@@ -1,0 +1,936 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>REVO — Ride Together</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tabler-icons/3.34.0/webfont/tabler-icons.min.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#111;--bg2:#1a1a1a;--card:#222;--card2:#2a2a2a;
+  --border:#333;--text:#fff;--muted:#888;--muted2:#555;
+  --green:#4ade80;--amber:#fbbf24;--red:#f87171;--blue:#60a5fa;
+}
+
+/* ── RESET / BASE ── */
+body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-serif;font-size:14px;margin:0;padding:0;min-height:100vh}
+
+/* ── APP SHELL ── */
+.app-wrapper{display:flex;min-height:100vh;width:100%}
+.app-main{flex:1;position:relative;min-height:100vh;overflow:hidden;background:var(--bg)}
+
+/* ── SCREENS ── */
+.screen{display:none;flex-direction:column;min-height:100vh}
+.screen.active{display:flex}
+.content{flex:1;overflow-y:auto;padding:24px 20px 90px}
+.content::-webkit-scrollbar{width:0}
+
+/* ── SIDEBAR (desktop) ── */
+.sidebar-nav{
+  display:none;
+  width:220px;flex-shrink:0;
+  background:var(--bg2);border-right:1px solid var(--border);
+  padding:28px 14px;
+  flex-direction:column;
+  position:sticky;top:0;height:100vh;overflow-y:auto;
+}
+.sidebar-logo{font-size:20px;font-weight:900;letter-spacing:-1.2px;padding:0 6px;margin-bottom:32px}
+.sidebar-logo span{color:var(--muted2)}
+.sidebar-items{display:flex;flex-direction:column;gap:2px;flex:1}
+.sidebar-item{
+  display:flex;align-items:center;gap:12px;
+  padding:10px 12px;border-radius:12px;
+  font-size:14px;font-weight:500;color:var(--muted);
+  cursor:pointer;transition:all .15s;
+  border:none;background:none;width:100%;text-align:left;
+}
+.sidebar-item:hover{color:var(--text);background:rgba(255,255,255,.05)}
+.sidebar-item.active{color:var(--text);background:rgba(255,255,255,.08)}
+.sidebar-item i{font-size:20px;flex-shrink:0}
+.sidebar-divider{height:1px;background:var(--border);margin:12px 0}
+.sidebar-create{
+  display:flex;align-items:center;gap:10px;
+  padding:11px 14px;border-radius:12px;
+  font-size:14px;font-weight:700;
+  background:var(--text);color:var(--bg);
+  cursor:pointer;border:none;width:100%;text-align:left;
+  transition:opacity .15s;margin:8px 0;
+}
+.sidebar-create:hover{opacity:.88}
+.sidebar-create i{font-size:18px}
+.sidebar-bottom{padding-top:16px;border-top:1px solid var(--border);margin-top:auto}
+.sidebar-signin-btn{
+  display:flex;align-items:center;gap:10px;
+  width:100%;padding:10px 12px;border-radius:12px;
+  font-size:13px;font-weight:500;color:var(--muted);
+  background:none;border:1px solid var(--border);cursor:pointer;
+  transition:all .15s;
+}
+.sidebar-signin-btn:hover{border-color:#555;color:var(--text)}
+
+/* ── BOTTOM NAV (mobile) ── */
+.bottom-nav{
+  position:absolute;bottom:0;left:0;right:0;
+  background:var(--bg2);border-top:1px solid var(--border);
+  display:flex;align-items:center;justify-content:space-around;
+  padding:12px 8px 20px;gap:4px;
+}
+.nav-item{display:flex;flex-direction:column;align-items:center;gap:4px;font-size:11px;color:var(--muted);cursor:pointer;padding:4px 12px;border-radius:12px;transition:color .15s;border:none;background:none;flex:1}
+.nav-item.active{color:var(--text)}
+.nav-item i{font-size:22px}
+.nav-center{width:48px;height:48px;border-radius:50%;background:var(--text);display:flex;align-items:center;justify-content:center;cursor:pointer;border:none;flex-shrink:0}
+.nav-center i{font-size:22px;color:var(--bg)}
+
+/* ── TYPOGRAPHY ── */
+.pg-title{font-size:26px;font-weight:700;letter-spacing:-.5px;margin-bottom:20px}
+.section-label{font-size:12px;color:var(--muted);font-weight:500;letter-spacing:.06em;text-transform:uppercase;margin-bottom:10px}
+.logo-text{font-size:22px;font-weight:800;letter-spacing:-1px}
+.logo-text span{color:var(--muted)}
+
+/* ── TOPBAR ── */
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:20px 20px 0}
+.topbar-icons{display:flex;align-items:center;gap:12px}
+.icon-btn{width:38px;height:38px;border-radius:50%;background:var(--card);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:18px;color:var(--muted);position:relative;transition:border-color .15s}
+.icon-btn:hover{border-color:#555;color:var(--text)}
+.icon-btn .dot{position:absolute;top:7px;right:7px;width:7px;height:7px;background:var(--text);border-radius:50%;border:2px solid var(--bg2)}
+
+/* ── RIDE CARDS ── */
+.action-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:24px}
+.action-card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:20px 16px;cursor:pointer;transition:background .15s}
+.action-card.light{background:#eee;color:#111}
+.action-card.light .action-sub{color:#666}
+.action-card:hover{background:var(--card2)}
+.action-card.light:hover{background:#ddd}
+.action-title{font-size:15px;font-weight:600;margin-bottom:4px}
+.action-sub{font-size:12px;color:var(--muted)}
+
+.ride-card{background:var(--card);border:1px solid var(--border);border-radius:18px;overflow:hidden;margin-bottom:14px;cursor:pointer;transition:border-color .15s}
+.ride-card:hover{border-color:#555}
+.ride-img{width:100%;height:130px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+.cover-a{background:#1a1a0a}.cover-b{background:#0a1a0a}.cover-c{background:#0a0a1a}.cover-d{background:#1a0a1a}
+.ride-tag{position:absolute;bottom:10px;left:10px;background:rgba(0,0,0,.65);padding:4px 10px;border-radius:20px;font-size:11px;font-weight:500;color:#fff;backdrop-filter:blur(4px)}
+.ride-body{padding:14px 16px}
+.ride-title{font-size:15px;font-weight:600;margin-bottom:6px}
+.ride-meta{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:12px}
+.meta-item{display:flex;align-items:center;gap:4px;font-size:12px;color:var(--muted)}
+.meta-item i{font-size:14px}
+.ride-footer{display:flex;align-items:center;justify-content:space-between;padding-top:10px;border-top:1px solid var(--border)}
+.host-row{display:flex;align-items:center;gap:8px}
+.av{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff;flex-shrink:0}
+.av-lg{width:44px;height:44px;font-size:16px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;color:#fff;flex-shrink:0}
+.av-xl{width:64px;height:64px;font-size:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;color:#fff;flex-shrink:0}
+.host-name{font-size:12px;color:var(--muted)}
+.host-name b{color:var(--text);font-weight:500}
+.pace-pill{padding:3px 10px;border-radius:20px;font-size:11px;font-weight:600}
+.p-chill{background:rgba(74,222,128,.12);color:#4ade80}
+.p-mod{background:rgba(251,191,36,.12);color:#fbbf24}
+.p-fast{background:rgba(248,113,113,.12);color:#f87171}
+.btn-join{padding:7px 18px;border-radius:20px;font-size:13px;font-weight:600;background:var(--text);color:var(--bg);border:none;cursor:pointer;white-space:nowrap;transition:transform .1s}
+.btn-join:active{transform:scale(.97)}
+.btn-join.pending{background:transparent;border:1px solid var(--amber);color:var(--amber);cursor:default}
+.btn-join.full{background:transparent;border:1px solid var(--muted2);color:var(--muted);cursor:default}
+
+.slots-bar{margin-bottom:12px}
+.slots-row{display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-bottom:5px}
+.bar{height:2px;background:var(--border);border-radius:4px;overflow:hidden}
+.bar-fill{height:100%;border-radius:4px;background:var(--green)}
+.bar-fill.w{background:var(--amber)}.bar-fill.r{background:var(--red)}
+
+/* ── MISC COMPONENTS ── */
+.search-box{display:flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--border);border-radius:28px;padding:10px 16px;margin-bottom:16px}
+.search-box i{font-size:16px;color:var(--muted)}
+.search-box span{font-size:14px;color:var(--muted2)}
+.filter-section{margin-bottom:18px}
+.pill-row{display:flex;gap:8px;flex-wrap:wrap}
+.pill{padding:7px 16px;border-radius:20px;font-size:13px;font-weight:500;background:var(--card);border:1px solid var(--border);color:var(--muted);cursor:pointer;transition:all .15s}
+.pill.active{background:var(--text);color:var(--bg);border-color:var(--text)}
+.pill:hover:not(.active){border-color:#555;color:var(--text)}
+.divider{height:1px;background:var(--border);margin:16px 0}
+.section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.see-all{font-size:12px;color:var(--muted);cursor:pointer}
+.tag-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+.tag{padding:5px 12px;border-radius:20px;font-size:12px;font-weight:500;background:var(--card);border:1px solid var(--border);color:var(--muted)}
+.info-card{background:var(--card);border:1px solid var(--border);border-radius:16px;padding:16px;margin-bottom:12px}
+.info-row{display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--border)}
+.info-row:last-child{border-bottom:none}
+.info-lbl{font-size:12px;color:var(--muted)}
+.info-val{font-size:13px;font-weight:500}
+.info-val.accent{color:var(--blue)}
+.ride-detail-back{display:flex;align-items:center;gap:10px;margin-bottom:16px;cursor:pointer}
+.ride-detail-back i{font-size:20px;color:var(--muted)}
+.ride-detail-back span{font-size:14px;color:var(--muted)}
+.detail-title{font-size:20px;font-weight:700;margin-bottom:8px}
+.detail-meta{display:flex;gap:16px;flex-wrap:wrap;margin-bottom:16px}
+.member-row{display:flex;align-items:center;gap:12px;padding:12px 0;border-bottom:1px solid var(--border);cursor:pointer;transition:opacity .15s}
+.member-row:hover{opacity:.8}
+.member-row:last-child{border-bottom:none}
+.member-info{flex:1}
+.member-name{font-size:14px;font-weight:500;margin-bottom:1px}
+.member-bike{font-size:12px;color:var(--muted)}
+.member-badge{padding:3px 10px;border-radius:20px;font-size:11px;font-weight:600}
+.mb-host{background:rgba(255,255,255,.08);color:var(--text)}
+.mb-rider{background:transparent;border:1px solid var(--border);color:var(--muted)}
+.stat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:20px}
+.stat-box{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px;text-align:center}
+.stat-num{font-size:22px;font-weight:700;margin-bottom:2px}
+.stat-lbl{font-size:11px;color:var(--muted)}
+.profile-top{display:flex;align-items:center;gap:16px;margin-bottom:24px}
+.profile-info .name{font-size:20px;font-weight:700;margin-bottom:2px}
+.profile-info .bike{font-size:13px;color:var(--muted);margin-bottom:6px}
+.profile-info .rating{display:flex;align-items:center;gap:6px;font-size:13px}
+.rating-star{color:var(--amber)}
+.profile-screen-top{padding:20px 20px 0;display:flex;align-items:center;justify-content:space-between;margin-bottom:20px}
+.notif-item{display:flex;align-items:flex-start;gap:12px;padding:14px;background:var(--card);border:1px solid var(--border);border-radius:16px;margin-bottom:10px;cursor:pointer;transition:border-color .15s}
+.notif-item.unread{border-color:#444}
+.notif-item:hover{border-color:#555}
+.notif-icon{width:40px;height:40px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:18px}
+.ni-green{background:rgba(74,222,128,.12)}.ni-white{background:rgba(255,255,255,.08)}.ni-red{background:rgba(248,113,113,.12)}.ni-amber{background:rgba(251,191,36,.12)}
+.notif-text{flex:1}
+.notif-title{font-size:14px;font-weight:500;margin-bottom:2px;line-height:1.3}
+.notif-sub{font-size:12px;color:var(--muted)}
+.notif-time{font-size:11px;color:var(--muted2);white-space:nowrap;margin-top:2px}
+.unread-dot{width:7px;height:7px;background:var(--text);border-radius:50%;margin-top:4px;flex-shrink:0}
+.chat-msg{margin-bottom:12px;display:flex;flex-direction:column}
+.chat-msg.mine{align-items:flex-end}
+.chat-bubble{max-width:75%;padding:10px 14px;border-radius:16px;font-size:13px;line-height:1.45}
+.chat-bubble.other{background:var(--card);border:1px solid var(--border)}
+.chat-bubble.mine{background:var(--text);color:var(--bg)}
+.chat-sender{font-size:11px;color:var(--muted);margin-bottom:3px}
+.chat-time{font-size:10px;color:var(--muted2);margin-top:3px}
+.chat-input-row{display:flex;align-items:center;gap:8px;padding:12px 16px 24px;background:var(--bg2);border-top:1px solid var(--border);position:absolute;bottom:0;left:0;right:0}
+.chat-inp{flex:1;background:var(--card);border:1px solid var(--border);border-radius:20px;padding:9px 14px;font-size:13px;color:var(--text);outline:none;font-family:inherit}
+.chat-inp::placeholder{color:var(--muted2)}
+.chat-send{width:36px;height:36px;border-radius:50%;background:var(--text);border:none;display:flex;align-items:center;justify-content:center;cursor:pointer}
+.chat-send i{font-size:16px;color:var(--bg)}
+.color-a{background:#2563eb}.color-b{background:#059669}.color-c{background:#d97706}.color-d{background:#7c3aed}.color-e{background:#dc2626}.color-f{background:#0891b2}
+
+/* ── BUTTONS ── */
+.btn-full{width:100%;padding:14px;border-radius:16px;font-size:15px;font-weight:700;background:var(--text);color:var(--bg);border:none;cursor:pointer;transition:opacity .15s;margin-top:8px}
+.btn-full:hover{opacity:.9}
+.btn-outline{width:100%;padding:13px;border-radius:16px;font-size:14px;font-weight:600;background:transparent;color:var(--text);border:1px solid var(--border);cursor:pointer;transition:border-color .15s;margin-top:8px}
+.btn-outline:hover{border-color:#666}
+
+/* ── FORMS ── */
+.form-group{margin-bottom:16px}
+.form-lbl{font-size:12px;color:var(--muted);font-weight:500;text-transform:uppercase;letter-spacing:.06em;margin-bottom:7px;display:block}
+.form-inp{width:100%;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:11px 14px;color:var(--text);font-size:14px;outline:none;font-family:inherit;transition:border-color .15s}
+.form-inp:focus{border-color:#666}
+.form-inp::placeholder{color:var(--muted2)}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.opts{display:flex;gap:8px;flex-wrap:wrap}
+.opt{padding:8px 14px;border-radius:20px;font-size:13px;font-weight:500;background:var(--card);border:1px solid var(--border);color:var(--muted);cursor:pointer;transition:all .15s}
+.opt.active{background:var(--text);color:var(--bg);border-color:var(--text)}
+.opt:hover:not(.active){border-color:#555;color:var(--text)}
+
+/* ── PHOTO UPLOAD ── */
+.photo-upload-wrap{
+  width:100%;height:170px;
+  border:2px dashed var(--border);border-radius:16px;
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;transition:border-color .2s;
+  position:relative;overflow:hidden;background:var(--card2);
+}
+.photo-upload-wrap:hover{border-color:#666}
+.photo-upload-wrap.drag-over{border-color:var(--text);background:rgba(255,255,255,.04)}
+.photo-placeholder{text-align:center;color:var(--muted);pointer-events:none}
+.photo-placeholder i{font-size:36px;color:var(--muted2);display:block;margin-bottom:8px}
+.photo-placeholder .p-title{font-size:13px;font-weight:600;margin-bottom:3px}
+.photo-placeholder .p-sub{font-size:11px;color:var(--muted2)}
+.photo-preview-img{width:100%;height:100%;object-fit:cover;display:none;position:absolute;inset:0}
+.photo-actions{
+  position:absolute;bottom:0;left:0;right:0;
+  background:linear-gradient(to top,rgba(0,0,0,.75),transparent);
+  padding:20px 12px 10px;
+  display:none;align-items:center;justify-content:space-between;
+}
+.photo-upload-wrap.has-photo .photo-preview-img{display:block}
+.photo-upload-wrap.has-photo .photo-placeholder{display:none}
+.photo-upload-wrap.has-photo .photo-actions{display:flex}
+.photo-upload-wrap.has-photo{border:none}
+.photo-change{font-size:12px;font-weight:600;color:#fff;background:rgba(255,255,255,.18);border:none;border-radius:8px;padding:6px 12px;cursor:pointer;backdrop-filter:blur(4px)}
+.photo-remove{font-size:14px;color:#fff;background:rgba(248,113,113,.3);border:none;border-radius:8px;padding:6px 8px;cursor:pointer;line-height:1}
+
+/* ── ACCOUNT SECTION (inline in create) ── */
+.account-section{background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:18px;padding:18px;margin-bottom:16px}
+.account-section-hd{display:flex;align-items:center;gap:10px;margin-bottom:4px}
+.account-section-hd i{font-size:20px;color:var(--muted)}
+.account-section-title{font-size:15px;font-weight:700}
+.account-section-sub{font-size:13px;color:var(--muted);margin-bottom:18px;padding-left:30px}
+.or-div{display:flex;align-items:center;gap:10px;margin:16px 0}
+.or-div::before,.or-div::after{content:'';flex:1;height:1px;background:var(--border)}
+.or-div span{font-size:12px;color:var(--muted2)}
+.signin-inline{text-align:center;font-size:13px;color:var(--muted);margin-bottom:16px}
+.signin-inline span{color:var(--text);font-weight:600;cursor:pointer}
+
+/* ── SHEET OVERLAY ── */
+.sheet-overlay{position:absolute;inset:0;background:rgba(0,0,0,0);display:flex;align-items:flex-end;z-index:300;pointer-events:none;transition:background .28s;overflow:hidden}
+.sheet-overlay.open{background:rgba(0,0,0,.72);pointer-events:all}
+.sheet-body{width:100%;background:#181818;border-top:1px solid var(--border);border-radius:24px 24px 0 0;padding:0 20px 36px;transform:translateY(100%);transition:transform .32s cubic-bezier(.32,.72,0,1)}
+.sheet-overlay.open .sheet-body{transform:translateY(0)}
+.sheet-handle{width:36px;height:4px;background:#333;border-radius:2px;margin:14px auto 20px}
+.auth-tabs{display:flex;background:var(--card);border-radius:11px;padding:3px;margin-bottom:22px}
+.auth-tab{flex:1;padding:8px;border-radius:8px;font-size:13px;font-weight:600;text-align:center;cursor:pointer;color:var(--muted);transition:all .15s;border:none;background:none}
+.auth-tab.active{background:var(--bg);color:var(--text)}
+.join-ride-hd{display:flex;align-items:center;gap:12px;margin-bottom:16px}
+.join-cover-thumb{width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden}
+.join-cover-thumb img{width:100%;height:100%;object-fit:cover}
+.join-cover-thumb i{font-size:22px;opacity:.6}
+
+/* ── LANDING ── */
+#s-landing{background:var(--bg);min-height:100vh}
+.landing-topbar{display:flex;align-items:center;justify-content:space-between;padding:24px 24px 0}
+.landing-logo{font-size:22px;font-weight:900;letter-spacing:-1.5px}
+.landing-logo span{color:var(--muted2)}
+.landing-signin-btn{font-size:13px;font-weight:500;color:var(--muted);cursor:pointer;background:none;border:none;padding:0;transition:color .15s}
+.landing-signin-btn:hover{color:var(--text)}
+.landing-hero{padding:36px 24px 20px}
+.landing-eyebrow{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:500;color:var(--muted);background:var(--card);border:1px solid var(--border);border-radius:20px;padding:5px 12px;margin-bottom:20px}
+.landing-headline{font-size:36px;font-weight:800;line-height:1.08;letter-spacing:-1.5px;margin-bottom:12px}
+.landing-sub{font-size:14px;color:var(--muted);line-height:1.6}
+.peek-section{padding:4px 0 0}
+.peek-label{font-size:11px;font-weight:500;color:var(--muted2);text-transform:uppercase;letter-spacing:.07em;padding:0 24px;margin-bottom:12px}
+.peek-scroll{display:flex;gap:10px;overflow-x:auto;padding:0 24px 4px}
+.peek-scroll::-webkit-scrollbar{display:none}
+.peek-card{flex-shrink:0;width:155px;background:var(--card);border:1px solid var(--border);border-radius:14px;overflow:hidden;cursor:pointer;transition:border-color .15s}
+.peek-card:hover{border-color:#555}
+.peek-card-cover{height:80px;display:flex;align-items:center;justify-content:center;position:relative}
+.peek-card-cover i{font-size:36px;opacity:.15}
+.peek-card-tag{position:absolute;bottom:7px;left:8px;background:rgba(0,0,0,.6);backdrop-filter:blur(4px);padding:3px 8px;border-radius:20px;font-size:10px;color:#fff;font-weight:500}
+.peek-card-body{padding:9px 11px 10px}
+.peek-card-title{font-size:12px;font-weight:600;margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.peek-card-meta{font-size:11px;color:var(--muted)}
+.peek-more{flex-shrink:0;width:90px;background:var(--card2);border:1px solid var(--border);border-radius:14px;display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;transition:border-color .15s}
+.peek-more:hover{border-color:#555}
+.landing-actions{padding:20px 24px 28px;margin-top:auto}
+.btn-land-primary{width:100%;padding:15px;border-radius:16px;font-size:15px;font-weight:700;background:var(--text);color:var(--bg);border:none;cursor:pointer;margin-bottom:10px;transition:opacity .15s}
+.btn-land-primary:hover{opacity:.88}
+.btn-land-secondary{width:100%;padding:14px;border-radius:16px;font-size:15px;font-weight:600;background:transparent;color:var(--text);border:1px solid var(--border);cursor:pointer;transition:border-color .15s;margin-bottom:20px}
+.btn-land-secondary:hover{border-color:#666}
+.landing-footer{text-align:center;font-size:12px;color:var(--muted2)}
+.landing-footer span{color:var(--muted);cursor:pointer}
+.landing-footer span:hover{color:var(--text)}
+
+/* ════════════════════════════════════
+   RESPONSIVE — TABLET / DESKTOP
+════════════════════════════════════ */
+@media(min-width:768px){
+  body{background:#0a0a0a;display:flex;align-items:stretch}
+  .app-wrapper{max-width:1400px;margin:0 auto;width:100%;box-shadow:0 0 0 1px #222}
+  .sidebar-nav{display:flex}
+  .bottom-nav{display:none !important}
+  .screen{min-height:100vh}
+
+  /* Content wider + breathing room */
+  .content{padding:36px 48px 60px}
+  .pg-title{font-size:30px}
+
+  /* Explore 2-col grid */
+  .explore-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+  .explore-grid .ride-card{margin-bottom:0}
+
+  /* Narrow form/detail pages */
+  .content-narrow{max-width:660px}
+
+  /* Landing — side by side */
+  #s-landing{flex-direction:row;min-height:100vh}
+  .landing-left{
+    width:420px;flex-shrink:0;
+    display:flex;flex-direction:column;justify-content:center;
+    padding:60px 48px;border-right:1px solid var(--border);
+  }
+  .landing-right{
+    flex:1;background:var(--bg2);padding:48px 40px;
+    display:flex;flex-direction:column;justify-content:center;
+    overflow-y:auto;
+  }
+  .landing-mobile-only{display:none}
+  .landing-topbar{display:none}
+
+  /* Landing right — grid of peek cards */
+  .peek-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .peek-grid .peek-card{width:auto;flex-shrink:unset}
+  .peek-grid .peek-more{width:auto}
+
+  /* Detail page cover taller */
+  .detail-cover-lg{height:220px !important}
+
+  /* Photo upload taller on desktop */
+  .photo-upload-wrap{height:200px}
+
+  /* Topbar logo hidden on desktop (sidebar has it) */
+  .topbar .logo-text{display:none}
+  .topbar{padding-bottom:4px}
+}
+
+@media(min-width:1200px){
+  .sidebar-nav{width:240px}
+  .content{padding:40px 56px 60px}
+}
+</style>
+</head>
+<body>
+<div class="app-wrapper">
+
+<!-- ══════════════════════════════
+     SIDEBAR (desktop only)
+══════════════════════════════ -->
+<nav class="sidebar-nav" id="sidebar-nav">
+  <div class="sidebar-logo">RE<span>V</span>O</div>
+  <div class="sidebar-items">
+    <button class="sidebar-item" id="snav-home" onclick="go('s-home')"><i class="ti ti-home"></i><span>Home</span></button>
+    <button class="sidebar-item active" id="snav-explore" onclick="go('s-explore')"><i class="ti ti-compass"></i><span>Explore</span></button>
+    <div class="sidebar-divider"></div>
+    <button class="sidebar-create" onclick="go('s-create')"><i class="ti ti-plus"></i><span>Create a Ride</span></button>
+    <div class="sidebar-divider"></div>
+    <button class="sidebar-item" id="snav-notif" onclick="requireAuth(()=>go('s-notif'),'to view alerts')"><i class="ti ti-bell"></i><span>Alerts</span></button>
+    <button class="sidebar-item" id="snav-profile" onclick="requireAuth(()=>go('s-profile'),'to view your profile')"><i class="ti ti-user"></i><span>Profile</span></button>
+  </div>
+  <div class="sidebar-bottom">
+    <div id="sidebar-user-area">
+      <button class="sidebar-signin-btn" onclick="openAuthSheet('in')"><i class="ti ti-login" style="font-size:18px"></i><span>Sign in</span></button>
+    </div>
+  </div>
+</nav>
+
+<!-- ══════════════════════════════
+     MAIN APP AREA
+══════════════════════════════ -->
+<div class="app-main" id="app-main">
+
+<!-- ── LANDING ── -->
+<div class="screen active" id="s-landing">
+  <!-- Mobile header (hidden on desktop) -->
+  <div class="landing-topbar landing-mobile-only">
+    <div class="landing-logo">RE<span>V</span>O</div>
+    <button class="landing-signin-btn" onclick="openAuthSheet('in')">Sign in →</button>
+  </div>
+
+  <!-- Desktop: left col / Mobile: full width -->
+  <div class="landing-left" style="display:flex;flex-direction:column">
+    <div class="landing-hero" style="padding-left:0;padding-right:0">
+      <div class="landing-eyebrow"><i class="ti ti-motorbike" style="font-size:13px"></i> 15 rides this week near Mumbai</div>
+      <div class="landing-headline">Find your<br>riding crew.</div>
+      <div class="landing-sub">Browse rides near you — no sign-up needed to explore.</div>
+    </div>
+    <!-- Desktop CTAs inside left col -->
+    <div style="margin-top:auto;padding-top:32px">
+      <button class="btn-land-primary" onclick="go('s-explore')"><i class="ti ti-compass" style="margin-right:6px;font-size:16px;vertical-align:-2px"></i>Browse Rides</button>
+      <button class="btn-land-secondary" onclick="go('s-create')"><i class="ti ti-plus" style="margin-right:6px;font-size:16px;vertical-align:-2px"></i>Host a Ride</button>
+      <div class="landing-footer">Already riding with us? <span onclick="openAuthSheet('in')">Sign in</span></div>
+    </div>
+  </div>
+
+  <!-- Mobile peek strip + CTAs (hidden on desktop) -->
+  <div class="landing-mobile-only" style="flex:1;display:flex;flex-direction:column">
+    <div class="peek-section" style="margin-top:8px">
+      <div class="peek-label">Happening near you</div>
+      <div class="peek-scroll">
+        <div class="peek-card" onclick="go('s-detail')"><div class="peek-card-cover cover-a"><i class="ti ti-sunrise"></i><div class="peek-card-tag">Breakfast</div></div><div class="peek-card-body"><div class="peek-card-title">Lonavala Sunrise Run</div><div class="peek-card-meta">Sat 14 Jun · 128km</div></div></div>
+        <div class="peek-card" onclick="go('s-detail2')"><div class="peek-card-cover cover-c"><i class="ti ti-moon"></i><div class="peek-card-tag">Night Ride</div></div><div class="peek-card-body"><div class="peek-card-title">Marine Drive Midnight</div><div class="peek-card-meta">Fri 13 Jun · 38km</div></div></div>
+        <div class="peek-card" onclick="go('s-explore')"><div class="peek-card-cover cover-b"><i class="ti ti-mountain"></i><div class="peek-card-tag">Adventure</div></div><div class="peek-card-body"><div class="peek-card-title">Sahyadri Offroad</div><div class="peek-card-meta">Sun 15 Jun · 240km</div></div></div>
+        <div class="peek-more" onclick="go('s-explore')"><div style="font-size:20px;font-weight:700;color:var(--muted)">+12</div><div style="font-size:11px;color:var(--muted2);margin-top:2px">more</div></div>
+      </div>
+    </div>
+    <div class="landing-actions">
+      <button class="btn-land-primary" onclick="go('s-explore')"><i class="ti ti-compass" style="margin-right:6px;font-size:16px;vertical-align:-2px"></i>Browse Rides</button>
+      <button class="btn-land-secondary" onclick="go('s-create')"><i class="ti ti-plus" style="margin-right:6px;font-size:16px;vertical-align:-2px"></i>Host a Ride</button>
+      <div class="landing-footer">Already riding with us? <span onclick="openAuthSheet('in')">Sign in</span></div>
+    </div>
+  </div>
+
+  <!-- Desktop: right col — ride grid -->
+  <div class="landing-right" style="display:none" id="landing-right-col">
+    <div style="font-size:11px;font-weight:500;color:var(--muted2);text-transform:uppercase;letter-spacing:.07em;margin-bottom:16px">Happening near you</div>
+    <div class="peek-grid">
+      <div class="peek-card" onclick="go('s-detail')" style="width:auto"><div class="peek-card-cover cover-a" style="height:100px"><i class="ti ti-sunrise"></i><div class="peek-card-tag">Breakfast</div></div><div class="peek-card-body"><div class="peek-card-title">Lonavala Sunrise Run</div><div class="peek-card-meta">Sat 14 Jun · 128km</div></div></div>
+      <div class="peek-card" onclick="go('s-detail2')" style="width:auto"><div class="peek-card-cover cover-c" style="height:100px"><i class="ti ti-moon"></i><div class="peek-card-tag">Night Ride</div></div><div class="peek-card-body"><div class="peek-card-title">Marine Drive Midnight</div><div class="peek-card-meta">Fri 13 Jun · 38km</div></div></div>
+      <div class="peek-card" onclick="go('s-explore')" style="width:auto"><div class="peek-card-cover cover-b" style="height:100px"><i class="ti ti-mountain"></i><div class="peek-card-tag">Adventure</div></div><div class="peek-card-body"><div class="peek-card-title">Sahyadri Offroad</div><div class="peek-card-meta">Sun 15 Jun · 240km</div></div></div>
+      <div class="peek-card" onclick="go('s-explore')" style="width:auto"><div class="peek-card-cover cover-d" style="height:100px"><i class="ti ti-campfire"></i><div class="peek-card-tag">Camping</div></div><div class="peek-card-body"><div class="peek-card-title">Kas Plateau Camp</div><div class="peek-card-meta">Sat 21 Jun · 310km</div></div></div>
+    </div>
+    <div style="text-align:center;margin-top:16px;font-size:13px;color:var(--muted);cursor:pointer" onclick="go('s-explore')">Browse all 15 rides this week →</div>
+  </div>
+</div>
+
+<!-- ── HOME (authenticated) ── -->
+<div class="screen" id="s-home">
+  <div class="topbar"><div class="logo-text">RE<span>V</span>O</div><div class="topbar-icons"><div class="icon-btn" onclick="go('s-notif')"><i class="ti ti-bell"></i><div class="dot"></div></div><div class="av color-a" style="width:38px;height:38px;font-size:14px;cursor:pointer" onclick="go('s-profile')">AK</div></div></div>
+  <div class="content">
+    <div style="margin-bottom:24px;padding-top:16px"><div style="font-size:16px;color:var(--muted);margin-bottom:2px">Good morning,</div><div style="font-size:22px;font-weight:700">Arjun 👋</div></div>
+    <div class="action-grid">
+      <div class="action-card light" onclick="go('s-create')"><div style="font-size:22px;margin-bottom:8px"><i class="ti ti-plus"></i></div><div class="action-title">Create a Ride</div><div class="action-sub">Start hosting</div></div>
+      <div class="action-card" onclick="go('s-explore')"><div style="font-size:22px;margin-bottom:8px"><i class="ti ti-compass"></i></div><div class="action-title">Join a Ride</div><div class="action-sub">Browse available</div></div>
+    </div>
+    <div class="section-header"><div class="section-label">Upcoming Rides</div><div class="see-all" onclick="go('s-explore')">See all</div></div>
+    <div class="ride-card" onclick="go('s-detail')"><div class="ride-img cover-a"><div style="font-size:64px;opacity:.12"><i class="ti ti-sunrise"></i></div><div class="ride-tag">Breakfast Ride</div></div><div class="ride-body"><div class="ride-title">Lonavala Sunrise Breakfast Run</div><div class="ride-meta"><span class="meta-item"><i class="ti ti-calendar"></i> Sat 14 Jun</span><span class="meta-item"><i class="ti ti-clock"></i> 5:30 AM</span><span class="meta-item"><i class="ti ti-road"></i> 128km</span></div><div class="slots-bar"><div class="slots-row"><span>Riders</span><span>6 / 10</span></div><div class="bar"><div class="bar-fill w" style="width:60%"></div></div></div><div class="ride-footer"><div class="host-row"><div class="av color-b">RK</div><div><div style="font-size:12px;font-weight:500">Rohan Kadam</div><div class="host-name">Royal Enfield Interceptor 650</div></div></div><span class="pace-pill p-chill">Slow</span></div></div></div>
+    <div class="ride-card" onclick="go('s-detail2')"><div class="ride-img cover-c"><div style="font-size:64px;opacity:.12"><i class="ti ti-moon"></i></div><div class="ride-tag">Night Ride</div></div><div class="ride-body"><div class="ride-title">Marine Drive Midnight Cruise</div><div class="ride-meta"><span class="meta-item"><i class="ti ti-calendar"></i> Fri 13 Jun</span><span class="meta-item"><i class="ti ti-clock"></i> 11:30 PM</span><span class="meta-item"><i class="ti ti-road"></i> 38km</span></div><div class="slots-bar"><div class="slots-row"><span>Riders</span><span>8 / 8 · Full</span></div><div class="bar"><div class="bar-fill r" style="width:100%"></div></div></div><div class="ride-footer"><div class="host-row"><div class="av color-c">SM</div><div><div style="font-size:12px;font-weight:500">Shreya Mehta</div><div class="host-name">KTM Duke 390</div></div></div><span class="pace-pill p-mod">Moderate</span></div></div></div>
+  </div>
+  <div class="bottom-nav">
+    <button class="nav-item active" onclick="go('s-home')"><i class="ti ti-home"></i><span>Home</span></button>
+    <button class="nav-item" onclick="go('s-explore')"><i class="ti ti-compass"></i><span>Explore</span></button>
+    <button class="nav-center" onclick="go('s-create')"><i class="ti ti-plus"></i></button>
+    <button class="nav-item" onclick="go('s-notif')"><i class="ti ti-bell"></i><span>Alerts</span></button>
+    <button class="nav-item" onclick="go('s-profile')"><i class="ti ti-user"></i><span>Profile</span></button>
+  </div>
+</div>
+
+<!-- ── EXPLORE ── -->
+<div class="screen" id="s-explore">
+  <div class="content">
+    <div class="pg-title" style="padding-top:4px">Explore</div>
+    <div class="search-box"><i class="ti ti-search"></i><span>Search routes, destinations...</span></div>
+    <div class="filter-section"><div class="section-label">Ride Type</div><div class="pill-row"><div class="pill" onclick="togglePill(this)">Casual</div><div class="pill" onclick="togglePill(this)">Touring</div><div class="pill" onclick="togglePill(this)">Adventure</div><div class="pill" onclick="togglePill(this)">Night</div><div class="pill" onclick="togglePill(this)">Camping</div></div></div>
+    <div class="filter-section"><div class="section-label">Pace</div><div class="pill-row"><div class="pill" onclick="togglePill(this)">Slow</div><div class="pill" onclick="togglePill(this)">Moderate</div><div class="pill" onclick="togglePill(this)">Fast</div></div></div>
+    <div class="divider"></div>
+    <div class="explore-grid">
+      <div class="ride-card" onclick="go('s-detail')"><div class="ride-img cover-a"><div style="font-size:64px;opacity:.12"><i class="ti ti-sunrise"></i></div><div class="ride-tag">Breakfast Ride</div></div><div class="ride-body"><div class="ride-title">Lonavala Sunrise Breakfast Run</div><div class="ride-meta"><span class="meta-item"><i class="ti ti-map-pin"></i> Pune</span><span class="meta-item"><i class="ti ti-calendar"></i> Sat 14 Jun</span><span class="meta-item"><i class="ti ti-road"></i> 128km</span></div><div class="slots-bar"><div class="slots-row"><span>Riders</span><span>6 / 10</span></div><div class="bar"><div class="bar-fill w" style="width:60%"></div></div></div><div class="ride-footer"><div class="host-row"><div class="av color-b">RK</div><div class="host-name"><b>Rohan Kadam</b></div></div><div style="display:flex;align-items:center;gap:8px"><span class="pace-pill p-chill">Slow</span><button class="btn-join" onclick="event.stopPropagation();openJoinSheet(this,'Lonavala Sunrise Breakfast Run','cover-a','ti-sunrise',null)">Join</button></div></div></div></div>
+      <div class="ride-card" onclick="go('s-detail2')"><div class="ride-img cover-b"><div style="font-size:64px;opacity:.12"><i class="ti ti-mountain"></i></div><div class="ride-tag">Adventure</div></div><div class="ride-body"><div class="ride-title">Sahyadri Offroad Weekend</div><div class="ride-meta"><span class="meta-item"><i class="ti ti-map-pin"></i> Mumbai</span><span class="meta-item"><i class="ti ti-calendar"></i> Sun 15 Jun</span><span class="meta-item"><i class="ti ti-road"></i> 240km</span></div><div class="slots-bar"><div class="slots-row"><span>Riders</span><span>4 / 12 · 300cc+</span></div><div class="bar"><div class="bar-fill" style="width:33%"></div></div></div><div class="ride-footer"><div class="host-row"><div class="av color-d">NP</div><div class="host-name"><b>Nikhil Pawar</b></div></div><div style="display:flex;align-items:center;gap:8px"><span class="pace-pill p-fast">Fast</span><button class="btn-join" onclick="event.stopPropagation();openJoinSheet(this,'Sahyadri Offroad Weekend','cover-b','ti-mountain',null)">Join</button></div></div></div></div>
+      <div class="ride-card" onclick="go('s-detail2')"><div class="ride-img cover-c"><div style="font-size:64px;opacity:.12"><i class="ti ti-moon"></i></div><div class="ride-tag">Night Ride</div></div><div class="ride-body"><div class="ride-title">Marine Drive Midnight Cruise</div><div class="ride-meta"><span class="meta-item"><i class="ti ti-map-pin"></i> Mumbai</span><span class="meta-item"><i class="ti ti-calendar"></i> Fri 13 Jun</span><span class="meta-item"><i class="ti ti-road"></i> 38km</span></div><div class="slots-bar"><div class="slots-row"><span>Riders</span><span>8 / 8 · Full</span></div><div class="bar"><div class="bar-fill r" style="width:100%"></div></div></div><div class="ride-footer"><div class="host-row"><div class="av color-c">SM</div><div class="host-name"><b>Shreya Mehta</b></div></div><div style="display:flex;align-items:center;gap:8px"><span class="pace-pill p-mod">Moderate</span><button class="btn-join full">Full</button></div></div></div></div>
+      <div class="ride-card" onclick="go('s-detail')"><div class="ride-img cover-d"><div style="font-size:64px;opacity:.12"><i class="ti ti-campfire"></i></div><div class="ride-tag">Camping</div></div><div class="ride-body"><div class="ride-title">Kas Plateau Camping Run</div><div class="ride-meta"><span class="meta-item"><i class="ti ti-map-pin"></i> Pune</span><span class="meta-item"><i class="ti ti-calendar"></i> Sat 21 Jun</span><span class="meta-item"><i class="ti ti-road"></i> 310km</span></div><div class="slots-bar"><div class="slots-row"><span>Riders</span><span>3 / 8</span></div><div class="bar"><div class="bar-fill" style="width:37%"></div></div></div><div class="ride-footer"><div class="host-row"><div class="av color-f">VN</div><div class="host-name"><b>Vikram Nair</b></div></div><div style="display:flex;align-items:center;gap:8px"><span class="pace-pill p-chill">Slow</span><button class="btn-join" onclick="event.stopPropagation();openJoinSheet(this,'Kas Plateau Camping Run','cover-d','ti-campfire',null)">Join</button></div></div></div></div>
+    </div>
+  </div>
+  <div class="bottom-nav">
+    <button class="nav-item" onclick="isAuthed?go('s-home'):go('s-landing')"><i class="ti ti-home"></i><span>Home</span></button>
+    <button class="nav-item active" onclick="go('s-explore')"><i class="ti ti-compass"></i><span>Explore</span></button>
+    <button class="nav-center" onclick="go('s-create')"><i class="ti ti-plus"></i></button>
+    <button class="nav-item" onclick="requireAuth(()=>go('s-notif'),'to view alerts')"><i class="ti ti-bell"></i><span>Alerts</span></button>
+    <button class="nav-item" onclick="requireAuth(()=>go('s-profile'),'to view your profile')"><i class="ti ti-user"></i><span>Profile</span></button>
+  </div>
+</div>
+
+<!-- ── RIDE DETAIL 1 ── -->
+<div class="screen" id="s-detail">
+  <div class="content content-narrow">
+    <div class="ride-detail-back" onclick="go('s-explore')"><i class="ti ti-arrow-left"></i><span>Back</span></div>
+    <div class="cover-a detail-cover-lg" style="height:160px;border-radius:16px;overflow:hidden;margin-bottom:16px;display:flex;align-items:center;justify-content:center;position:relative"><div style="font-size:72px;opacity:.12"><i class="ti ti-sunrise"></i></div><div class="ride-tag">Breakfast Ride</div></div>
+    <div class="detail-title">Lonavala Sunrise Breakfast Run</div>
+    <div class="detail-meta"><span class="meta-item"><i class="ti ti-calendar"></i> Sat 14 Jun</span><span class="meta-item"><i class="ti ti-clock"></i> 5:30 AM</span><span class="meta-item"><i class="ti ti-road"></i> 128km</span></div>
+    <div class="tag-row"><span class="pace-pill p-chill">Slow pace</span><span class="tag">Any CC</span><span class="tag"><i class="ti ti-users" style="font-size:12px"></i> 6 / 10 riders</span></div>
+    <div class="info-card" style="margin-bottom:12px"><div style="font-size:13px;color:var(--muted);line-height:1.6">Early morning run to Lonavala. We stop at Cafe Colombiano for breakfast before heading back. Scenic ghats route. Bring a light jacket — it gets cold before sunrise.</div></div>
+    <div class="info-card" style="margin-bottom:12px"><div class="info-row"><span class="info-lbl">Start</span><span class="info-val">FC Road Shell Pump, Pune</span></div><div class="info-row"><span class="info-lbl">Meeting point</span><span class="info-val">FC Road Shell Pump</span></div><div class="info-row"><span class="info-lbl">Destination</span><span class="info-val">Lonavala</span></div></div>
+    <div class="section-header"><div style="font-size:15px;font-weight:600">Ride Party</div><div class="see-all" onclick="go('s-members')">View all <i class="ti ti-arrow-right" style="font-size:12px"></i></div></div>
+    <div class="info-card" style="margin-bottom:16px">
+      <div class="member-row" onclick="go('s-riderprofile')"><div class="av color-b">RK</div><div class="member-info"><div class="member-name">Rohan Kadam</div><div class="member-bike">Royal Enfield Interceptor 650</div></div><span class="member-badge mb-host">Host</span></div>
+      <div class="member-row" onclick="go('s-riderprofile')"><div class="av color-e">PS</div><div class="member-info"><div class="member-name">Priya Sharma</div><div class="member-bike">RE Classic 350</div></div><span class="member-badge mb-rider">Rider</span></div>
+      <div style="text-align:center;padding:10px 0 2px;font-size:12px;color:var(--muted);cursor:pointer" onclick="go('s-members')">+ 4 more riders · View all →</div>
+    </div>
+    <button class="btn-full" id="detail1-join-btn" onclick="openJoinSheet(this,'Lonavala Sunrise Breakfast Run','cover-a','ti-sunrise',null)">Request to Join</button>
+    <button class="btn-outline" onclick="requireAuth(()=>go('s-chat'),'to open the ride chat')"><i class="ti ti-message-circle" style="margin-right:6px;font-size:16px;vertical-align:-2px"></i>Ride Chat</button>
+  </div>
+  <div class="bottom-nav">
+    <button class="nav-item" onclick="isAuthed?go('s-home'):go('s-landing')"><i class="ti ti-home"></i><span>Home</span></button>
+    <button class="nav-item active" onclick="go('s-explore')"><i class="ti ti-compass"></i><span>Explore</span></button>
+    <button class="nav-center" onclick="go('s-create')"><i class="ti ti-plus"></i></button>
+    <button class="nav-item" onclick="requireAuth(()=>go('s-notif'),'to view alerts')"><i class="ti ti-bell"></i><span>Alerts</span></button>
+    <button class="nav-item" onclick="requireAuth(()=>go('s-profile'),'to view your profile')"><i class="ti ti-user"></i><span>Profile</span></button>
+  </div>
+</div>
+
+<!-- ── RIDE DETAIL 2 ── -->
+<div class="screen" id="s-detail2">
+  <div class="content content-narrow">
+    <div class="ride-detail-back" onclick="go('s-explore')"><i class="ti ti-arrow-left"></i><span>Back</span></div>
+    <div class="cover-c detail-cover-lg" style="height:160px;border-radius:16px;overflow:hidden;margin-bottom:16px;display:flex;align-items:center;justify-content:center;position:relative"><div style="font-size:72px;opacity:.12"><i class="ti ti-moon"></i></div><div class="ride-tag">Night Ride</div></div>
+    <div class="detail-title">Marine Drive Midnight Cruise</div>
+    <div class="detail-meta"><span class="meta-item"><i class="ti ti-calendar"></i> Fri 13 Jun</span><span class="meta-item"><i class="ti ti-clock"></i> 11:30 PM</span><span class="meta-item"><i class="ti ti-road"></i> 38km</span></div>
+    <div class="tag-row"><span class="pace-pill p-mod">Moderate pace</span><span class="tag">Any CC</span><span class="tag"><i class="ti ti-users" style="font-size:12px"></i> 8 / 8 · Full</span></div>
+    <div class="info-card" style="margin-bottom:12px"><div style="font-size:13px;color:var(--muted);line-height:1.6">Classic Mumbai night ride along Marine Drive, looping through BKC and back. City lights, clear roads. Great for all experience levels.</div></div>
+    <div class="info-card" style="margin-bottom:12px"><div class="info-row"><span class="info-lbl">Start</span><span class="info-val">Marine Drive, Nariman Point</span></div><div class="info-row"><span class="info-lbl">Destination</span><span class="info-val">BKC and back</span></div></div>
+    <div class="section-header"><div style="font-size:15px;font-weight:600">Ride Party</div><div class="see-all" onclick="go('s-members')">View all</div></div>
+    <div class="info-card" style="margin-bottom:12px">
+      <div class="member-row" onclick="go('s-riderprofile')"><div class="av color-c">SM</div><div class="member-info"><div class="member-name">Shreya Mehta</div><div class="member-bike">KTM Duke 390</div></div><span class="member-badge mb-host">Host</span></div>
+      <div class="member-row" onclick="go('s-riderprofile')"><div class="av color-d">NP</div><div class="member-info"><div class="member-name">Nikhil Pawar</div><div class="member-bike">Yamaha MT-09</div></div><span class="member-badge mb-rider">Rider</span></div>
+      <div style="text-align:center;padding:10px 0 2px;font-size:12px;color:var(--muted);cursor:pointer" onclick="go('s-members')">+ 6 more riders · View all →</div>
+    </div>
+    <div style="background:rgba(251,191,36,.08);border:1px solid rgba(251,191,36,.2);border-radius:14px;padding:12px 14px;margin-bottom:4px;font-size:13px;color:var(--amber)"><i class="ti ti-info-circle" style="margin-right:6px;vertical-align:-2px"></i>This ride is full — you can join the waitlist.</div>
+    <button class="btn-full" id="detail2-join-btn" onclick="openJoinSheet(this,'Marine Drive Midnight Cruise','cover-c','ti-moon',null)">Join Waitlist</button>
+    <button class="btn-outline" onclick="requireAuth(()=>go('s-chat'),'to open the ride chat')"><i class="ti ti-message-circle" style="margin-right:6px;font-size:16px;vertical-align:-2px"></i>Ride Chat</button>
+  </div>
+  <div class="bottom-nav">
+    <button class="nav-item" onclick="isAuthed?go('s-home'):go('s-landing')"><i class="ti ti-home"></i><span>Home</span></button>
+    <button class="nav-item active" onclick="go('s-explore')"><i class="ti ti-compass"></i><span>Explore</span></button>
+    <button class="nav-center" onclick="go('s-create')"><i class="ti ti-plus"></i></button>
+    <button class="nav-item" onclick="requireAuth(()=>go('s-notif'),'to view alerts')"><i class="ti ti-bell"></i><span>Alerts</span></button>
+    <button class="nav-item" onclick="requireAuth(()=>go('s-profile'),'to view your profile')"><i class="ti ti-user"></i><span>Profile</span></button>
+  </div>
+</div>
+
+<!-- ── MEMBERS ── -->
+<div class="screen" id="s-members">
+  <div class="content content-narrow">
+    <div class="ride-detail-back" onclick="go('s-detail2')"><i class="ti ti-arrow-left"></i><span>Back to ride</span></div>
+    <div class="pg-title" style="margin-bottom:4px">Ride Party</div>
+    <div style="font-size:13px;color:var(--muted);margin-bottom:20px">Marine Drive Midnight Cruise · 8 riders</div>
+    <div class="info-card">
+      <div class="member-row" onclick="go('s-riderprofile')"><div class="av-lg color-c">SM</div><div class="member-info"><div class="member-name">Shreya Mehta</div><div class="member-bike">KTM Duke 390 · 390cc</div><div style="font-size:11px;color:var(--muted);margin-top:2px">Mumbai · ⭐ 5.0 · 17 rides</div></div><span class="member-badge mb-host">Host</span></div>
+      <div class="member-row" onclick="go('s-riderprofile')"><div class="av-lg color-d">NP</div><div class="member-info"><div class="member-name">Nikhil Pawar</div><div class="member-bike">Yamaha MT-09 · 890cc</div><div style="font-size:11px;color:var(--muted);margin-top:2px">Mumbai · ⭐ 4.7 · 41 rides</div></div><span class="member-badge mb-rider">Rider</span></div>
+      <div class="member-row" onclick="go('s-riderprofile')"><div class="av-lg color-e">PS</div><div class="member-info"><div class="member-name">Priya Sharma</div><div class="member-bike">RE Classic 350 · 350cc</div><div style="font-size:11px;color:var(--muted);margin-top:2px">Mumbai · ⭐ 4.6 · 12 rides</div></div><span class="member-badge mb-rider">Rider</span></div>
+      <div class="member-row" onclick="go('s-riderprofile')"><div class="av-lg color-b">RK</div><div class="member-info"><div class="member-name">Rahul Khanna</div><div class="member-bike">Triumph Street Triple · 765cc</div><div style="font-size:11px;color:var(--muted);margin-top:2px">Mumbai · ⭐ 4.9 · 28 rides</div></div><span class="member-badge mb-rider">Rider</span></div>
+      <div class="member-row" onclick="go('s-riderprofile')"><div class="av-lg color-f">VN</div><div class="member-info"><div class="member-name">Vikram Nair</div><div class="member-bike">KTM Adventure 390 · 390cc</div><div style="font-size:11px;color:var(--muted);margin-top:2px">Thane · ⭐ 4.8 · 18 rides</div></div><span class="member-badge mb-rider">Rider</span></div>
+      <div class="member-row" onclick="go('s-riderprofile')"><div class="av-lg color-d">MB</div><div class="member-info"><div class="member-name">Meera Bhat</div><div class="member-bike">Bajaj Dominar 400 · 400cc</div><div style="font-size:11px;color:var(--muted);margin-top:2px">Mumbai · ⭐ 4.6 · 9 rides</div></div><span class="member-badge mb-rider">Rider</span></div>
+      <div class="member-row" onclick="go('s-riderprofile')"><div class="av-lg color-e">JS</div><div class="member-info"><div class="member-name">Jay Shah</div><div class="member-bike">Honda CB650R · 650cc</div><div style="font-size:11px;color:var(--muted);margin-top:2px">Navi Mumbai · ⭐ 4.7 · 22 rides</div></div><span class="member-badge mb-rider">Rider</span></div>
+    </div>
+    <button class="btn-full" style="margin-top:12px" onclick="requireAuth(()=>go('s-chat'),'to open the group chat')"><i class="ti ti-message-circle" style="margin-right:6px;font-size:16px;vertical-align:-2px"></i>Open Group Chat</button>
+  </div>
+  <div class="bottom-nav">
+    <button class="nav-item" onclick="isAuthed?go('s-home'):go('s-landing')"><i class="ti ti-home"></i><span>Home</span></button>
+    <button class="nav-item active" onclick="go('s-explore')"><i class="ti ti-compass"></i><span>Explore</span></button>
+    <button class="nav-center" onclick="go('s-create')"><i class="ti ti-plus"></i></button>
+    <button class="nav-item" onclick="requireAuth(()=>go('s-notif'),'to view alerts')"><i class="ti ti-bell"></i><span>Alerts</span></button>
+    <button class="nav-item" onclick="requireAuth(()=>go('s-profile'),'to view your profile')"><i class="ti ti-user"></i><span>Profile</span></button>
+  </div>
+</div>
+
+<!-- ── RIDER PROFILE ── -->
+<div class="screen" id="s-riderprofile">
+  <div class="content content-narrow">
+    <div class="ride-detail-back" onclick="go('s-members')"><i class="ti ti-arrow-left"></i><span>Back</span></div>
+    <div class="profile-top">
+      <div class="av-xl color-d" style="width:72px;height:72px;font-size:24px">NP</div>
+      <div class="profile-info"><div class="name">Nikhil Pawar</div><div class="bike">Yamaha MT-09 · 890cc</div><div class="rating"><span class="rating-star"><i class="ti ti-star" style="font-size:13px"></i></span><span style="font-weight:600">4.7</span><span style="color:var(--muted)">· 41 rides · Mumbai</span></div><div style="margin-top:8px;display:flex;gap:6px;flex-wrap:wrap"><span style="font-size:11px;background:rgba(74,222,128,.1);color:var(--green);padding:3px 10px;border-radius:20px">Experienced</span></div></div>
+    </div>
+    <div class="stat-grid"><div class="stat-box"><div class="stat-num">41</div><div class="stat-lbl">Total rides</div></div><div class="stat-box"><div class="stat-num">15</div><div class="stat-lbl">Hosted</div></div><div class="stat-box"><div class="stat-num">12k</div><div class="stat-lbl">km ridden</div></div></div>
+    <div class="info-card" style="margin-bottom:12px"><div class="info-row"><span class="info-lbl">Bike</span><span class="info-val">Yamaha MT-09</span></div><div class="info-row"><span class="info-lbl">Engine</span><span class="info-val">890cc</span></div><div class="info-row"><span class="info-lbl">City</span><span class="info-val">Mumbai, Maharashtra</span></div><div class="info-row"><span class="info-lbl">Member since</span><span class="info-val">Jan 2024</span></div></div>
+    <div class="section-label" style="margin-bottom:10px">Recent rides</div>
+    <div class="info-card"><div class="member-row" style="cursor:default"><div style="flex:1"><div style="font-size:14px;font-weight:500">Leh Ladakh Ultimate North</div><div style="font-size:12px;color:var(--muted)">May 2025 · 2,100km</div></div><span style="font-size:11px;background:rgba(255,77,0,.12);color:#ff7a3d;padding:3px 10px;border-radius:20px">Host</span></div><div class="member-row" style="cursor:default"><div style="flex:1"><div style="font-size:14px;font-weight:500">Sahyadri Weekend Circuit</div><div style="font-size:12px;color:var(--muted)">Apr 2025 · 240km</div></div><span style="font-size:11px;background:rgba(96,165,250,.1);color:var(--blue);padding:3px 10px;border-radius:20px">Rider</span></div></div>
+    <button class="btn-outline" style="margin-top:12px"><i class="ti ti-flag" style="margin-right:6px;font-size:14px;vertical-align:-2px"></i>Report this rider</button>
+  </div>
+  <div class="bottom-nav">
+    <button class="nav-item" onclick="isAuthed?go('s-home'):go('s-landing')"><i class="ti ti-home"></i><span>Home</span></button>
+    <button class="nav-item" onclick="go('s-explore')"><i class="ti ti-compass"></i><span>Explore</span></button>
+    <button class="nav-center" onclick="go('s-create')"><i class="ti ti-plus"></i></button>
+    <button class="nav-item" onclick="requireAuth(()=>go('s-notif'),'to view alerts')"><i class="ti ti-bell"></i><span>Alerts</span></button>
+    <button class="nav-item" onclick="requireAuth(()=>go('s-profile'),'to view your profile')"><i class="ti ti-user"></i><span>Profile</span></button>
+  </div>
+</div>
+
+<!-- ── CHAT ── -->
+<div class="screen" id="s-chat">
+  <div style="padding:16px 20px 12px;border-bottom:1px solid var(--border);background:var(--bg2);display:flex;align-items:center;gap:12px"><div style="cursor:pointer;color:var(--muted);font-size:20px" onclick="go('s-detail2')"><i class="ti ti-arrow-left"></i></div><div style="flex:1"><div style="font-size:15px;font-weight:600">Marine Drive Cruise</div><div style="font-size:12px;color:var(--muted)">8 riders · Fri 13 Jun</div></div><div style="cursor:pointer;color:var(--muted);font-size:18px" onclick="go('s-members')"><i class="ti ti-users"></i></div></div>
+  <div style="flex:1;padding:16px 20px 80px;overflow-y:auto">
+    <div class="chat-msg"><div class="chat-sender">Shreya Mehta (Host)</div><div class="chat-bubble other">Hey everyone! Meeting at Marine Drive Nariman Point end. Don't forget reflective gear 🌙</div><div class="chat-time">11:02 PM</div></div>
+    <div class="chat-msg"><div class="chat-sender">Nikhil Pawar</div><div class="chat-bubble other">On my way! ETA 10 mins</div><div class="chat-time">11:18 PM</div></div>
+    <div class="chat-msg mine"><div class="chat-bubble mine">Just parked near the fountain. See you guys soon</div><div class="chat-time">11:21 PM</div></div>
+    <div class="chat-msg"><div class="chat-sender">Vikram Nair</div><div class="chat-bubble other">Spotted you Arjun! Coming over</div><div class="chat-time">11:22 PM</div></div>
+    <div class="chat-msg"><div class="chat-sender">Shreya Mehta (Host)</div><div class="chat-bubble other">Everyone here, let's roll at 11:30 sharp. Hazards on at lights.</div><div class="chat-time">11:28 PM</div></div>
+  </div>
+  <div class="chat-input-row"><input class="chat-inp" placeholder="Message the group..."/><button class="chat-send"><i class="ti ti-send"></i></button></div>
+</div>
+
+<!-- ── NOTIFICATIONS ── -->
+<div class="screen" id="s-notif">
+  <div class="content content-narrow">
+    <div class="pg-title" style="padding-top:4px">Notifications</div>
+    <div style="font-size:13px;color:var(--muted);margin-bottom:20px">3 unread</div>
+    <div class="notif-item unread" onclick="go('s-detail')"><div class="notif-icon ni-white"><i class="ti ti-bell" style="font-size:18px;color:var(--text)"></i></div><div class="notif-text"><div class="notif-title">Vikram Nair requested to join your Lonavala Sunrise Run</div><div class="notif-sub">Lonavala Sunrise Breakfast Run</div></div><div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px"><div class="notif-time">2m</div><div class="unread-dot"></div></div></div>
+    <div class="notif-item unread" onclick="go('s-detail2')"><div class="notif-icon ni-green"><i class="ti ti-check" style="font-size:18px;color:var(--green)"></i></div><div class="notif-text"><div class="notif-title">You were accepted for Marine Drive Midnight Cruise</div><div class="notif-sub">Marine Drive Midnight Cruise</div></div><div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px"><div class="notif-time">18m</div><div class="unread-dot"></div></div></div>
+    <div class="notif-item unread"><div class="notif-icon ni-amber"><i class="ti ti-clock" style="font-size:18px;color:var(--amber)"></i></div><div class="notif-text"><div class="notif-title">Sahyadri Offroad Weekend starts in 2 hours</div><div class="notif-sub">Sahyadri Offroad Weekend</div></div><div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px"><div class="notif-time">1h</div><div class="unread-dot"></div></div></div>
+    <div class="notif-item" onclick="go('s-detail2')"><div class="notif-icon ni-red"><i class="ti ti-x" style="font-size:18px;color:var(--red)"></i></div><div class="notif-text"><div class="notif-title">Your request for Night Cruise BKC was not accepted</div><div class="notif-sub">Night Cruise BKC</div></div><div class="notif-time">Yesterday</div></div>
+    <div class="notif-item"><div class="notif-icon ni-white"><i class="ti ti-star" style="font-size:18px;color:var(--muted)"></i></div><div class="notif-text"><div class="notif-title">Vikram gave you 5 stars on Lonavala Run</div><div class="notif-sub">New rating received</div></div><div class="notif-time">3d</div></div>
+  </div>
+  <div class="bottom-nav">
+    <button class="nav-item" onclick="go('s-home')"><i class="ti ti-home"></i><span>Home</span></button>
+    <button class="nav-item" onclick="go('s-explore')"><i class="ti ti-compass"></i><span>Explore</span></button>
+    <button class="nav-center" onclick="go('s-create')"><i class="ti ti-plus"></i></button>
+    <button class="nav-item active" onclick="go('s-notif')"><i class="ti ti-bell"></i><span>Alerts</span></button>
+    <button class="nav-item" onclick="go('s-profile')"><i class="ti ti-user"></i><span>Profile</span></button>
+  </div>
+</div>
+
+<!-- ── PROFILE ── -->
+<div class="screen" id="s-profile">
+  <div class="profile-screen-top"><div class="pg-title" style="margin-bottom:0">Profile</div><div class="icon-btn"><i class="ti ti-settings"></i></div></div>
+  <div class="content content-narrow" style="padding-top:20px">
+    <div class="profile-top"><div class="av-xl color-a" style="width:72px;height:72px;font-size:24px;border:2px solid var(--border)">AK</div><div class="profile-info"><div class="name">Arjun Kulkarni</div><div class="bike">RE Himalayan 450</div><div class="rating"><span class="rating-star"><i class="ti ti-star" style="font-size:13px"></i></span><span style="font-weight:600">4.9</span><span style="color:var(--muted)">· 34 rides</span></div></div></div>
+    <div class="stat-grid" style="margin-bottom:16px"><div class="stat-box"><div class="stat-num">34</div><div class="stat-lbl">Total</div></div><div class="stat-box"><div class="stat-num">8</div><div class="stat-lbl">Hosted</div></div><div class="stat-box"><div class="stat-num">4.9</div><div class="stat-lbl">Rating</div></div></div>
+    <div class="info-card" style="margin-bottom:16px"><div class="info-row"><span class="info-lbl">Bike</span><span class="info-val">RE Himalayan 450</span></div><div class="info-row"><span class="info-lbl">Engine</span><span class="info-val">450cc</span></div><div class="info-row"><span class="info-lbl">City</span><span class="info-val">Pune, Maharashtra</span></div><div class="info-row"><span class="info-lbl">Instagram</span><span class="info-val accent">@arjunrides</span></div></div>
+    <div style="height:120px;border-radius:14px;background:var(--card2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center"><div style="text-align:center"><div style="font-size:40px;opacity:.2"><i class="ti ti-road"></i></div><div style="font-size:12px;color:var(--muted);margin-top:6px">All rides</div></div></div>
+  </div>
+  <div class="bottom-nav">
+    <button class="nav-item" onclick="go('s-home')"><i class="ti ti-home"></i><span>Home</span></button>
+    <button class="nav-item" onclick="go('s-explore')"><i class="ti ti-compass"></i><span>Explore</span></button>
+    <button class="nav-center" onclick="go('s-create')"><i class="ti ti-plus"></i></button>
+    <button class="nav-item" onclick="go('s-notif')"><i class="ti ti-bell"></i><span>Alerts</span></button>
+    <button class="nav-item active" onclick="go('s-profile')"><i class="ti ti-user"></i><span>Profile</span></button>
+  </div>
+</div>
+
+<!-- ── CREATE RIDE (with photo upload + inline account) ── -->
+<div class="screen" id="s-create">
+  <div class="content content-narrow">
+    <div class="ride-detail-back" onclick="isAuthed?go('s-home'):go('s-landing')"><i class="ti ti-arrow-left"></i><span>Back</span></div>
+    <div class="pg-title">Create a Ride</div>
+
+    <!-- COVER PHOTO UPLOAD -->
+    <div class="form-group">
+      <label class="form-lbl">Cover Photo <span style="color:var(--muted2);text-transform:none;letter-spacing:0;font-size:11px">— 1 photo</span></label>
+      <div class="photo-upload-wrap" id="photo-upload-wrap" onclick="document.getElementById('photo-file-input').click()">
+        <div class="photo-placeholder">
+          <i class="ti ti-photo-up"></i>
+          <div class="p-title">Add a cover photo</div>
+          <div class="p-sub">Tap to upload · JPG or PNG · Max 10MB</div>
+          <div class="p-sub" style="margin-top:2px;display:none" id="drag-hint">or drag &amp; drop here</div>
+        </div>
+        <img class="photo-preview-img" id="photo-preview-img" alt="Cover preview"/>
+        <div class="photo-actions">
+          <button class="photo-change" onclick="event.stopPropagation();document.getElementById('photo-file-input').click()"><i class="ti ti-refresh" style="margin-right:4px;font-size:12px"></i>Change photo</button>
+          <button class="photo-remove" onclick="event.stopPropagation();removePhoto()" title="Remove photo"><i class="ti ti-x"></i></button>
+        </div>
+      </div>
+      <input type="file" id="photo-file-input" accept="image/jpeg,image/png,image/webp" style="display:none" onchange="handlePhotoUpload(this)"/>
+    </div>
+
+    <div class="form-group"><label class="form-lbl">Ride Title</label><input class="form-inp" placeholder="e.g. Lonavala Sunrise Breakfast Run"/></div>
+    <div class="form-group"><label class="form-lbl">Ride Type</label><div class="opts" id="type-opts"><div class="opt active" onclick="selOpt('type-opts',this)">Breakfast</div><div class="opt" onclick="selOpt('type-opts',this)">Weekend</div><div class="opt" onclick="selOpt('type-opts',this)">Long Tour</div><div class="opt" onclick="selOpt('type-opts',this)">Night Ride</div><div class="opt" onclick="selOpt('type-opts',this)">Adventure</div><div class="opt" onclick="selOpt('type-opts',this)">Camping</div></div></div>
+    <div class="form-grid" style="margin-bottom:16px"><div class="form-group" style="margin-bottom:0"><label class="form-lbl">From</label><input class="form-inp" placeholder="Start location"/></div><div class="form-group" style="margin-bottom:0"><label class="form-lbl">To</label><input class="form-inp" placeholder="Destination"/></div></div>
+    <div class="form-group"><label class="form-lbl">Meeting Point</label><input class="form-inp" placeholder="Exact meeting spot"/></div>
+    <div class="form-grid" style="margin-bottom:16px"><div class="form-group" style="margin-bottom:0"><label class="form-lbl">Date</label><input class="form-inp" type="date"/></div><div class="form-group" style="margin-bottom:0"><label class="form-lbl">Time</label><input class="form-inp" type="time"/></div></div>
+    <div class="form-group"><label class="form-lbl">Pace</label><div class="opts" id="pace-opts"><div class="opt" onclick="selOpt('pace-opts',this)" style="color:#4ade80;border-color:rgba(74,222,128,.25)">Slow</div><div class="opt active" onclick="selOpt('pace-opts',this)">Moderate</div><div class="opt" onclick="selOpt('pace-opts',this)" style="color:#f87171;border-color:rgba(248,113,113,.25)">Fast</div></div></div>
+    <div class="form-grid" style="margin-bottom:16px"><div class="form-group" style="margin-bottom:0"><label class="form-lbl">Min CC</label><select class="form-inp" style="cursor:pointer"><option>Any</option><option>150+</option><option>200+</option><option>300+</option><option>500+</option></select></div><div class="form-group" style="margin-bottom:0"><label class="form-lbl">Max Riders</label><input class="form-inp" type="number" placeholder="10" min="2" max="100"/></div></div>
+    <div class="form-group"><label class="form-lbl">Description</label><textarea class="form-inp" rows="3" placeholder="What to expect, what to bring..."></textarea></div>
+
+    <!-- INLINE ACCOUNT CREATION -->
+    <div style="display:flex;align-items:center;gap:10px;margin:24px 0 16px"><div style="flex:1;height:1px;background:var(--border)"></div><div style="font-size:11px;color:var(--muted2);font-weight:500;text-transform:uppercase;letter-spacing:.08em;white-space:nowrap">Your account</div><div style="flex:1;height:1px;background:var(--border)"></div></div>
+    <div class="account-section">
+      <div class="account-section-hd"><i class="ti ti-user-circle"></i><div class="account-section-title">Create your account</div></div>
+      <div class="account-section-sub">Sign up to publish this ride and manage your requests.</div>
+      <div class="form-group"><label class="form-lbl">Full name</label><input class="form-inp" placeholder="Your name"/></div>
+      <div class="form-group"><label class="form-lbl">Email</label><input class="form-inp" type="email" placeholder="you@example.com"/></div>
+      <div class="form-group" style="margin-bottom:0"><label class="form-lbl">Password</label><input class="form-inp" type="password" placeholder="Create a password"/></div>
+      <div class="or-div"><span>or</span></div>
+      <div class="signin-inline">Already on REVO? <span onclick="openAuthSheet('in')">Sign in</span></div>
+    </div>
+
+    <button class="btn-full" style="margin-bottom:8px">Publish Ride</button>
+  </div>
+  <div class="bottom-nav">
+    <button class="nav-item" onclick="isAuthed?go('s-home'):go('s-landing')"><i class="ti ti-home"></i><span>Home</span></button>
+    <button class="nav-item" onclick="go('s-explore')"><i class="ti ti-compass"></i><span>Explore</span></button>
+    <button class="nav-center" style="background:var(--border)"><i class="ti ti-plus" style="color:#fff"></i></button>
+    <button class="nav-item" onclick="requireAuth(()=>go('s-notif'),'to view alerts')"><i class="ti ti-bell"></i><span>Alerts</span></button>
+    <button class="nav-item" onclick="requireAuth(()=>go('s-profile'),'to view your profile')"><i class="ti ti-user"></i><span>Profile</span></button>
+  </div>
+</div>
+
+
+<!-- ════════════════════════════════
+     JOIN REQUEST SHEET
+════════════════════════════════ -->
+<div class="sheet-overlay" id="join-overlay" onclick="handleSheetClick(event,'join-overlay')">
+  <div class="sheet-body">
+    <div class="sheet-handle"></div>
+    <div class="join-ride-hd">
+      <div class="join-cover-thumb cover-a" id="join-cover-thumb">
+        <i class="ti ti-sunrise" id="join-icon"></i>
+      </div>
+      <div>
+        <div style="font-size:15px;font-weight:700">Request to Join</div>
+        <div style="font-size:12px;color:var(--muted)" id="join-ride-name">Lonavala Sunrise Run</div>
+      </div>
+    </div>
+    <div style="font-size:13px;color:var(--muted);margin-bottom:20px;line-height:1.5">Add your details — the host reviews requests before confirming your spot.</div>
+    <div class="form-group"><label class="form-lbl">Your name <span style="color:var(--red)">*</span></label><input class="form-inp" id="join-name" placeholder="Full name"/></div>
+    <div class="form-group"><label class="form-lbl">Your bike <span style="color:var(--red)">*</span></label><input class="form-inp" id="join-bike" placeholder="e.g. RE Himalayan 450"/></div>
+    <div class="form-group" style="margin-bottom:6px"><label class="form-lbl">Phone / WhatsApp <span style="color:var(--muted2)">(optional)</span></label><input class="form-inp" id="join-phone" type="tel" placeholder="+91 98765 43210"/></div>
+    <div style="font-size:11px;color:var(--muted2);margin-bottom:18px">Shared only with the ride host.</div>
+    <div class="signin-inline" style="margin-bottom:16px">Already on REVO? <span onclick="closeJoinSheet();openAuthSheet('in')">Sign in instead</span></div>
+    <button class="btn-full" style="margin-top:0" onclick="submitJoinRequest()">Send Request</button>
+    <button class="btn-outline" onclick="closeJoinSheet()" style="margin-top:8px;color:var(--muted)">Cancel</button>
+  </div>
+</div>
+
+<!-- ════════════════════════════════
+     AUTH SHEET (nav-level sign in)
+════════════════════════════════ -->
+<div class="sheet-overlay" id="auth-overlay" onclick="handleSheetClick(event,'auth-overlay')">
+  <div class="sheet-body">
+    <div class="sheet-handle"></div>
+    <div class="auth-tabs"><button class="auth-tab active" id="tab-signin" onclick="setAuthMode('signin')">Sign in</button><button class="auth-tab" id="tab-signup" onclick="setAuthMode('signup')">Create account</button></div>
+    <div style="margin-bottom:20px"><div style="font-size:20px;font-weight:700;margin-bottom:5px" id="auth-title">Welcome back</div><div style="font-size:13px;color:var(--muted)" id="auth-sub">Sign in to continue</div></div>
+    <div class="form-group" id="auth-name-group" style="display:none"><label class="form-lbl">Your name</label><input class="form-inp" placeholder="Full name"/></div>
+    <div class="form-group"><label class="form-lbl">Email</label><input class="form-inp" type="email" placeholder="you@example.com"/></div>
+    <div class="form-group"><label class="form-lbl">Password</label><input class="form-inp" type="password" placeholder="••••••••"/></div>
+    <button class="btn-full" id="auth-submit-btn" onclick="completeAuth()">Sign in</button>
+    <button class="btn-outline" onclick="closeAuthSheet()" style="margin-top:8px;color:var(--muted)">Cancel</button>
+  </div>
+</div>
+
+</div><!-- /app-main -->
+</div><!-- /app-wrapper -->
+
+<script>
+/* ══ STATE ══ */
+let isAuthed = false;
+let pendingAction = null;
+let joinTriggerBtn = null;
+let authMode = 'signin';
+
+const ALL_SCREENS = ['s-landing','s-home','s-explore','s-detail','s-detail2','s-members','s-riderprofile','s-chat','s-notif','s-profile','s-create'];
+const SIDEBAR_MAP = {'s-home':'snav-home','s-explore':'snav-explore','s-detail':'snav-explore','s-detail2':'snav-explore','s-members':'snav-explore','s-riderprofile':'snav-explore','s-create':'snav-create','s-notif':'snav-notif','s-profile':'snav-profile'};
+
+/* ══ NAVIGATION ══ */
+function go(id) {
+  ALL_SCREENS.forEach(s => { const el=document.getElementById(s); if(el) el.classList.remove('active'); });
+  const t = document.getElementById(id);
+  if (t) {
+    t.classList.add('active');
+    t.scrollTop = 0;
+    const c = t.querySelector('.content'); if(c) c.scrollTop = 0;
+  }
+  // update sidebar
+  document.querySelectorAll('.sidebar-item').forEach(el => el.classList.remove('active'));
+  const snavId = SIDEBAR_MAP[id];
+  if (snavId) { const el = document.getElementById(snavId); if(el) el.classList.add('active'); }
+}
+
+/* ══ AUTH GATE ══ */
+function requireAuth(action, context) {
+  if (isAuthed) { action(); return; }
+  pendingAction = action;
+  openAuthSheet('in', context);
+}
+
+function openAuthSheet(mode, context) {
+  setAuthMode(mode === 'up' ? 'signup' : 'signin');
+  if (context) document.getElementById('auth-sub').textContent = 'Sign in ' + context;
+  document.getElementById('auth-overlay').classList.add('open');
+}
+
+function closeAuthSheet() {
+  document.getElementById('auth-overlay').classList.remove('open');
+  pendingAction = null;
+}
+
+function setAuthMode(mode) {
+  authMode = mode;
+  const si = mode === 'signin';
+  document.getElementById('tab-signin').classList.toggle('active', si);
+  document.getElementById('tab-signup').classList.toggle('active', !si);
+  document.getElementById('auth-title').textContent = si ? 'Welcome back' : 'Join REVO';
+  const sub = document.getElementById('auth-sub');
+  if (!sub.textContent.startsWith('Sign in ')) sub.textContent = si ? 'Sign in to continue' : 'Create your free account';
+  document.getElementById('auth-name-group').style.display = si ? 'none' : 'block';
+  document.getElementById('auth-submit-btn').textContent = si ? 'Sign in' : 'Create account';
+}
+
+function completeAuth() {
+  isAuthed = true;
+  closeAuthSheet();
+  // Update sidebar bottom
+  const ua = document.getElementById('sidebar-user-area');
+  if (ua) ua.innerHTML = '<div style="display:flex;align-items:center;gap:10px;cursor:pointer;padding:8px 6px;border-radius:12px" onclick="go(\'s-profile\')" onmouseover="this.style.background=\'rgba(255,255,255,.05)\'" onmouseout="this.style.background=\'\'"><div class="av color-a" style="width:34px;height:34px;font-size:12px">AK</div><div><div style="font-size:13px;font-weight:600;color:var(--text)">Arjun K.</div><div style="font-size:11px;color:var(--muted)">@arjunrides</div></div></div>';
+  if (pendingAction) { const a = pendingAction; pendingAction = null; setTimeout(()=>a(), 180); }
+  else go('s-home');
+}
+
+/* ══ JOIN SHEET ══ */
+function openJoinSheet(btn, rideName, coverClass, iconClass, imgSrc) {
+  joinTriggerBtn = btn;
+  document.getElementById('join-ride-name').textContent = rideName;
+  const thumb = document.getElementById('join-cover-thumb');
+  if (imgSrc) {
+    thumb.innerHTML = '<img src="'+imgSrc+'" style="width:100%;height:100%;object-fit:cover"/>';
+    thumb.className = 'join-cover-thumb';
+  } else {
+    thumb.className = 'join-cover-thumb ' + (coverClass||'cover-a');
+    thumb.innerHTML = '<i class="ti '+(iconClass||'ti-motorbike')+'" style="font-size:22px;opacity:.6"></i>';
+  }
+  ['join-name','join-bike','join-phone'].forEach(id=>{ const el=document.getElementById(id); if(el) el.value=''; });
+  document.getElementById('join-overlay').classList.add('open');
+}
+
+function closeJoinSheet() {
+  document.getElementById('join-overlay').classList.remove('open');
+  joinTriggerBtn = null;
+}
+
+function submitJoinRequest() {
+  const name = document.getElementById('join-name').value.trim();
+  const bike = document.getElementById('join-bike').value.trim();
+  if (!name || !bike) {
+    ['join-name','join-bike'].forEach(id => {
+      const el = document.getElementById(id);
+      if (!el.value.trim()) { el.style.borderColor='var(--red)'; setTimeout(()=>el.style.borderColor='',2000); if(!name) el.focus(); }
+    }); return;
+  }
+  if (joinTriggerBtn) {
+    if (joinTriggerBtn.classList.contains('btn-full')) {
+      joinTriggerBtn.textContent = '✓ Request sent';
+      joinTriggerBtn.style.opacity = '.55';
+      joinTriggerBtn.disabled = true;
+    } else {
+      joinTriggerBtn.textContent = 'Requested';
+      joinTriggerBtn.classList.add('pending');
+      joinTriggerBtn.disabled = true;
+    }
+  }
+  closeJoinSheet();
+}
+
+function handleSheetClick(e, overlayId) {
+  if (e.target === document.getElementById(overlayId)) {
+    if (overlayId === 'join-overlay') closeJoinSheet(); else closeAuthSheet();
+  }
+}
+
+/* ══ PHOTO UPLOAD ══ */
+function handlePhotoUpload(input) {
+  if (!input.files || !input.files[0]) return;
+  processPhotoFile(input.files[0]);
+}
+
+function processPhotoFile(file) {
+  if (!file.type.match(/image\/(jpeg|png|webp)/)) return;
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    document.getElementById('photo-preview-img').src = e.target.result;
+    document.getElementById('photo-upload-wrap').classList.add('has-photo');
+  };
+  reader.readAsDataURL(file);
+}
+
+function removePhoto() {
+  document.getElementById('photo-preview-img').src = '';
+  document.getElementById('photo-upload-wrap').classList.remove('has-photo');
+  document.getElementById('photo-file-input').value = '';
+}
+
+/* ══ DRAG & DROP ══ */
+(function() {
+  const area = document.getElementById('photo-upload-wrap');
+  if (!area) return;
+  area.addEventListener('dragover', e => { e.preventDefault(); area.classList.add('drag-over'); });
+  area.addEventListener('dragleave', () => area.classList.remove('drag-over'));
+  area.addEventListener('drop', e => {
+    e.preventDefault(); area.classList.remove('drag-over');
+    const f = e.dataTransfer.files[0];
+    if (f) processPhotoFile(f);
+  });
+  // Show drag hint on desktop hover
+  if (window.matchMedia('(min-width:768px)').matches) {
+    document.getElementById('drag-hint').style.display = 'block';
+  }
+})();
+
+/* ══ RESPONSIVE: show landing right col on desktop ══ */
+(function() {
+  function applyLayout() {
+    const isDesktop = window.matchMedia('(min-width:768px)').matches;
+    const mobileEls = document.querySelectorAll('.landing-mobile-only');
+    const rightCol = document.getElementById('landing-right-col');
+    mobileEls.forEach(el => el.style.display = isDesktop ? 'none' : 'flex');
+    if (rightCol) rightCol.style.display = isDesktop ? 'flex' : 'none';
+  }
+  applyLayout();
+  window.addEventListener('resize', applyLayout);
+})();
+
+/* ══ FILTER PILLS ══ */
+function togglePill(el) { el.classList.toggle('active'); }
+function selOpt(gridId, el) {
+  document.querySelectorAll('#'+gridId+' .opt').forEach(b=>b.classList.remove('active'));
+  el.classList.add('active');
+}
+</script>
+</body>
+</html>
