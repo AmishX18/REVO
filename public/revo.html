@@ -5,6 +5,12 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>REVO — Ride Together</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tabler-icons/3.34.0/webfont/tabler-icons.min.css">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  const SUPABASE_URL = "https://vxtpktdgepobqpfapnzn.supabase.co";
+  const SUPABASE_ANON_KEY = "sb_publishable_iA-XMc8VtF_L5UOwmha3xg_tjSdSPw3";
+  const sb = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+</script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 :root{
@@ -482,7 +488,7 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-s
     <div class="filter-section"><div class="section-label">Ride Type</div><div class="pill-row"><div class="pill" onclick="togglePill(this)">Casual</div><div class="pill" onclick="togglePill(this)">Touring</div><div class="pill" onclick="togglePill(this)">Adventure</div><div class="pill" onclick="togglePill(this)">Night</div><div class="pill" onclick="togglePill(this)">Camping</div></div></div>
     <div class="filter-section"><div class="section-label">Pace</div><div class="pill-row"><div class="pill" onclick="togglePill(this)">Slow</div><div class="pill" onclick="togglePill(this)">Moderate</div><div class="pill" onclick="togglePill(this)">Fast</div></div></div>
     <div class="divider"></div>
-    <div class="explore-grid">
+    <div class="explore-grid" id="explore-grid">
       <div class="ride-card" onclick="go('s-detail')"><div class="ride-img cover-a"><div style="font-size:64px;opacity:.12"><i class="ti ti-sunrise"></i></div><div class="ride-tag">Breakfast Ride</div></div><div class="ride-body"><div class="ride-title">Lonavala Sunrise Breakfast Run</div><div class="ride-meta"><span class="meta-item"><i class="ti ti-map-pin"></i> Pune</span><span class="meta-item"><i class="ti ti-calendar"></i> Sat 14 Jun</span><span class="meta-item"><i class="ti ti-road"></i> 128km</span></div><div class="slots-bar"><div class="slots-row"><span>Riders</span><span>6 / 10</span></div><div class="bar"><div class="bar-fill w" style="width:60%"></div></div></div><div class="ride-footer"><div class="host-row"><div class="av color-b">RK</div><div class="host-name"><b>Rohan Kadam</b></div></div><div style="display:flex;align-items:center;gap:8px"><span class="pace-pill p-chill">Slow</span><button class="btn-join" onclick="event.stopPropagation();openJoinSheet(this,'Lonavala Sunrise Breakfast Run','cover-a','ti-sunrise',null)">Join</button></div></div></div></div>
       <div class="ride-card" onclick="go('s-detail2')"><div class="ride-img cover-b"><div style="font-size:64px;opacity:.12"><i class="ti ti-mountain"></i></div><div class="ride-tag">Adventure</div></div><div class="ride-body"><div class="ride-title">Sahyadri Offroad Weekend</div><div class="ride-meta"><span class="meta-item"><i class="ti ti-map-pin"></i> Mumbai</span><span class="meta-item"><i class="ti ti-calendar"></i> Sun 15 Jun</span><span class="meta-item"><i class="ti ti-road"></i> 240km</span></div><div class="slots-bar"><div class="slots-row"><span>Riders</span><span>4 / 12 · 300cc+</span></div><div class="bar"><div class="bar-fill" style="width:33%"></div></div></div><div class="ride-footer"><div class="host-row"><div class="av color-d">NP</div><div class="host-name"><b>Nikhil Pawar</b></div></div><div style="display:flex;align-items:center;gap:8px"><span class="pace-pill p-fast">Fast</span><button class="btn-join" onclick="event.stopPropagation();openJoinSheet(this,'Sahyadri Offroad Weekend','cover-b','ti-mountain',null)">Join</button></div></div></div></div>
       <div class="ride-card" onclick="go('s-detail2')"><div class="ride-img cover-c"><div style="font-size:64px;opacity:.12"><i class="ti ti-moon"></i></div><div class="ride-tag">Night Ride</div></div><div class="ride-body"><div class="ride-title">Marine Drive Midnight Cruise</div><div class="ride-meta"><span class="meta-item"><i class="ti ti-map-pin"></i> Mumbai</span><span class="meta-item"><i class="ti ti-calendar"></i> Fri 13 Jun</span><span class="meta-item"><i class="ti ti-road"></i> 38km</span></div><div class="slots-bar"><div class="slots-row"><span>Riders</span><span>8 / 8 · Full</span></div><div class="bar"><div class="bar-fill r" style="width:100%"></div></div></div><div class="ride-footer"><div class="host-row"><div class="av color-c">SM</div><div class="host-name"><b>Shreya Mehta</b></div></div><div style="display:flex;align-items:center;gap:8px"><span class="pace-pill p-mod">Moderate</span><button class="btn-join full">Full</button></div></div></div></div>
@@ -545,6 +551,47 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-s
     <div style="background:rgba(251,191,36,.08);border:1px solid rgba(251,191,36,.2);border-radius:14px;padding:12px 14px;margin-bottom:4px;font-size:13px;color:var(--amber)"><i class="ti ti-info-circle" style="margin-right:6px;vertical-align:-2px"></i>This ride is full — you can join the waitlist.</div>
     <button class="btn-full" id="detail2-join-btn" onclick="openJoinSheet(this,'Marine Drive Midnight Cruise','cover-c','ti-moon',null)">Join Waitlist</button>
     <button class="btn-outline" onclick="requireAuth(()=>go('s-chat'),'to open the ride chat')"><i class="ti ti-message-circle" style="margin-right:6px;font-size:16px;vertical-align:-2px"></i>Ride Chat</button>
+  </div>
+  <div class="bottom-nav">
+    <button class="nav-item" onclick="isAuthed?go('s-home'):go('s-landing')"><i class="ti ti-home"></i><span>Home</span></button>
+    <button class="nav-item active" onclick="go('s-explore')"><i class="ti ti-compass"></i><span>Explore</span></button>
+    <button class="nav-center" onclick="go('s-create')"><i class="ti ti-plus"></i></button>
+    <button class="nav-item" onclick="requireAuth(()=>go('s-notif'),'to view alerts')"><i class="ti ti-bell"></i><span>Alerts</span></button>
+    <button class="nav-item" onclick="requireAuth(()=>go('s-profile'),'to view your profile')"><i class="ti ti-user"></i><span>Profile</span></button>
+  </div>
+</div>
+
+<!-- ── DYNAMIC RIDE DETAIL ── -->
+<div class="screen" id="s-ride-detail">
+  <div class="content content-narrow">
+    <div class="ride-detail-back" onclick="go('s-explore')"><i class="ti ti-arrow-left"></i><span>Back</span></div>
+    <div class="cover-a detail-cover-lg" id="rd-cover" style="height:160px;border-radius:16px;overflow:hidden;margin-bottom:16px;display:flex;align-items:center;justify-content:center;position:relative">
+      <div style="font-size:72px;opacity:.12"><i class="ti ti-motorbike"></i></div>
+      <div class="ride-tag" id="rd-tag">Ride</div>
+    </div>
+    <div class="detail-title" id="rd-title">Loading...</div>
+    <div class="detail-meta" id="rd-meta"></div>
+    <div class="tag-row" id="rd-tags"></div>
+    <div class="info-card" style="margin-bottom:12px">
+      <div style="font-size:13px;color:var(--muted);line-height:1.6" id="rd-description"></div>
+    </div>
+    <div class="info-card" style="margin-bottom:16px">
+      <div class="info-row"><span class="info-lbl">Start</span><span class="info-val" id="rd-from">—</span></div>
+      <div class="info-row"><span class="info-lbl">Meeting point</span><span class="info-val" id="rd-meeting">—</span></div>
+      <div class="info-row"><span class="info-lbl">Destination</span><span class="info-val" id="rd-to">—</span></div>
+    </div>
+    <div class="section-header"><div style="font-size:15px;font-weight:600">Hosted by</div></div>
+    <div class="info-card" style="margin-bottom:16px">
+      <div class="member-row" style="cursor:default">
+        <div class="av color-b" id="rd-host-avatar">H</div>
+        <div class="member-info">
+          <div class="member-name" id="rd-host-name">—</div>
+          <div class="member-bike">Host</div>
+        </div>
+        <span class="member-badge mb-host">Host</span>
+      </div>
+    </div>
+    <button class="btn-full" id="rd-join-btn">Request to Join</button>
   </div>
   <div class="bottom-nav">
     <button class="nav-item" onclick="isAuthed?go('s-home'):go('s-landing')"><i class="ti ti-home"></i><span>Home</span></button>
@@ -680,18 +727,18 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-s
       <input type="file" id="photo-file-input" accept="image/jpeg,image/png,image/webp" style="display:none" onchange="handlePhotoUpload(this)"/>
     </div>
 
-    <div class="form-group"><label class="form-lbl">Ride Title</label><input class="form-inp" placeholder="e.g. Lonavala Sunrise Breakfast Run"/></div>
+    <div class="form-group"><label class="form-lbl">Ride Title</label><input class="form-inp" id="ride-title" placeholder="e.g. Lonavala Sunrise Breakfast Run"/></div>
     <div class="form-group"><label class="form-lbl">Ride Type</label><div class="opts" id="type-opts"><div class="opt active" onclick="selOpt('type-opts',this)">Breakfast</div><div class="opt" onclick="selOpt('type-opts',this)">Weekend</div><div class="opt" onclick="selOpt('type-opts',this)">Long Tour</div><div class="opt" onclick="selOpt('type-opts',this)">Night Ride</div><div class="opt" onclick="selOpt('type-opts',this)">Adventure</div><div class="opt" onclick="selOpt('type-opts',this)">Camping</div></div></div>
-    <div class="form-grid" style="margin-bottom:16px"><div class="form-group" style="margin-bottom:0"><label class="form-lbl">From</label><input class="form-inp" placeholder="Start location"/></div><div class="form-group" style="margin-bottom:0"><label class="form-lbl">To</label><input class="form-inp" placeholder="Destination"/></div></div>
-    <div class="form-group"><label class="form-lbl">Meeting Point</label><input class="form-inp" placeholder="Exact meeting spot"/></div>
-    <div class="form-grid" style="margin-bottom:16px"><div class="form-group" style="margin-bottom:0"><label class="form-lbl">Date</label><input class="form-inp" type="date"/></div><div class="form-group" style="margin-bottom:0"><label class="form-lbl">Time</label><input class="form-inp" type="time"/></div></div>
+    <div class="form-grid" style="margin-bottom:16px"><div class="form-group" style="margin-bottom:0"><label class="form-lbl">From</label><input class="form-inp" id="ride-from" placeholder="Start location"/></div><div class="form-group" style="margin-bottom:0"><label class="form-lbl">To</label><input class="form-inp" id="ride-to" placeholder="Destination"/></div></div>
+    <div class="form-group"><label class="form-lbl">Meeting Point</label><input class="form-inp" id="ride-meeting" placeholder="Exact meeting spot"/></div>
+    <div class="form-grid" style="margin-bottom:16px"><div class="form-group" style="margin-bottom:0"><label class="form-lbl">Date</label><input class="form-inp" id="ride-date" type="date"/></div><div class="form-group" style="margin-bottom:0"><label class="form-lbl">Time</label><input class="form-inp" id="ride-time" type="time"/></div></div>
     <div class="form-group"><label class="form-lbl">Pace</label><div class="opts" id="pace-opts"><div class="opt" onclick="selOpt('pace-opts',this)" style="color:#4ade80;border-color:rgba(74,222,128,.25)">Slow</div><div class="opt active" onclick="selOpt('pace-opts',this)">Moderate</div><div class="opt" onclick="selOpt('pace-opts',this)" style="color:#f87171;border-color:rgba(248,113,113,.25)">Fast</div></div></div>
-    <div class="form-grid" style="margin-bottom:16px"><div class="form-group" style="margin-bottom:0"><label class="form-lbl">Min CC</label><select class="form-inp" style="cursor:pointer"><option>Any</option><option>150+</option><option>200+</option><option>300+</option><option>500+</option></select></div><div class="form-group" style="margin-bottom:0"><label class="form-lbl">Max Riders</label><input class="form-inp" type="number" placeholder="10" min="2" max="100"/></div></div>
-    <div class="form-group"><label class="form-lbl">Description</label><textarea class="form-inp" rows="3" placeholder="What to expect, what to bring..."></textarea></div>
+    <div class="form-grid" style="margin-bottom:16px"><div class="form-group" style="margin-bottom:0"><label class="form-lbl">Min CC</label><select class="form-inp" id="ride-mincc" style="cursor:pointer"><option>Any</option><option>150+</option><option>200+</option><option>300+</option><option>500+</option></select></div><div class="form-group" style="margin-bottom:0"><label class="form-lbl">Max Riders</label><input class="form-inp" id="ride-maxriders" type="number" placeholder="10" min="2" max="100"/></div></div>
+    <div class="form-group"><label class="form-lbl">Description</label><textarea class="form-inp" id="ride-description" rows="3" placeholder="What to expect, what to bring..."></textarea></div>
 
     <!-- INLINE ACCOUNT CREATION -->
     <div style="display:flex;align-items:center;gap:10px;margin:24px 0 16px"><div style="flex:1;height:1px;background:var(--border)"></div><div style="font-size:11px;color:var(--muted2);font-weight:500;text-transform:uppercase;letter-spacing:.08em;white-space:nowrap">Your account</div><div style="flex:1;height:1px;background:var(--border)"></div></div>
-    <div class="account-section">
+    <div class="account-section" id="guest-account-section">
       <div class="account-section-hd"><i class="ti ti-user-circle"></i><div class="account-section-title">Create your account</div></div>
       <div class="account-section-sub">Sign up to publish this ride and manage your requests.</div>
       <div class="form-group"><label class="form-lbl">Full name</label><input class="form-inp" placeholder="Your name"/></div>
@@ -701,7 +748,7 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-s
       <div class="signin-inline">Already on REVO? <span onclick="openAuthSheet('in')">Sign in</span></div>
     </div>
 
-    <button class="btn-full" style="margin-bottom:8px">Publish Ride</button>
+    <button class="btn-full" style="margin-bottom:8px" onclick="publishRide()">Publish Ride</button>
   </div>
   <div class="bottom-nav">
     <button class="nav-item" onclick="isAuthed?go('s-home'):go('s-landing')"><i class="ti ti-home"></i><span>Home</span></button>
@@ -747,9 +794,9 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-s
     <div class="sheet-handle"></div>
     <div class="auth-tabs"><button class="auth-tab active" id="tab-signin" onclick="setAuthMode('signin')">Sign in</button><button class="auth-tab" id="tab-signup" onclick="setAuthMode('signup')">Create account</button></div>
     <div style="margin-bottom:20px"><div style="font-size:20px;font-weight:700;margin-bottom:5px" id="auth-title">Welcome back</div><div style="font-size:13px;color:var(--muted)" id="auth-sub">Sign in to continue</div></div>
-    <div class="form-group" id="auth-name-group" style="display:none"><label class="form-lbl">Your name</label><input class="form-inp" placeholder="Full name"/></div>
-    <div class="form-group"><label class="form-lbl">Email</label><input class="form-inp" type="email" placeholder="you@example.com"/></div>
-    <div class="form-group"><label class="form-lbl">Password</label><input class="form-inp" type="password" placeholder="••••••••"/></div>
+    <div class="form-group" id="auth-name-group" style="display:none"><label class="form-lbl">Your name</label><input class="form-inp" id="auth-name" placeholder="Full name"/></div>
+    <div class="form-group"><label class="form-lbl">Email</label><input class="form-inp" id="auth-email" type="email" placeholder="you@example.com"/></div>
+    <div class="form-group"><label class="form-lbl">Password</label><input class="form-inp" id="auth-password" type="password" placeholder="••••••••"/></div>
     <button class="btn-full" id="auth-submit-btn" onclick="completeAuth()">Sign in</button>
     <button class="btn-outline" onclick="closeAuthSheet()" style="margin-top:8px;color:var(--muted)">Cancel</button>
   </div>
@@ -763,14 +810,20 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-s
 let isAuthed = false;
 let pendingAction = null;
 let joinTriggerBtn = null;
+let joinRideId = null;
+let selectedCoverFile = null;
 let authMode = 'signin';
 
-const ALL_SCREENS = ['s-landing','s-home','s-explore','s-detail','s-detail2','s-members','s-riderprofile','s-chat','s-notif','s-profile','s-create'];
+const ALL_SCREENS = ['s-landing','s-home','s-explore','s-detail','s-detail2','s-members','s-riderprofile','s-chat','s-notif','s-profile','s-create','s-ride-detail'];
 const SIDEBAR_MAP = {'s-home':'snav-home','s-explore':'snav-explore','s-detail':'snav-explore','s-detail2':'snav-explore','s-members':'snav-explore','s-riderprofile':'snav-explore','s-create':'snav-create','s-notif':'snav-notif','s-profile':'snav-profile'};
 
 /* ══ NAVIGATION ══ */
 function go(id) {
   ALL_SCREENS.forEach(s => { const el=document.getElementById(s); if(el) el.classList.remove('active'); });
+  const guestBox = document.getElementById('guest-account-section');
+  if (guestBox) guestBox.style.display = isAuthed ? 'none' : 'block';
+  if (id === 's-explore') loadRides();
+  if (id === 's-explore') loadRides();
   const t = document.getElementById(id);
   if (t) {
     t.classList.add('active');
@@ -813,19 +866,124 @@ function setAuthMode(mode) {
   document.getElementById('auth-submit-btn').textContent = si ? 'Sign in' : 'Create account';
 }
 
-function completeAuth() {
+async function completeAuth() {
+  const email = document.getElementById('auth-email').value.trim();
+  const password = document.getElementById('auth-password').value.trim();
+  const name = document.getElementById('auth-name').value.trim();
+
+  if (!email || !password) {
+    alert('Please enter both email and password');
+    return;
+  }
+
+  let result;
+  if (authMode === 'signup') {
+    result = await sb.auth.signUp({ email, password, options: { data: { name } } });
+    if (!result.error && result.data.user) {
+      await sb.from('profiles').insert({
+        id: result.data.user.id,
+        name: name || 'New Rider',
+      });
+    }
+  } else {
+    result = await sb.auth.signInWithPassword({ email, password });
+  }
+
+  if (result.error) {
+    alert('Error: ' + result.error.message);
+    return;
+  }
+
   isAuthed = true;
   closeAuthSheet();
   // Update sidebar bottom
   const ua = document.getElementById('sidebar-user-area');
-  if (ua) ua.innerHTML = '<div style="display:flex;align-items:center;gap:10px;cursor:pointer;padding:8px 6px;border-radius:12px" onclick="go(\'s-profile\')" onmouseover="this.style.background=\'rgba(255,255,255,.05)\'" onmouseout="this.style.background=\'\'"><div class="av color-a" style="width:34px;height:34px;font-size:12px">AK</div><div><div style="font-size:13px;font-weight:600;color:var(--text)">Arjun K.</div><div style="font-size:11px;color:var(--muted)">@arjunrides</div></div></div>';
+  if (ua) {
+    const displayEmail = (result.data.user && result.data.user.email) || email;
+    const initial = displayEmail.charAt(0).toUpperCase();
+    ua.innerHTML = `<div style="display:flex;align-items:center;gap:10px;cursor:pointer;padding:8px 6px;border-radius:12px" onclick="go('s-profile')" onmouseover="this.style.background='rgba(255,255,255,.05)'" onmouseout="this.style.background=''"><div class="av color-a" style="width:34px;height:34px;font-size:12px">${initial}</div><div><div style="font-size:13px;font-weight:600;color:var(--text)">${displayEmail}</div></div></div>`;
+  }
   if (pendingAction) { const a = pendingAction; pendingAction = null; setTimeout(()=>a(), 180); }
   else go('s-home');
 }
 
+/* ══ PUBLISH RIDE ══ */
+async function publishRide() {
+  const { data: { user } } = await sb.auth.getUser();
+  if (!user) {
+    alert('Please sign in first to publish a ride.');
+    openAuthSheet('in', 'to publish your ride');
+    return;
+  }
+
+  const title = document.getElementById('ride-title').value.trim();
+  if (!title) {
+    alert('Please enter a ride title.');
+    return;
+  }
+
+  const rideType = document.querySelector('#type-opts .opt.active')?.textContent || 'Casual';
+  const pace = (document.querySelector('#pace-opts .opt.active')?.textContent || 'Moderate').toLowerCase();
+  const fromLoc = document.getElementById('ride-from').value.trim();
+  const toLoc = document.getElementById('ride-to').value.trim();
+  const meetingPoint = document.getElementById('ride-meeting').value.trim();
+  const date = document.getElementById('ride-date').value;
+  const time = document.getElementById('ride-time').value;
+  const minCcText = document.getElementById('ride-mincc').value;
+  const minCc = minCcText === 'Any' ? 0 : parseInt(minCcText);
+  const maxRiders = parseInt(document.getElementById('ride-maxriders').value) || 10;
+  const description = document.getElementById('ride-description').value.trim();
+
+  let rideDate = null;
+  if (date) {
+    rideDate = time ? new Date(date + 'T' + time) : new Date(date);
+  }
+
+  let coverUrl = null;
+  if (selectedCoverFile) {
+    const filePath = user.id + '-' + Date.now() + '-' + selectedCoverFile.name;
+    const { error: uploadError } = await sb.storage
+      .from('ride-covers')
+      .upload(filePath, selectedCoverFile);
+
+    if (uploadError) {
+      alert('Error uploading photo: ' + uploadError.message);
+      return;
+    }
+
+    const { data: urlData } = sb.storage.from('ride-covers').getPublicUrl(filePath);
+    coverUrl = urlData.publicUrl;
+  }
+
+  const { data, error } = await sb.from('rides').insert({
+    host_id: user.id,
+    title: title,
+    ride_type: rideType,
+    cover_url: coverUrl,
+    from_loc: fromLoc,
+    to_loc: toLoc,
+    meeting_point: meetingPoint,
+    ride_date: rideDate,
+    pace: pace,
+    min_cc: minCc,
+    max_riders: maxRiders,
+    description: description,
+  }).select();
+
+  if (error) {
+    alert('Error publishing ride: ' + error.message);
+    return;
+  }
+
+  alert('Ride published successfully!');
+  selectedCoverFile = null;
+  go('s-home');
+}
+
 /* ══ JOIN SHEET ══ */
-function openJoinSheet(btn, rideName, coverClass, iconClass, imgSrc) {
+function openJoinSheet(btn, rideName, coverClass, iconClass, imgSrc, rideId) {
   joinTriggerBtn = btn;
+  joinRideId = rideId || null;
   document.getElementById('join-ride-name').textContent = rideName;
   const thumb = document.getElementById('join-cover-thumb');
   if (imgSrc) {
@@ -844,7 +1002,7 @@ function closeJoinSheet() {
   joinTriggerBtn = null;
 }
 
-function submitJoinRequest() {
+async function submitJoinRequest() {
   const name = document.getElementById('join-name').value.trim();
   const bike = document.getElementById('join-bike').value.trim();
   if (!name || !bike) {
@@ -853,6 +1011,27 @@ function submitJoinRequest() {
       if (!el.value.trim()) { el.style.borderColor='var(--red)'; setTimeout(()=>el.style.borderColor='',2000); if(!name) el.focus(); }
     }); return;
   }
+
+  if (joinRideId) {
+    const { data: { user } } = await sb.auth.getUser();
+    if (!user) {
+      alert('Please sign in to send a join request, then click Join again.');
+      openAuthSheet('in', 'to request to join this ride');
+      return;
+    }
+
+    const { error } = await sb.from('ride_members').insert({
+      ride_id: joinRideId,
+      user_id: user.id,
+      status: 'pending',
+    });
+
+    if (error) {
+      alert('Error sending request: ' + error.message);
+      return;
+    }
+  }
+
   if (joinTriggerBtn) {
     if (joinTriggerBtn.classList.contains('btn-full')) {
       joinTriggerBtn.textContent = '✓ Request sent';
@@ -881,6 +1060,7 @@ function handlePhotoUpload(input) {
 
 function processPhotoFile(file) {
   if (!file.type.match(/image\/(jpeg|png|webp)/)) return;
+  selectedCoverFile = file;
   const reader = new FileReader();
   reader.onload = (e) => {
     document.getElementById('photo-preview-img').src = e.target.result;
@@ -890,6 +1070,7 @@ function processPhotoFile(file) {
 }
 
 function removePhoto() {
+  selectedCoverFile = null;
   document.getElementById('photo-preview-img').src = '';
   document.getElementById('photo-upload-wrap').classList.remove('has-photo');
   document.getElementById('photo-file-input').value = '';
@@ -924,6 +1105,111 @@ function removePhoto() {
   applyLayout();
   window.addEventListener('resize', applyLayout);
 })();
+
+/* ══ LOAD REAL RIDES ══ */
+async function loadRides() {
+  const grid = document.getElementById('explore-grid');
+  if (!grid) return;
+
+  const { data: rides, error } = await sb
+    .from('rides')
+    .select('*, profiles(name)')
+    .order('created_at', { ascending: false });
+
+  if (error) {
+    console.error('Error loading rides:', error);
+    grid.innerHTML = '<div style="text-align:center;padding:40px 20px;color:var(--red)">Could not load rides.</div>';
+    return;
+  }
+
+  if (!rides || rides.length === 0) {
+    grid.innerHTML = '<div style="text-align:center;padding:40px 20px;color:var(--muted)">No rides yet. Be the first to create one!</div>';
+    return;
+  }
+
+  grid.innerHTML = rides.map(function(ride) {
+    const hostProfile = Array.isArray(ride.profiles) ? ride.profiles[0] : ride.profiles;
+    const hostName = (hostProfile && hostProfile.name) || 'Unknown Host';
+    const initial = hostName.charAt(0).toUpperCase();
+    const dateStr = ride.ride_date ? new Date(ride.ride_date).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' }) : 'Date TBD';
+    const coverHtml = ride.cover_url
+      ? '<img src="' + ride.cover_url + '" style="width:100%;height:100%;object-fit:cover">'
+      : '<div style="font-size:64px;opacity:.12"><i class="ti ti-motorbike"></i></div>';
+    const paceClass = ride.pace === 'slow' ? 'p-chill' : ride.pace === 'fast' ? 'p-fast' : 'p-mod';
+    const paceLabel = ride.pace ? (ride.pace.charAt(0).toUpperCase() + ride.pace.slice(1)) : 'Moderate';
+    const safeTitle = (ride.title || '').replace(/'/g, "\\'");
+
+    return '<div class="ride-card" onclick="openRideDetail(\'' + ride.id + '\')">' +
+      '<div class="ride-img cover-a">' + coverHtml + '<div class="ride-tag">' + (ride.ride_type || 'Ride') + '</div></div>' +
+      '<div class="ride-body">' +
+        '<div class="ride-title">' + ride.title + '</div>' +
+        '<div class="ride-meta">' +
+          '<span class="meta-item"><i class="ti ti-map-pin"></i> ' + (ride.from_loc || '') + '</span>' +
+          '<span class="meta-item"><i class="ti ti-calendar"></i> ' + dateStr + '</span>' +
+        '</div>' +
+        '<div class="ride-footer">' +
+          '<div class="host-row"><div class="av color-b">' + initial + '</div><div class="host-name"><b>' + hostName + '</b></div></div>' +
+          '<div style="display:flex;align-items:center;gap:8px">' +
+            '<span class="pace-pill ' + paceClass + '">' + paceLabel + '</span>' +
+            '<button class="btn-join" onclick="event.stopPropagation();openJoinSheet(this,\'' + safeTitle + '\',\'cover-a\',\'ti-motorbike\',null,\'' + ride.id + '\')">Join</button>' +
+          '</div>' +
+        '</div>' +
+      '</div>' +
+    '</div>';
+  }).join('');
+}
+
+/* ══ OPEN RIDE DETAIL ══ */
+async function openRideDetail(rideId) {
+  go('s-ride-detail');
+  document.getElementById('rd-title').textContent = 'Loading...';
+
+  const { data: ride, error } = await sb
+    .from('rides')
+    .select('*, profiles(name)')
+    .eq('id', rideId)
+    .single();
+
+  if (error || !ride) {
+    document.getElementById('rd-title').textContent = 'Ride not found';
+    return;
+  }
+
+  const hostProfile = Array.isArray(ride.profiles) ? ride.profiles[0] : ride.profiles;
+  const hostName = (hostProfile && hostProfile.name) || 'Unknown Host';
+  const initial = hostName.charAt(0).toUpperCase();
+  const dateStr = ride.ride_date ? new Date(ride.ride_date).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' }) : 'Date TBD';
+  const timeStr = ride.ride_date ? new Date(ride.ride_date).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' }) : '';
+  const paceClass = ride.pace === 'slow' ? 'p-chill' : ride.pace === 'fast' ? 'p-fast' : 'p-mod';
+  const paceLabel = ride.pace ? (ride.pace.charAt(0).toUpperCase() + ride.pace.slice(1)) : 'Moderate';
+
+  document.getElementById('rd-title').textContent = ride.title;
+  document.getElementById('rd-tag').textContent = ride.ride_type || 'Ride';
+  if (ride.cover_url) {
+    document.getElementById('rd-cover').insertAdjacentHTML('afterbegin', '<img src="' + ride.cover_url + '" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover">');
+  }
+  document.getElementById('rd-meta').innerHTML =
+    '<span class="meta-item"><i class="ti ti-calendar"></i> ' + dateStr + '</span>' +
+    (timeStr ? '<span class="meta-item"><i class="ti ti-clock"></i> ' + timeStr + '</span>' : '');
+  document.getElementById('rd-tags').innerHTML =
+    '<span class="pace-pill ' + paceClass + '">' + paceLabel + ' pace</span>' +
+    '<span class="tag">' + (ride.min_cc ? ride.min_cc + 'cc+' : 'Any CC') + '</span>' +
+    '<span class="tag"><i class="ti ti-users" style="font-size:12px"></i> Up to ' + (ride.max_riders || 10) + ' riders</span>';
+  document.getElementById('rd-description').textContent = ride.description || 'No description provided.';
+  document.getElementById('rd-from').textContent = ride.from_loc || '—';
+  document.getElementById('rd-meeting').textContent = ride.meeting_point || '—';
+  document.getElementById('rd-to').textContent = ride.to_loc || '—';
+  document.getElementById('rd-host-name').textContent = hostName;
+  document.getElementById('rd-host-avatar').textContent = initial;
+
+  const joinBtn = document.getElementById('rd-join-btn');
+  joinBtn.textContent = 'Request to Join';
+  joinBtn.disabled = false;
+  joinBtn.style.opacity = '1';
+  joinBtn.onclick = function() {
+    openJoinSheet(joinBtn, ride.title, 'cover-a', 'ti-motorbike', null, ride.id);
+  };
+}
 
 /* ══ FILTER PILLS ══ */
 function togglePill(el) { el.classList.toggle('active'); }
