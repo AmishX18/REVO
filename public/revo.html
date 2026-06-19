@@ -599,6 +599,7 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-s
       <div id="rd-pending-list"></div>
     </div>
     <button class="btn-full" id="rd-join-btn">Request to Join</button>
+    <a class="btn-full" id="rd-whatsapp-btn" href="#" target="_blank" rel="noopener" style="display:none;background:#25D366;color:#fff;text-decoration:none;text-align:center">💬 Join WhatsApp Group</a>
   </div>
   <div class="bottom-nav">
     <button class="nav-item" onclick="isAuthed?go('s-home'):go('s-landing')"><i class="ti ti-home"></i><span>Home</span></button>
@@ -743,6 +744,7 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-s
     <div class="form-group"><label class="form-lbl">Pace</label><div class="opts" id="pace-opts"><div class="opt" onclick="selOpt('pace-opts',this)" style="color:#4ade80;border-color:rgba(74,222,128,.25)">Slow</div><div class="opt active" onclick="selOpt('pace-opts',this)">Moderate</div><div class="opt" onclick="selOpt('pace-opts',this)" style="color:#f87171;border-color:rgba(248,113,113,.25)">Fast</div></div></div>
     <div class="form-grid" style="margin-bottom:16px"><div class="form-group" style="margin-bottom:0"><label class="form-lbl">Min CC</label><select class="form-inp" id="ride-mincc" style="cursor:pointer"><option>Any</option><option>150+</option><option>200+</option><option>300+</option><option>500+</option></select></div><div class="form-group" style="margin-bottom:0"><label class="form-lbl">Max Riders</label><input class="form-inp" id="ride-maxriders" type="number" placeholder="10" min="2" max="100"/></div></div>
     <div class="form-group"><label class="form-lbl">Description</label><textarea class="form-inp" id="ride-description" rows="3" placeholder="What to expect, what to bring..."></textarea></div>
+<div class="form-group"><label class="form-lbl">WhatsApp Group Link <span style="color:var(--muted2);text-transform:none;letter-spacing:0;font-size:11px">— optional, shown only to accepted riders</span></label><input class="form-inp" id="ride-whatsapp" placeholder="https://chat.whatsapp.com/..."/></div>
 
     <!-- INLINE ACCOUNT CREATION -->
     <div style="display:flex;align-items:center;gap:10px;margin:24px 0 16px"><div style="flex:1;height:1px;background:var(--border)"></div><div style="font-size:11px;color:var(--muted2);font-weight:500;text-transform:uppercase;letter-spacing:.08em;white-space:nowrap">Your account</div><div style="flex:1;height:1px;background:var(--border)"></div></div>
@@ -944,6 +946,7 @@ async function publishRide() {
   const minCc = minCcText === 'Any' ? 0 : parseInt(minCcText);
   const maxRiders = parseInt(document.getElementById('ride-maxriders').value) || 10;
   const description = document.getElementById('ride-description').value.trim();
+  const whatsappLink = document.getElementById('ride-whatsapp').value.trim();
 
   let rideDate = null;
   if (date) {
@@ -979,6 +982,7 @@ async function publishRide() {
     min_cc: minCc,
     max_riders: maxRiders,
     description: description,
+    whatsapp_link: whatsappLink || null,
   }).select();
 
   if (error) {
@@ -1424,13 +1428,36 @@ async function openRideDetail(rideId) {
   const isHost = currentUser && currentUser.id === ride.host_id;
   const pendingSection = document.getElementById('rd-pending-section');
 
+  const waBtn = document.getElementById('rd-whatsapp-btn');
+  if (waBtn) {
+    waBtn.style.display = 'none';
+    if (ride.whatsapp_link) {
+      if (isHost) {
+        waBtn.style.display = 'block';
+        waBtn.href = ride.whatsapp_link;
+      } else if (currentUser) {
+        const { data: waCheck } = await sb
+          .from('ride_members')
+          .select('status')
+          .eq('ride_id', ride.id)
+          .eq('user_id', currentUser.id)
+          .eq('status', 'accepted')
+          .maybeSingle();
+        if (waCheck) {
+          waBtn.style.display = 'block';
+          waBtn.href = ride.whatsapp_link;
+        }
+      }
+    }
+  }
+
   if (isHost) {
     joinBtn.style.display = 'none';
     pendingSection.style.display = 'block';
 
     const { data: requests } = await sb
       .from('ride_members')
-      .select('*, profiles(name)')
+      .select('*, profiles(name, bike_model, cc, city, rating)')
       .eq('ride_id', ride.id)
       .eq('status', 'pending');
 
@@ -1441,10 +1468,16 @@ async function openRideDetail(rideId) {
       listEl.innerHTML = requests.map(function(req) {
         const reqProfile = Array.isArray(req.profiles) ? req.profiles[0] : req.profiles;
         const reqName = (reqProfile && reqProfile.name) || 'Rider';
+        const reqBike = (reqProfile && reqProfile.bike_model) || 'Bike not set';
+        const reqCity = (reqProfile && reqProfile.city) || 'City not set';
+        const reqRating = (reqProfile && reqProfile.rating) || 5.0;
         return '<div class="pending-request">' +
           '<div class="req-top">' +
             '<div class="av color-f">' + reqName.charAt(0).toUpperCase() + '</div>' +
-            '<div style="flex:1"><div style="font-size:14px;font-weight:500">' + reqName + '</div></div>' +
+            '<div style="flex:1">' +
+              '<div style="font-size:14px;font-weight:500">' + reqName + '</div>' +
+              '<div style="font-size:12px;color:var(--muted)">' + reqBike + ' · ' + reqCity + ' · ⭐ ' + reqRating + '</div>' +
+            '</div>' +
           '</div>' +
           '<div class="req-actions">' +
             '<button class="btn-accept" onclick="respondToRequest(\'' + req.id + '\',\'accepted\',\'' + ride.id + '\')">Accept</button>' +
