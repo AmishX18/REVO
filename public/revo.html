@@ -389,7 +389,7 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-s
     <div class="sidebar-divider"></div>
     <button class="sidebar-create" onclick="go('s-create')"><i class="ti ti-plus"></i><span>Create a Ride</span></button>
     <div class="sidebar-divider"></div>
-    <button class="sidebar-item" id="snav-notif" onclick="requireAuth(()=>go('s-notif'),'to view alerts')"><i class="ti ti-bell"></i><span>Alerts</span></button>
+    <button class="sidebar-item" id="snav-notif" onclick="requireAuth(()=>go('s-notif'),'to view alerts')"><i class="ti ti-bell"></i><span>Alerts</span><span id="alerts-dot" style="display:none;width:7px;height:7px;background:var(--red);border-radius:50%;margin-left:6px"></span></button>
     <button class="sidebar-item" id="snav-profile" onclick="requireAuth(()=>go('s-profile'),'to view your profile')"><i class="ti ti-user"></i><span>Profile</span></button>
   </div>
   <div class="sidebar-bottom">
@@ -580,7 +580,7 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-s
       <div class="info-row"><span class="info-lbl">Meeting point</span><span class="info-val" id="rd-meeting">—</span></div>
       <div class="info-row"><span class="info-lbl">Destination</span><span class="info-val" id="rd-to">—</span></div>
     </div>
-    <div class="section-header"><div style="font-size:15px;font-weight:600">Hosted by</div></div>
+    <div class="section-header"><div style="font-size:15px;font-weight:600">Ride Party</div></div>
     <div class="info-card" style="margin-bottom:16px">
       <div class="member-row" style="cursor:default">
         <div class="av color-b" id="rd-host-avatar">H</div>
@@ -590,6 +590,11 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-s
         </div>
         <span class="member-badge mb-host">Host</span>
       </div>
+      <div id="rd-accepted-list"></div>
+    </div>
+    <div id="rd-pending-section" style="display:none">
+      <div class="section-header"><div style="font-size:15px;font-weight:600">Pending Requests</div></div>
+      <div id="rd-pending-list"></div>
     </div>
     <button class="btn-full" id="rd-join-btn">Request to Join</button>
   </div>
@@ -669,6 +674,7 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-s
   <div class="content content-narrow">
     <div class="pg-title" style="padding-top:4px">Notifications</div>
     <div style="font-size:13px;color:var(--muted);margin-bottom:20px">3 unread</div>
+    <div id="notif-list"></div>
     <div class="notif-item unread" onclick="go('s-detail')"><div class="notif-icon ni-white"><i class="ti ti-bell" style="font-size:18px;color:var(--text)"></i></div><div class="notif-text"><div class="notif-title">Vikram Nair requested to join your Lonavala Sunrise Run</div><div class="notif-sub">Lonavala Sunrise Breakfast Run</div></div><div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px"><div class="notif-time">2m</div><div class="unread-dot"></div></div></div>
     <div class="notif-item unread" onclick="go('s-detail2')"><div class="notif-icon ni-green"><i class="ti ti-check" style="font-size:18px;color:var(--green)"></i></div><div class="notif-text"><div class="notif-title">You were accepted for Marine Drive Midnight Cruise</div><div class="notif-sub">Marine Drive Midnight Cruise</div></div><div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px"><div class="notif-time">18m</div><div class="unread-dot"></div></div></div>
     <div class="notif-item unread"><div class="notif-icon ni-amber"><i class="ti ti-clock" style="font-size:18px;color:var(--amber)"></i></div><div class="notif-text"><div class="notif-title">Sahyadri Offroad Weekend starts in 2 hours</div><div class="notif-sub">Sahyadri Offroad Weekend</div></div><div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px"><div class="notif-time">1h</div><div class="unread-dot"></div></div></div>
@@ -823,7 +829,11 @@ function go(id) {
   const guestBox = document.getElementById('guest-account-section');
   if (guestBox) guestBox.style.display = isAuthed ? 'none' : 'block';
   if (id === 's-explore') loadRides();
+  if (id === 's-notif') loadNotifications();
+  checkUnreadNotifications();
   if (id === 's-explore') loadRides();
+  if (id === 's-notif') loadNotifications();
+  checkUnreadNotifications();
   const t = document.getElementById(id);
   if (t) {
     t.classList.add('active');
@@ -1159,6 +1169,116 @@ async function loadRides() {
   }).join('');
 }
 
+/* ══ CHECK UNREAD ══ */
+async function checkUnreadNotifications() {
+  const dot = document.getElementById('alerts-dot');
+  if (!dot) return;
+  if (!isAuthed) { dot.style.display = 'none'; return; }
+
+  const { data: { user } } = await sb.auth.getUser();
+  if (!user) { dot.style.display = 'none'; return; }
+
+  const { data: pendingOnMyRides } = await sb
+    .from('ride_members')
+    .select('joined_at, rides!inner(host_id)')
+    .eq('rides.host_id', user.id)
+    .eq('status', 'pending');
+
+  const { data: myAccepted } = await sb
+    .from('ride_members')
+    .select('joined_at')
+    .eq('user_id', user.id)
+    .eq('status', 'accepted');
+
+  const allTimes = [].concat(pendingOnMyRides || [], myAccepted || []).map(function(r) { return r.joined_at; });
+  if (allTimes.length === 0) { dot.style.display = 'none'; return; }
+
+  const newest = allTimes.sort().reverse()[0];
+  const lastSeen = localStorage.getItem('revo_alerts_last_seen');
+
+  if (!lastSeen || new Date(newest) > new Date(lastSeen)) {
+    dot.style.display = 'block';
+  } else {
+    dot.style.display = 'none';
+  }
+}
+
+/* ══ LOAD NOTIFICATIONS ══ */
+async function loadNotifications() {
+  const list = document.getElementById('notif-list');
+  if (!list) return;
+  list.innerHTML = '<div style="font-size:13px;color:var(--muted);padding:8px 0">Loading...</div>';
+
+  const { data: { user } } = await sb.auth.getUser();
+  if (!user) {
+    list.innerHTML = '';
+    return;
+  }
+
+  const { data: pendingOnMyRides } = await sb
+    .from('ride_members')
+    .select('*, profiles(name), rides!inner(title, host_id)')
+    .eq('rides.host_id', user.id)
+    .eq('status', 'pending')
+    .order('joined_at', { ascending: false });
+
+  const { data: myAccepted } = await sb
+    .from('ride_members')
+    .select('*, rides(title)')
+    .eq('user_id', user.id)
+    .eq('status', 'accepted')
+    .order('joined_at', { ascending: false });
+
+  let items = [];
+
+  (pendingOnMyRides || []).forEach(function(req) {
+    const reqProfile = Array.isArray(req.profiles) ? req.profiles[0] : req.profiles;
+    const reqName = (reqProfile && reqProfile.name) || 'Someone';
+    const rideInfo = Array.isArray(req.rides) ? req.rides[0] : req.rides;
+    const rideTitle = (rideInfo && rideInfo.title) || 'your ride';
+    items.push({
+      time: req.joined_at,
+      html: '<div class="notif-item unread" onclick="openRideDetail(\'' + req.ride_id + '\')">' +
+        '<div class="notif-icon ni-white"><i class="ti ti-bell" style="font-size:18px;color:var(--text)"></i></div>' +
+        '<div class="notif-text"><div class="notif-title">' + reqName + ' requested to join ' + rideTitle + '</div></div>' +
+        '<div class="unread-dot"></div>' +
+      '</div>'
+    });
+  });
+
+  (myAccepted || []).forEach(function(m) {
+    const rideInfo = Array.isArray(m.rides) ? m.rides[0] : m.rides;
+    const rideTitle = (rideInfo && rideInfo.title) || 'a ride';
+    items.push({
+      time: m.joined_at,
+      html: '<div class="notif-item unread" onclick="openRideDetail(\'' + m.ride_id + '\')">' +
+        '<div class="notif-icon ni-green"><i class="ti ti-check" style="font-size:18px;color:var(--green)"></i></div>' +
+        '<div class="notif-text"><div class="notif-title">You were accepted for ' + rideTitle + '</div></div>' +
+        '<div class="unread-dot"></div>' +
+      '</div>'
+    });
+  });
+
+  items.sort(function(a, b) { return new Date(b.time) - new Date(a.time); });
+
+  if (items.length === 0) {
+    list.innerHTML = '<div style="font-size:13px;color:var(--muted);padding:8px 0">No notifications yet.</div>';
+  } else {
+    list.innerHTML = items.map(function(i) { return i.html; }).join('');
+  }
+
+  localStorage.setItem('revo_alerts_last_seen', new Date().toISOString());
+  const dot = document.getElementById('alerts-dot');
+  if (dot) dot.style.display = 'none';
+}
+
+/* ══ RESPOND TO REQUEST ══ */
+async function respondToRequest(requestId, newStatus, rideId) {
+  const { error } = await sb.from('ride_members').update({ status: newStatus }).eq('id', requestId);
+  if (error) { alert('Error: ' + error.message); return; }
+  openRideDetail(rideId);
+}
+
 /* ══ OPEN RIDE DETAIL ══ */
 async function openRideDetail(rideId) {
   go('s-ride-detail');
@@ -1202,6 +1322,27 @@ async function openRideDetail(rideId) {
   document.getElementById('rd-host-name').textContent = hostName;
   document.getElementById('rd-host-avatar').textContent = initial;
 
+  const { data: acceptedMembers } = await sb
+    .from('ride_members')
+    .select('*, profiles(name)')
+    .eq('ride_id', ride.id)
+    .eq('status', 'accepted');
+
+  const acceptedListEl = document.getElementById('rd-accepted-list');
+  if (acceptedMembers && acceptedMembers.length > 0) {
+    acceptedListEl.innerHTML = acceptedMembers.map(function(m) {
+      const mProfile = Array.isArray(m.profiles) ? m.profiles[0] : m.profiles;
+      const mName = (mProfile && mProfile.name) || 'Rider';
+      return '<div class="member-row" style="cursor:default">' +
+        '<div class="av color-e">' + mName.charAt(0).toUpperCase() + '</div>' +
+        '<div class="member-info"><div class="member-name">' + mName + '</div></div>' +
+        '<span class="member-badge mb-rider">Rider</span>' +
+      '</div>';
+    }).join('');
+  } else {
+    acceptedListEl.innerHTML = '';
+  }
+
   const joinBtn = document.getElementById('rd-join-btn');
   joinBtn.textContent = 'Request to Join';
   joinBtn.disabled = false;
@@ -1209,6 +1350,63 @@ async function openRideDetail(rideId) {
   joinBtn.onclick = function() {
     openJoinSheet(joinBtn, ride.title, 'cover-a', 'ti-motorbike', null, ride.id);
   };
+
+  const { data: { user: currentUser } } = await sb.auth.getUser();
+  const isHost = currentUser && currentUser.id === ride.host_id;
+  const pendingSection = document.getElementById('rd-pending-section');
+
+  if (isHost) {
+    joinBtn.style.display = 'none';
+    pendingSection.style.display = 'block';
+
+    const { data: requests } = await sb
+      .from('ride_members')
+      .select('*, profiles(name)')
+      .eq('ride_id', ride.id)
+      .eq('status', 'pending');
+
+    const listEl = document.getElementById('rd-pending-list');
+    if (!requests || requests.length === 0) {
+      listEl.innerHTML = '<div style="font-size:13px;color:var(--muted);padding:8px 0">No pending requests right now.</div>';
+    } else {
+      listEl.innerHTML = requests.map(function(req) {
+        const reqProfile = Array.isArray(req.profiles) ? req.profiles[0] : req.profiles;
+        const reqName = (reqProfile && reqProfile.name) || 'Rider';
+        return '<div class="pending-request">' +
+          '<div class="req-top">' +
+            '<div class="av color-f">' + reqName.charAt(0).toUpperCase() + '</div>' +
+            '<div style="flex:1"><div style="font-size:14px;font-weight:500">' + reqName + '</div></div>' +
+          '</div>' +
+          '<div class="req-actions">' +
+            '<button class="btn-accept" onclick="respondToRequest(\'' + req.id + '\',\'accepted\',\'' + ride.id + '\')">Accept</button>' +
+            '<button class="btn-reject" onclick="respondToRequest(\'' + req.id + '\',\'declined\',\'' + ride.id + '\')">Decline</button>' +
+          '</div>' +
+        '</div>';
+      }).join('');
+    }
+  } else {
+    pendingSection.style.display = 'none';
+
+    if (currentUser) {
+      const { data: myRequest } = await sb
+        .from('ride_members')
+        .select('status')
+        .eq('ride_id', ride.id)
+        .eq('user_id', currentUser.id)
+        .maybeSingle();
+
+      if (myRequest) {
+        joinBtn.disabled = true;
+        joinBtn.style.opacity = '.55';
+        joinBtn.onclick = null;
+        if (myRequest.status === 'accepted') {
+          joinBtn.textContent = "✓ You're going";
+        } else {
+          joinBtn.textContent = 'Requested';
+        }
+      }
+    }
+  }
 }
 
 /* ══ FILTER PILLS ══ */
