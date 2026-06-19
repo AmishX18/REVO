@@ -462,7 +462,7 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-s
 <div class="screen" id="s-home">
   <div class="topbar"><div class="logo-text">RE<span>V</span>O</div><div class="topbar-icons"><div class="icon-btn" onclick="go('s-notif')"><i class="ti ti-bell"></i><div class="dot"></div></div><div class="av color-a" style="width:38px;height:38px;font-size:14px;cursor:pointer" onclick="go('s-profile')">AK</div></div></div>
   <div class="content">
-    <div style="margin-bottom:24px;padding-top:16px"><div style="font-size:16px;color:var(--muted);margin-bottom:2px">Good morning,</div><div style="font-size:22px;font-weight:700">Arjun 👋</div></div>
+    <div style="margin-bottom:24px;padding-top:16px"><div style="font-size:16px;color:var(--muted);margin-bottom:2px" id="home-greeting-time">Hey,</div><div style="font-size:22px;font-weight:700" id="home-greeting-name">Rider 👋</div></div>
     <div class="action-grid">
       <div class="action-card light" onclick="go('s-create')"><div style="font-size:22px;margin-bottom:8px"><i class="ti ti-plus"></i></div><div class="action-title">Create a Ride</div><div class="action-sub">Start hosting</div></div>
       <div class="action-card" onclick="go('s-explore')"><div style="font-size:22px;margin-bottom:8px"><i class="ti ti-compass"></i></div><div class="action-title">Join a Ride</div><div class="action-sub">Browse available</div></div>
@@ -694,9 +694,9 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-s
 <div class="screen" id="s-profile">
   <div class="profile-screen-top"><div class="pg-title" style="margin-bottom:0">Profile</div><div class="icon-btn"><i class="ti ti-settings"></i></div></div>
   <div class="content content-narrow" style="padding-top:20px">
-    <div class="profile-top"><div class="av-xl color-a" style="width:72px;height:72px;font-size:24px;border:2px solid var(--border)">AK</div><div class="profile-info"><div class="name">Arjun Kulkarni</div><div class="bike">RE Himalayan 450</div><div class="rating"><span class="rating-star"><i class="ti ti-star" style="font-size:13px"></i></span><span style="font-weight:600">4.9</span><span style="color:var(--muted)">· 34 rides</span></div></div></div>
-    <div class="stat-grid" style="margin-bottom:16px"><div class="stat-box"><div class="stat-num">34</div><div class="stat-lbl">Total</div></div><div class="stat-box"><div class="stat-num">8</div><div class="stat-lbl">Hosted</div></div><div class="stat-box"><div class="stat-num">4.9</div><div class="stat-lbl">Rating</div></div></div>
-    <div class="info-card" style="margin-bottom:16px"><div class="info-row"><span class="info-lbl">Bike</span><span class="info-val">RE Himalayan 450</span></div><div class="info-row"><span class="info-lbl">Engine</span><span class="info-val">450cc</span></div><div class="info-row"><span class="info-lbl">City</span><span class="info-val">Pune, Maharashtra</span></div><div class="info-row"><span class="info-lbl">Instagram</span><span class="info-val accent">@arjunrides</span></div></div>
+    <div class="profile-top"><div class="av-xl color-a" style="width:72px;height:72px;font-size:24px;border:2px solid var(--border)" id="profile-avatar">A</div><div class="profile-info"><div class="name" id="profile-name" style="cursor:pointer" onclick="editProfileField('name','name')">Loading...</div><div class="bike" id="profile-bike-sub"></div><div class="rating"><span class="rating-star"><i class="ti ti-star" style="font-size:13px"></i></span><span style="font-weight:600" id="profile-rating-top">5.0</span><span style="color:var(--muted)" id="profile-rides-suffix">· 0 rides</span></div></div></div>
+    <div class="stat-grid" style="margin-bottom:16px"><div class="stat-box"><div class="stat-num" id="profile-total">0</div><div class="stat-lbl">Total</div></div><div class="stat-box"><div class="stat-num" id="profile-hosted">0</div><div class="stat-lbl">Hosted</div></div><div class="stat-box"><div class="stat-num" id="profile-rating">5.0</div><div class="stat-lbl">Rating</div></div></div>
+    <div class="info-card" style="margin-bottom:16px"><div class="info-row" style="cursor:pointer" onclick="editProfileField('bike_model','bike model')"><span class="info-lbl">Bike</span><span class="info-val" id="profile-bike-val">Tap to add</span></div><div class="info-row" style="cursor:pointer" onclick="editProfileField('cc','engine CC')"><span class="info-lbl">Engine</span><span class="info-val" id="profile-cc-val">Tap to add</span></div><div class="info-row" style="cursor:pointer" onclick="editProfileField('city','city')"><span class="info-lbl">City</span><span class="info-val" id="profile-city-val">Tap to add</span></div><div class="info-row" style="cursor:pointer" onclick="editProfileField('instagram','Instagram username')"><span class="info-lbl">Instagram</span><span class="info-val accent" id="profile-instagram-val">Tap to add</span></div></div>
     <div style="height:120px;border-radius:14px;background:var(--card2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center"><div style="text-align:center"><div style="font-size:40px;opacity:.2"><i class="ti ti-road"></i></div><div style="font-size:12px;color:var(--muted);margin-top:6px">All rides</div></div></div>
   </div>
   <div class="bottom-nav">
@@ -830,9 +830,8 @@ function go(id) {
   if (guestBox) guestBox.style.display = isAuthed ? 'none' : 'block';
   if (id === 's-explore') loadRides();
   if (id === 's-notif') loadNotifications();
-  checkUnreadNotifications();
-  if (id === 's-explore') loadRides();
-  if (id === 's-notif') loadNotifications();
+  if (id === 's-profile') loadProfile();
+  if (id === 's-home') loadHomeGreeting();
   checkUnreadNotifications();
   const t = document.getElementById(id);
   if (t) {
@@ -1161,12 +1160,75 @@ async function loadRides() {
           '<div class="host-row"><div class="av color-b">' + initial + '</div><div class="host-name"><b>' + hostName + '</b></div></div>' +
           '<div style="display:flex;align-items:center;gap:8px">' +
             '<span class="pace-pill ' + paceClass + '">' + paceLabel + '</span>' +
+            '<button onclick="event.stopPropagation();shareRide(\'' + ride.id + '\',\'' + safeTitle + '\')" style="width:30px;height:30px;border-radius:50%;background:var(--card2);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--muted)"><span style="font-size:13px">🔗</span></button>' +
             '<button class="btn-join" onclick="event.stopPropagation();openJoinSheet(this,\'' + safeTitle + '\',\'cover-a\',\'ti-motorbike\',null,\'' + ride.id + '\')">Join</button>' +
           '</div>' +
         '</div>' +
       '</div>' +
     '</div>';
   }).join('');
+}
+
+/* ══ HOME GREETING ══ */
+async function loadHomeGreeting() {
+  const { data: { user } } = await sb.auth.getUser();
+  if (!user) return;
+
+  const { data: profile } = await sb.from('profiles').select('name').eq('id', user.id).maybeSingle();
+  const name = (profile && profile.name) || (user.email ? user.email.split('@')[0] : 'Rider');
+
+  const hour = new Date().getHours();
+  const greeting = hour < 12 ? 'Good morning,' : hour < 17 ? 'Good afternoon,' : 'Good evening,';
+
+  const timeEl = document.getElementById('home-greeting-time');
+  const nameEl = document.getElementById('home-greeting-name');
+  if (timeEl) timeEl.textContent = greeting;
+  if (nameEl) nameEl.textContent = name + ' 👋';
+}
+
+/* ══ LOAD PROFILE ══ */
+async function loadProfile() {
+  const { data: { user } } = await sb.auth.getUser();
+  if (!user) return;
+
+  const { data: profile } = await sb.from('profiles').select('*').eq('id', user.id).maybeSingle();
+
+  const name = (profile && profile.name) || (user.email ? user.email.split('@')[0] : 'Rider');
+  const bikeModel = (profile && profile.bike_model) || 'Tap to add';
+  const ccVal = (profile && profile.cc) ? profile.cc + 'cc' : 'Tap to add';
+  const city = (profile && profile.city) || 'Tap to add';
+  const rating = (profile && profile.rating) || 5.0;
+  const initial = name.charAt(0).toUpperCase();
+
+  document.getElementById('profile-name').textContent = name;
+  document.getElementById('profile-bike-sub').textContent = (profile && profile.bike_model) || '';
+  document.getElementById('profile-avatar').textContent = initial;
+  document.getElementById('profile-bike-val').textContent = bikeModel;
+  document.getElementById('profile-cc-val').textContent = ccVal;
+  document.getElementById('profile-city-val').textContent = city;
+  document.getElementById('profile-instagram-val').textContent = (profile && profile.instagram) || 'Tap to add';
+  document.getElementById('profile-rating').textContent = rating;
+  document.getElementById('profile-rating-top').textContent = rating;
+
+  const { count: hostedCount } = await sb.from('rides').select('*', { count: 'exact', head: true }).eq('host_id', user.id);
+  const { count: joinedCount } = await sb.from('ride_members').select('*', { count: 'exact', head: true }).eq('user_id', user.id).eq('status', 'accepted');
+
+  const total = (hostedCount || 0) + (joinedCount || 0);
+  document.getElementById('profile-total').textContent = total;
+  document.getElementById('profile-hosted').textContent = hostedCount || 0;
+  document.getElementById('profile-rides-suffix').textContent = '· ' + total + ' rides';
+}
+
+async function editProfileField(field, label) {
+  const newVal = prompt('Edit your ' + label + ':');
+  if (newVal === null || newVal.trim() === '') return;
+  const { data: { user } } = await sb.auth.getUser();
+  if (!user) return;
+  const updateObj = {};
+  updateObj[field] = field === 'cc' ? parseInt(newVal) : newVal.trim();
+  const { error } = await sb.from('profiles').update(updateObj).eq('id', user.id);
+  if (error) { alert('Error: ' + error.message); return; }
+  loadProfile();
 }
 
 /* ══ CHECK UNREAD ══ */
@@ -1305,8 +1367,11 @@ async function openRideDetail(rideId) {
 
   document.getElementById('rd-title').textContent = ride.title;
   document.getElementById('rd-tag').textContent = ride.ride_type || 'Ride';
+  const coverEl = document.getElementById('rd-cover');
+  const existingCoverImg = coverEl.querySelector('img');
+  if (existingCoverImg) existingCoverImg.remove();
   if (ride.cover_url) {
-    document.getElementById('rd-cover').insertAdjacentHTML('afterbegin', '<img src="' + ride.cover_url + '" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover">');
+    coverEl.insertAdjacentHTML('afterbegin', '<img src="' + ride.cover_url + '" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover">');
   }
   document.getElementById('rd-meta').innerHTML =
     '<span class="meta-item"><i class="ti ti-calendar"></i> ' + dateStr + '</span>' +
@@ -1314,13 +1379,15 @@ async function openRideDetail(rideId) {
   document.getElementById('rd-tags').innerHTML =
     '<span class="pace-pill ' + paceClass + '">' + paceLabel + ' pace</span>' +
     '<span class="tag">' + (ride.min_cc ? ride.min_cc + 'cc+' : 'Any CC') + '</span>' +
-    '<span class="tag"><i class="ti ti-users" style="font-size:12px"></i> Up to ' + (ride.max_riders || 10) + ' riders</span>';
+    '<span class="tag"><i class="ti ti-users" style="font-size:12px"></i> Up to ' + (ride.max_riders || 10) + ' riders</span>' +
+    '<button id="rd-share-icon-btn" style="margin-left:auto;width:32px;height:32px;border-radius:50%;background:var(--card);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--muted)"><span style="font-size:15px">🔗</span></button>';
   document.getElementById('rd-description').textContent = ride.description || 'No description provided.';
   document.getElementById('rd-from').textContent = ride.from_loc || '—';
   document.getElementById('rd-meeting').textContent = ride.meeting_point || '—';
   document.getElementById('rd-to').textContent = ride.to_loc || '—';
   document.getElementById('rd-host-name').textContent = hostName;
   document.getElementById('rd-host-avatar').textContent = initial;
+  document.getElementById('rd-share-icon-btn').onclick = function() { shareRide(ride.id, ride.title); };
 
   const { data: acceptedMembers } = await sb
     .from('ride_members')
@@ -1415,6 +1482,30 @@ function selOpt(gridId, el) {
   document.querySelectorAll('#'+gridId+' .opt').forEach(b=>b.classList.remove('active'));
   el.classList.add('active');
 }
+
+/* ══ SHARE A RIDE ══ */
+function shareRide(rideId, title) {
+  const url = window.location.origin + '/revo.html?ride=' + rideId;
+  if (navigator.share) {
+    navigator.share({ title: title, text: 'Join me on this ride: ' + title, url: url }).catch(function(){});
+  } else if (navigator.clipboard) {
+    navigator.clipboard.writeText(url).then(function() {
+      alert('Link copied! Share it with your friends:\n' + url);
+    }).catch(function() {
+      prompt('Copy this link to share:', url);
+    });
+  } else {
+    prompt('Copy this link to share:', url);
+  }
+}
+
+(function() {
+  const params = new URLSearchParams(window.location.search);
+  const sharedRideId = params.get('ride');
+  if (sharedRideId) {
+    openRideDetail(sharedRideId);
+  }
+})();
 </script>
 </body>
 </html>
