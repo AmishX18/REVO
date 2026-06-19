@@ -288,7 +288,7 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-s
 .landing-topbar{display:flex;align-items:center;justify-content:space-between;padding:24px 24px 0}
 .landing-logo{font-size:22px;font-weight:900;letter-spacing:-1.5px}
 .landing-logo span{color:var(--muted2)}
-.landing-signin-btn{font-size:13px;font-weight:500;color:var(--muted);cursor:pointer;background:none;border:none;padding:0;transition:color .15s}
+.landing-signin-btn{font-size:14px;font-weight:600;color:var(--text);cursor:pointer;background:var(--card);border:1px solid var(--border);padding:8px 16px;border-radius:20px;transition:all .15s}
 .landing-signin-btn:hover{color:var(--text)}
 .landing-hero{padding:36px 24px 20px}
 .landing-eyebrow{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:500;color:var(--muted);background:var(--card);border:1px solid var(--border);border-radius:20px;padding:5px 12px;margin-bottom:20px}
@@ -360,6 +360,7 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-s
 
   /* Detail page cover taller */
   .detail-cover-lg{height:220px !important}
+  .landing-left .landing-hero{padding-left:0;padding-right:0}
 
   /* Photo upload taller on desktop */
   .photo-upload-wrap{height:200px}
@@ -483,7 +484,8 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-s
 <!-- ── EXPLORE ── -->
 <div class="screen" id="s-explore">
   <div class="content">
-    <div class="pg-title" style="padding-top:4px">Explore</div>
+    <div class="ride-detail-back" onclick="isAuthed?go('s-home'):go('s-landing')"><i class="ti ti-arrow-left"></i><span>Back</span></div>
+    <div class="pg-title">Explore</div>
     <div class="search-box"><i class="ti ti-search"></i><span>Search routes, destinations...</span></div>
     <div class="filter-section"><div class="section-label">Ride Type</div><div class="pill-row"><div class="pill" onclick="togglePill(this)">Casual</div><div class="pill" onclick="togglePill(this)">Touring</div><div class="pill" onclick="togglePill(this)">Adventure</div><div class="pill" onclick="togglePill(this)">Night</div><div class="pill" onclick="togglePill(this)">Camping</div></div></div>
     <div class="filter-section"><div class="section-label">Pace</div><div class="pill-row"><div class="pill" onclick="togglePill(this)">Slow</div><div class="pill" onclick="togglePill(this)">Moderate</div><div class="pill" onclick="togglePill(this)">Fast</div></div></div>
