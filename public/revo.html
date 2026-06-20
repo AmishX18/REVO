@@ -286,8 +286,10 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-s
 .join-cover-thumb i{font-size:22px;opacity:.6}
 
 /* ── LANDING ── */
-#s-landing{background:var(--bg);min-height:100vh}
-.landing-topbar{display:flex;align-items:center;justify-content:space-between;padding:24px 24px 0}
+#s-landing{background:var(--bg);min-height:100vh;position:relative;overflow:hidden}
+.landing-video-bg{position:absolute;top:0;left:0;width:100%;height:600px;object-fit:cover;z-index:0}
+.landing-video-overlay{position:absolute;top:0;left:0;width:100%;height:600px;background:linear-gradient(to bottom,rgba(10,10,10,.25) 0%,rgba(17,17,17,.55) 55%,rgba(17,17,17,.97) 100%);z-index:1;pointer-events:none}
+.landing-topbar{display:flex;align-items:center;justify-content:space-between;padding:24px 24px 0;position:relative;z-index:2}
 .landing-logo{font-size:22px;font-weight:900;letter-spacing:-1.5px}
 .landing-logo span{color:var(--muted2)}
 .landing-signin-btn{font-size:14px;font-weight:600;color:var(--text);cursor:pointer;background:var(--card);border:1px solid var(--border);padding:8px 16px;border-radius:20px;transition:all .15s}
@@ -319,6 +321,8 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-s
 .landing-desktop-cta{display:none}
 .landing-footer span{color:var(--muted);cursor:pointer}
 .landing-footer span:hover{color:var(--text)}
+.landing-left{position:relative;z-index:2}
+.landing-mobile-only{position:relative;z-index:2}
 
 /* ════════════════════════════════════
    RESPONSIVE — TABLET / DESKTOP
@@ -356,6 +360,9 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-s
   .landing-mobile-only{display:none}
   .landing-desktop-cta{display:block}
   .landing-topbar{display:none}
+  .landing-video-bg, .landing-video-overlay{width:420px;height:420px}
+  .btn-land-primary, .btn-land-secondary{padding:18px;font-size:16px}
+  .btn-land-secondary{background:var(--text);color:var(--bg);border:none}
 
   /* Landing right — grid of peek cards */
   .peek-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
@@ -411,6 +418,8 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-s
 
 <!-- ── LANDING ── -->
 <div class="screen active" id="s-landing">
+  <video class="landing-video-bg" autoplay muted loop playsinline src="/landing-bg.mp4"></video>
+  <div class="landing-video-overlay"></div>
   <!-- Mobile header (hidden on desktop) -->
   <div class="landing-topbar landing-mobile-only">
     <div class="landing-logo">RE<span>V</span>O</div>
@@ -425,7 +434,7 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-s
       <div class="landing-sub">Browse rides near you — no sign-up needed to explore.</div>
     </div>
     <!-- Desktop CTAs inside left col -->
-    <div class="landing-desktop-cta" style="margin-top:auto;padding-top:32px">
+    <div class="landing-desktop-cta" style="margin-top:90px">
       <button class="btn-land-primary" onclick="go('s-explore')"><i class="ti ti-compass" style="margin-right:6px;font-size:16px;vertical-align:-2px"></i>Browse Rides</button>
       <button class="btn-land-secondary" onclick="go('s-create')"><i class="ti ti-plus" style="margin-right:6px;font-size:16px;vertical-align:-2px"></i>Host a Ride</button>
       <div class="landing-footer">Already riding with us? <span onclick="openAuthSheet('in')">Sign in</span></div>
