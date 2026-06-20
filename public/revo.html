@@ -316,6 +316,7 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-s
 .btn-land-secondary{width:100%;padding:14px;border-radius:16px;font-size:15px;font-weight:600;background:transparent;color:var(--text);border:1px solid var(--border);cursor:pointer;transition:border-color .15s;margin-bottom:20px}
 .btn-land-secondary:hover{border-color:#666}
 .landing-footer{text-align:center;font-size:12px;color:var(--muted2)}
+.landing-desktop-cta{display:none}
 .landing-footer span{color:var(--muted);cursor:pointer}
 .landing-footer span:hover{color:var(--text)}
 
@@ -353,6 +354,7 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-s
     overflow-y:auto;
   }
   .landing-mobile-only{display:none}
+  .landing-desktop-cta{display:block}
   .landing-topbar{display:none}
 
   /* Landing right — grid of peek cards */
@@ -423,7 +425,7 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-s
       <div class="landing-sub">Browse rides near you — no sign-up needed to explore.</div>
     </div>
     <!-- Desktop CTAs inside left col -->
-    <div style="margin-top:auto;padding-top:32px">
+    <div class="landing-desktop-cta" style="margin-top:auto;padding-top:32px">
       <button class="btn-land-primary" onclick="go('s-explore')"><i class="ti ti-compass" style="margin-right:6px;font-size:16px;vertical-align:-2px"></i>Browse Rides</button>
       <button class="btn-land-secondary" onclick="go('s-create')"><i class="ti ti-plus" style="margin-right:6px;font-size:16px;vertical-align:-2px"></i>Host a Ride</button>
       <div class="landing-footer">Already riding with us? <span onclick="openAuthSheet('in')">Sign in</span></div>
@@ -434,12 +436,7 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-s
   <div class="landing-mobile-only" style="flex:1;display:flex;flex-direction:column">
     <div class="peek-section" style="margin-top:8px">
       <div class="peek-label">Happening near you</div>
-      <div class="peek-scroll">
-        <div class="peek-card" onclick="go('s-detail')"><div class="peek-card-cover cover-a"><i class="ti ti-sunrise"></i><div class="peek-card-tag">Breakfast</div></div><div class="peek-card-body"><div class="peek-card-title">Lonavala Sunrise Run</div><div class="peek-card-meta">Sat 14 Jun · 128km</div></div></div>
-        <div class="peek-card" onclick="go('s-detail2')"><div class="peek-card-cover cover-c"><i class="ti ti-moon"></i><div class="peek-card-tag">Night Ride</div></div><div class="peek-card-body"><div class="peek-card-title">Marine Drive Midnight</div><div class="peek-card-meta">Fri 13 Jun · 38km</div></div></div>
-        <div class="peek-card" onclick="go('s-explore')"><div class="peek-card-cover cover-b"><i class="ti ti-mountain"></i><div class="peek-card-tag">Adventure</div></div><div class="peek-card-body"><div class="peek-card-title">Sahyadri Offroad</div><div class="peek-card-meta">Sun 15 Jun · 240km</div></div></div>
-        <div class="peek-more" onclick="go('s-explore')"><div style="font-size:20px;font-weight:700;color:var(--muted)">+12</div><div style="font-size:11px;color:var(--muted2);margin-top:2px">more</div></div>
-      </div>
+      <div class="peek-scroll" id="landing-peek-mobile"><div style="padding:0 24px;font-size:12px;color:var(--muted)">Loading...</div></div>
     </div>
     <div class="landing-actions">
       <button class="btn-land-primary" onclick="go('s-explore')"><i class="ti ti-compass" style="margin-right:6px;font-size:16px;vertical-align:-2px"></i>Browse Rides</button>
@@ -451,12 +448,7 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-s
   <!-- Desktop: right col — ride grid -->
   <div class="landing-right" style="display:none" id="landing-right-col">
     <div style="font-size:11px;font-weight:500;color:var(--muted2);text-transform:uppercase;letter-spacing:.07em;margin-bottom:16px">Happening near you</div>
-    <div class="peek-grid">
-      <div class="peek-card" onclick="go('s-detail')" style="width:auto"><div class="peek-card-cover cover-a" style="height:100px"><i class="ti ti-sunrise"></i><div class="peek-card-tag">Breakfast</div></div><div class="peek-card-body"><div class="peek-card-title">Lonavala Sunrise Run</div><div class="peek-card-meta">Sat 14 Jun · 128km</div></div></div>
-      <div class="peek-card" onclick="go('s-detail2')" style="width:auto"><div class="peek-card-cover cover-c" style="height:100px"><i class="ti ti-moon"></i><div class="peek-card-tag">Night Ride</div></div><div class="peek-card-body"><div class="peek-card-title">Marine Drive Midnight</div><div class="peek-card-meta">Fri 13 Jun · 38km</div></div></div>
-      <div class="peek-card" onclick="go('s-explore')" style="width:auto"><div class="peek-card-cover cover-b" style="height:100px"><i class="ti ti-mountain"></i><div class="peek-card-tag">Adventure</div></div><div class="peek-card-body"><div class="peek-card-title">Sahyadri Offroad</div><div class="peek-card-meta">Sun 15 Jun · 240km</div></div></div>
-      <div class="peek-card" onclick="go('s-explore')" style="width:auto"><div class="peek-card-cover cover-d" style="height:100px"><i class="ti ti-campfire"></i><div class="peek-card-tag">Camping</div></div><div class="peek-card-body"><div class="peek-card-title">Kas Plateau Camp</div><div class="peek-card-meta">Sat 21 Jun · 310km</div></div></div>
-    </div>
+    <div class="peek-grid" id="landing-peek-desktop"><div style="font-size:12px;color:var(--muted)">Loading...</div></div>
     <div style="text-align:center;margin-top:16px;font-size:13px;color:var(--muted);cursor:pointer" onclick="go('s-explore')">Browse all 15 rides this week →</div>
   </div>
 </div>
@@ -1751,6 +1743,39 @@ function selOpt(gridId, el) {
   el.classList.add('active');
 }
 
+/* ══ LANDING PEEK ══ */
+async function loadLandingPeek() {
+  const { data: rides } = await sb.from('rides').select('*, profiles(name)').order('created_at', { ascending: false }).limit(8);
+
+  const twoDaysAgo = new Date();
+  twoDaysAgo.setDate(twoDaysAgo.getDate() - 2);
+  const activeRides = (rides || []).filter(function(r) {
+    if (!r.ride_date) return true;
+    return new Date(r.ride_date) >= twoDaysAgo;
+  }).slice(0, 4);
+
+  const mobileEl = document.getElementById('landing-peek-mobile');
+  const desktopEl = document.getElementById('landing-peek-desktop');
+
+  if (activeRides.length === 0) {
+    const emptyMsg = '<div style="padding:0 24px;font-size:13px;color:var(--muted)">No rides yet — be the first to host one!</div>';
+    if (mobileEl) mobileEl.innerHTML = emptyMsg;
+    if (desktopEl) desktopEl.innerHTML = emptyMsg;
+    return;
+  }
+
+  const cardsHtml = activeRides.map(function(ride) {
+    const dateStr = ride.ride_date ? new Date(ride.ride_date).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' }) : 'Date TBD';
+    const coverHtml = ride.cover_url
+      ? '<img src="' + ride.cover_url + '" style="width:100%;height:100%;object-fit:cover">'
+      : '<i class="ti ti-motorbike"></i>';
+    return '<div class="peek-card" onclick="go(\'s-explore\')"><div class="peek-card-cover cover-a"><div class="peek-card-tag">' + (ride.ride_type || 'Ride') + '</div>' + coverHtml + '</div><div class="peek-card-body"><div class="peek-card-title">' + ride.title + '</div><div class="peek-card-meta">' + dateStr + '</div></div></div>';
+  }).join('');
+
+  if (mobileEl) mobileEl.innerHTML = cardsHtml;
+  if (desktopEl) desktopEl.innerHTML = cardsHtml;
+}
+
 /* ══ SHARE A RIDE ══ */
 function shareRide(rideId, title) {
   const url = window.location.origin + '/revo.html?ride=' + rideId;
@@ -1777,6 +1802,7 @@ window.addEventListener('popstate', function(e) {
 history.replaceState({ screen: 's-landing' }, '', '');
 
 (async function() {
+  loadLandingPeek();
   const { data: { user } } = await sb.auth.getUser();
   if (user) {
     isAuthed = true;
