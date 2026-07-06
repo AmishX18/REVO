@@ -40,7 +40,7 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-s
 .sidebar-bottom{padding-top:16px;border-top:1px solid var(--border);margin-top:auto}
 .sidebar-signin-btn{display:flex;align-items:center;gap:10px;width:100%;padding:10px 12px;border-radius:12px;font-size:13px;font-weight:500;color:var(--muted);background:none;border:1px solid var(--border);cursor:pointer;transition:all .15s}
 .sidebar-signin-btn:hover{border-color:#555;color:var(--text)}
-.bottom-nav{position:absolute;bottom:0;left:0;right:0;background:var(--bg2);border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-around;padding:12px 8px 20px;gap:4px}
+.bottom-nav{position:fixed;bottom:0;left:0;right:0;background:var(--bg2);border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-around;padding:12px 8px 20px;gap:4px;z-index:200}
 .nav-item{display:flex;flex-direction:column;align-items:center;gap:4px;font-size:11px;color:var(--muted);cursor:pointer;padding:4px 12px;border-radius:12px;transition:color .15s;border:none;background:none;flex:1}
 .nav-item.active{color:var(--text)}
 .nav-item i{font-size:22px}
@@ -254,6 +254,15 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-s
 .landing-footer span:hover{color:var(--text)}
 .landing-left{position:relative;z-index:2}
 .landing-mobile-only{position:relative;z-index:2}
+@media(max-width:767px){
+  body{font-size:15px}
+  .meta-item,.info-lbl,.notif-sub,.host-name,.section-label,.member-bike,.stat-lbl,.ride-meta span{font-weight:500}
+  .action-sub,.landing-sub{font-weight:400;color:#a3a3a3}
+  .pg-title{font-size:28px}
+  .ride-title{font-size:16px}
+  .detail-title{font-size:22px}
+}
+
 @media(min-width:768px){
   body{background:#0a0a0a;display:flex;align-items:stretch}
   .app-wrapper{max-width:1400px;margin:0 auto;width:100%;box-shadow:0 0 0 1px #222}
@@ -353,7 +362,7 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-s
 </div>
 
 <div class="screen" id="s-home">
-  <div class="topbar"><div class="logo-text" style="cursor:pointer" onclick="goLogoHome()">RE<span>V</span>O</div><div class="topbar-icons"><div class="icon-btn" onclick="go('s-notif')"><span style="font-size:16px">🔔</span><div class="dot"></div></div><div class="av color-a" style="width:38px;height:38px;font-size:14px;cursor:pointer" onclick="go('s-profile')" id="home-topbar-avatar">A</div></div></div>
+  <div class="topbar"><div class="logo-text" style="cursor:pointer" onclick="goLogoHome()">RE<span>V</span>O</div><div class="topbar-icons"><div class="icon-btn" onclick="go('s-notif')"><span style="font-size:16px">🔔</span><div class="dot" id="home-bell-dot" style="display:none;background:var(--red)"></div></div><div class="av color-a" style="width:38px;height:38px;font-size:14px;cursor:pointer" onclick="go('s-profile')" id="home-topbar-avatar">A</div></div></div>
   <div class="content">
     <div style="margin-bottom:24px;padding-top:16px"><div style="font-size:16px;color:var(--muted);margin-bottom:2px" id="home-greeting-time">Hey,</div><div style="font-size:22px;font-weight:700" id="home-greeting-name">Rider 👋</div></div>
     <div style="font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:24px;padding:14px 16px;background:var(--card);border:1px solid var(--border);border-radius:14px">REVO connects local riders for group motorcycle rides — discover rides near you, or host your own and build your riding crew.</div>
@@ -371,7 +380,7 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-s
   <div class="bottom-nav">
     <button class="nav-item active" onclick="go('s-home')"><i class="ti ti-home"></i><span>Home</span></button>
     <button class="nav-item" onclick="go('s-explore')"><i class="ti ti-compass"></i><span>Explore</span></button>
-    <button class="nav-center" onclick="goCreateRide()"><i class="ti ti-plus"></i></button>
+    <button class="nav-center" onclick="goCreateRide()"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
     <button class="nav-item" onclick="go('s-notif')"><i class="ti ti-bell"></i><span>Alerts</span></button>
     <button class="nav-item" onclick="go('s-profile')"><i class="ti ti-user"></i><span>Profile</span></button>
   </div>
@@ -395,7 +404,7 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-s
   <div class="bottom-nav">
     <button class="nav-item" onclick="isAuthed?go('s-home'):go('s-landing')"><i class="ti ti-home"></i><span>Home</span></button>
     <button class="nav-item active" onclick="go('s-explore')"><i class="ti ti-compass"></i><span>Explore</span></button>
-    <button class="nav-center" onclick="goCreateRide()"><i class="ti ti-plus"></i></button>
+    <button class="nav-center" onclick="goCreateRide()"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
     <button class="nav-item" onclick="requireAuth(()=>go('s-notif'),'to view alerts')"><i class="ti ti-bell"></i><span>Alerts</span></button>
     <button class="nav-item" onclick="requireAuth(()=>go('s-profile'),'to view your profile')"><i class="ti ti-user"></i><span>Profile</span></button>
   </div>
@@ -422,7 +431,7 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-s
   <div class="bottom-nav">
     <button class="nav-item" onclick="isAuthed?go('s-home'):go('s-landing')"><i class="ti ti-home"></i><span>Home</span></button>
     <button class="nav-item active" onclick="go('s-explore')"><i class="ti ti-compass"></i><span>Explore</span></button>
-    <button class="nav-center" onclick="goCreateRide()"><i class="ti ti-plus"></i></button>
+    <button class="nav-center" onclick="goCreateRide()"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
     <button class="nav-item" onclick="requireAuth(()=>go('s-notif'),'to view alerts')"><i class="ti ti-bell"></i><span>Alerts</span></button>
     <button class="nav-item" onclick="requireAuth(()=>go('s-profile'),'to view your profile')"><i class="ti ti-user"></i><span>Profile</span></button>
   </div>
@@ -450,7 +459,7 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-s
   <div class="bottom-nav">
     <button class="nav-item" onclick="isAuthed?go('s-home'):go('s-landing')"><i class="ti ti-home"></i><span>Home</span></button>
     <button class="nav-item active" onclick="go('s-explore')"><i class="ti ti-compass"></i><span>Explore</span></button>
-    <button class="nav-center" onclick="goCreateRide()"><i class="ti ti-plus"></i></button>
+    <button class="nav-center" onclick="goCreateRide()"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
     <button class="nav-item" onclick="requireAuth(()=>go('s-notif'),'to view alerts')"><i class="ti ti-bell"></i><span>Alerts</span></button>
     <button class="nav-item" onclick="requireAuth(()=>go('s-profile'),'to view your profile')"><i class="ti ti-user"></i><span>Profile</span></button>
   </div>
@@ -497,7 +506,7 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-s
   <div class="bottom-nav">
     <button class="nav-item" onclick="isAuthed?go('s-home'):go('s-landing')"><i class="ti ti-home"></i><span>Home</span></button>
     <button class="nav-item active" onclick="go('s-explore')"><i class="ti ti-compass"></i><span>Explore</span></button>
-    <button class="nav-center" onclick="goCreateRide()"><i class="ti ti-plus"></i></button>
+    <button class="nav-center" onclick="goCreateRide()"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
     <button class="nav-item" onclick="requireAuth(()=>go('s-notif'),'to view alerts')"><i class="ti ti-bell"></i><span>Alerts</span></button>
     <button class="nav-item" onclick="requireAuth(()=>go('s-profile'),'to view your profile')"><i class="ti ti-user"></i><span>Profile</span></button>
   </div>
@@ -522,7 +531,7 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-s
   <div class="bottom-nav">
     <button class="nav-item" onclick="isAuthed?go('s-home'):go('s-landing')"><i class="ti ti-home"></i><span>Home</span></button>
     <button class="nav-item active" onclick="go('s-explore')"><i class="ti ti-compass"></i><span>Explore</span></button>
-    <button class="nav-center" onclick="goCreateRide()"><i class="ti ti-plus"></i></button>
+    <button class="nav-center" onclick="goCreateRide()"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
     <button class="nav-item" onclick="requireAuth(()=>go('s-notif'),'to view alerts')"><i class="ti ti-bell"></i><span>Alerts</span></button>
     <button class="nav-item" onclick="requireAuth(()=>go('s-profile'),'to view your profile')"><i class="ti ti-user"></i><span>Profile</span></button>
   </div>
@@ -544,7 +553,7 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-s
   <div class="bottom-nav">
     <button class="nav-item" onclick="isAuthed?go('s-home'):go('s-landing')"><i class="ti ti-home"></i><span>Home</span></button>
     <button class="nav-item" onclick="go('s-explore')"><i class="ti ti-compass"></i><span>Explore</span></button>
-    <button class="nav-center" onclick="goCreateRide()"><i class="ti ti-plus"></i></button>
+    <button class="nav-center" onclick="goCreateRide()"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
     <button class="nav-item" onclick="requireAuth(()=>go('s-notif'),'to view alerts')"><i class="ti ti-bell"></i><span>Alerts</span></button>
     <button class="nav-item" onclick="requireAuth(()=>go('s-profile'),'to view your profile')"><i class="ti ti-user"></i><span>Profile</span></button>
   </div>
@@ -571,7 +580,7 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-s
   <div class="bottom-nav">
     <button class="nav-item" onclick="go('s-home')"><i class="ti ti-home"></i><span>Home</span></button>
     <button class="nav-item" onclick="go('s-explore')"><i class="ti ti-compass"></i><span>Explore</span></button>
-    <button class="nav-center" onclick="goCreateRide()"><i class="ti ti-plus"></i></button>
+    <button class="nav-center" onclick="goCreateRide()"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
     <button class="nav-item active" onclick="go('s-notif')"><i class="ti ti-bell"></i><span>Alerts</span></button>
     <button class="nav-item" onclick="go('s-profile')"><i class="ti ti-user"></i><span>Profile</span></button>
   </div>
@@ -590,7 +599,7 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-s
   <div class="bottom-nav">
     <button class="nav-item" onclick="go('s-home')"><i class="ti ti-home"></i><span>Home</span></button>
     <button class="nav-item" onclick="go('s-explore')"><i class="ti ti-compass"></i><span>Explore</span></button>
-    <button class="nav-center" onclick="goCreateRide()"><i class="ti ti-plus"></i></button>
+    <button class="nav-center" onclick="goCreateRide()"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
     <button class="nav-item" onclick="go('s-notif')"><i class="ti ti-bell"></i><span>Alerts</span></button>
     <button class="nav-item active" onclick="go('s-profile')"><i class="ti ti-user"></i><span>Profile</span></button>
   </div>
@@ -619,22 +628,22 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-s
       <input type="file" id="photo-file-input" accept="image/jpeg,image/png,image/webp" style="display:none" onchange="handlePhotoUpload(this)"/>
     </div>
 
-    <div class="form-group"><label class="form-lbl">Ride Title</label><input class="form-inp" id="ride-title" placeholder="e.g. Lonavala Sunrise Breakfast Run"/></div>
+    <div class="form-group"><label class="form-lbl">Ride Title <span style="color:var(--red)">*</span></label><input class="form-inp" id="ride-title" placeholder="e.g. Lonavala Sunrise Breakfast Run"/></div>
     <div class="form-group"><label class="form-lbl">Ride Type</label><div class="opts" id="type-opts"><div class="opt active" onclick="selOpt('type-opts',this)">Breakfast</div><div class="opt" onclick="selOpt('type-opts',this)">Weekend</div><div class="opt" onclick="selOpt('type-opts',this)">Long Tour</div><div class="opt" onclick="selOpt('type-opts',this)">Night Ride</div><div class="opt" onclick="selOpt('type-opts',this)">Adventure</div><div class="opt" onclick="selOpt('type-opts',this)">Camping</div></div></div>
-    <div class="form-grid" style="margin-bottom:16px"><div class="form-group" style="margin-bottom:0"><label class="form-lbl">From</label><input class="form-inp" id="ride-from" placeholder="Start location"/></div><div class="form-group" style="margin-bottom:0"><label class="form-lbl">To</label><input class="form-inp" id="ride-to" placeholder="Destination"/></div></div>
-    <div class="form-group"><label class="form-lbl">Meeting Point</label><input class="form-inp" id="ride-meeting" placeholder="Exact meeting spot"/></div>
-    <div class="form-grid" style="margin-bottom:16px"><div class="form-group" style="margin-bottom:0"><label class="form-lbl">Date</label><input class="form-inp" id="ride-date" type="date"/></div><div class="form-group" style="margin-bottom:0"><label class="form-lbl">Time</label><input class="form-inp" id="ride-time" type="time"/></div></div>
+    <div class="form-grid" style="margin-bottom:16px"><div class="form-group" style="margin-bottom:0"><label class="form-lbl">From <span style="color:var(--red)">*</span></label><input class="form-inp" id="ride-from" placeholder="Start location"/></div><div class="form-group" style="margin-bottom:0"><label class="form-lbl">To <span style="color:var(--red)">*</span></label><input class="form-inp" id="ride-to" placeholder="Destination"/></div></div>
+    <div class="form-group"><label class="form-lbl">Meeting Point <span style="color:var(--red)">*</span></label><input class="form-inp" id="ride-meeting" placeholder="Exact meeting spot"/></div>
+    <div class="form-grid" style="margin-bottom:16px"><div class="form-group" style="margin-bottom:0"><label class="form-lbl">Date <span style="color:var(--red)">*</span></label><input class="form-inp" id="ride-date" type="date"/></div><div class="form-group" style="margin-bottom:0"><label class="form-lbl">Time <span style="color:var(--red)">*</span></label><input class="form-inp" id="ride-time" type="time"/></div></div>
     <div class="form-group"><label class="form-lbl">Pace</label><div class="opts" id="pace-opts"><div class="opt" onclick="selOpt('pace-opts',this)" style="color:#4ade80;border-color:rgba(74,222,128,.25)">Slow</div><div class="opt active" onclick="selOpt('pace-opts',this)">Moderate</div><div class="opt" onclick="selOpt('pace-opts',this)" style="color:#f87171;border-color:rgba(248,113,113,.25)">Fast</div></div></div>
-    <div class="form-grid" style="margin-bottom:16px"><div class="form-group" style="margin-bottom:0"><label class="form-lbl">Min CC</label><select class="form-inp" id="ride-mincc" style="cursor:pointer"><option>Any</option><option>150+</option><option>200+</option><option>300+</option><option>500+</option></select></div><div class="form-group" style="margin-bottom:0"><label class="form-lbl">Max Riders</label><input class="form-inp" id="ride-maxriders" type="number" placeholder="10" min="2" max="100"/></div></div>
-    <div class="form-group"><label class="form-lbl">Description</label><textarea class="form-inp" id="ride-description" rows="3" placeholder="What to expect, what to bring..."></textarea></div>
-<div class="form-group"><label class="form-lbl">WhatsApp Group Link <span style="color:var(--muted2);text-transform:none;letter-spacing:0;font-size:11px">— optional, shown only to accepted riders</span></label><input class="form-inp" id="ride-whatsapp" placeholder="https://chat.whatsapp.com/..."/></div>
+    <div class="form-grid" style="margin-bottom:16px"><div class="form-group" style="margin-bottom:0"><label class="form-lbl">Min CC</label><select class="form-inp" id="ride-mincc" style="cursor:pointer"><option>Any</option><option>150+</option><option>200+</option><option>300+</option><option>500+</option></select></div><div class="form-group" style="margin-bottom:0"><label class="form-lbl">Max Riders <span style="color:var(--red)">*</span></label><input class="form-inp" id="ride-maxriders" type="number" placeholder="10" min="2" max="100"/></div></div>
+    <div class="form-group"><label class="form-lbl">Description <span style="color:var(--red)">*</span></label><textarea class="form-inp" id="ride-description" rows="3" placeholder="What to expect, what to bring..."></textarea></div>
+<div class="form-group"><label class="form-lbl">WhatsApp Group Link <span style="color:var(--red)">*</span></label><input class="form-inp" id="ride-whatsapp" placeholder="https://chat.whatsapp.com/..."/></div>
 
     <button class="btn-full" style="margin-bottom:8px;margin-top:8px" onclick="publishRide()">Publish Ride</button>
   </div>
   <div class="bottom-nav">
     <button class="nav-item" onclick="isAuthed?go('s-home'):go('s-landing')"><i class="ti ti-home"></i><span>Home</span></button>
     <button class="nav-item" onclick="go('s-explore')"><i class="ti ti-compass"></i><span>Explore</span></button>
-    <button class="nav-center" style="background:var(--border)"><i class="ti ti-plus" style="color:#fff"></i></button>
+    <button class="nav-center" style="background:var(--border)"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
     <button class="nav-item" onclick="requireAuth(()=>go('s-notif'),'to view alerts')"><i class="ti ti-bell"></i><span>Alerts</span></button>
     <button class="nav-item" onclick="requireAuth(()=>go('s-profile'),'to view your profile')"><i class="ti ti-user"></i><span>Profile</span></button>
   </div>
@@ -671,16 +680,21 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-s
     <div style="margin-bottom:20px"><div style="font-size:20px;font-weight:700;margin-bottom:5px" id="auth-title">Welcome back</div><div style="font-size:13px;color:var(--muted)" id="auth-sub">Sign in to continue</div></div>
     <div class="form-group" id="auth-name-group" style="display:none">
       <div class="form-grid" style="margin-bottom:16px">
-        <div class="form-group" style="margin-bottom:0"><label class="form-lbl">First name</label><input class="form-inp" id="auth-first-name" placeholder="First name" oninput="capitalizeInput(this)"/></div>
-        <div class="form-group" style="margin-bottom:0"><label class="form-lbl">Last name</label><input class="form-inp" id="auth-last-name" placeholder="Last name" oninput="capitalizeInput(this)"/></div>
+        <div class="form-group" style="margin-bottom:0"><label class="form-lbl">First name <span style="color:var(--red)">*</span></label><input class="form-inp" id="auth-first-name" placeholder="First name" oninput="capitalizeInput(this)"/></div>
+        <div class="form-group" style="margin-bottom:0"><label class="form-lbl">Last name <span style="color:var(--red)">*</span></label><input class="form-inp" id="auth-last-name" placeholder="Last name" oninput="capitalizeInput(this)"/></div>
       </div>
-      <div class="form-group"><label class="form-lbl">Bike Name</label><input class="form-inp" id="auth-bike" placeholder="e.g. Royal Enfield Himalayan" oninput="capitalizeInput(this)"/></div>
-      <div class="form-group"><label class="form-lbl">City</label><input class="form-inp" id="auth-city" placeholder="e.g. Pune" oninput="capitalizeInput(this)"/></div>
-      <div class="form-group"><label class="form-lbl">Engine CC</label><input class="form-inp" id="auth-cc" type="number" placeholder="e.g. 350"/></div>
-      <div class="form-group"><label class="form-lbl">Instagram <span style="color:var(--muted2);text-transform:none;letter-spacing:0;font-size:11px">(optional)</span></label><input class="form-inp" id="auth-instagram" placeholder="@yourhandle"/></div>
+      <div class="form-group"><label class="form-lbl">Bike Name <span style="color:var(--red)">*</span></label><input class="form-inp" id="auth-bike" placeholder="e.g. Royal Enfield Himalayan" oninput="capitalizeInput(this)"/></div>
+      <div class="form-group"><label class="form-lbl">City <span style="color:var(--red)">*</span></label><input class="form-inp" id="auth-city" placeholder="e.g. Pune" oninput="capitalizeInput(this)"/></div>
+      <div class="form-group"><label class="form-lbl">Engine CC <span style="color:var(--red)">*</span></label><input class="form-inp" id="auth-cc" type="number" placeholder="e.g. 350"/></div>
     </div>
-    <div class="form-group"><label class="form-lbl">Email</label><input class="form-inp" id="auth-email" type="email" placeholder="you@example.com"/></div>
-    <div class="form-group"><label class="form-lbl">Password</label><input class="form-inp" id="auth-password" type="password" placeholder="••••••••"/></div>
+    <div class="form-group"><label class="form-lbl">Email <span style="color:var(--red)">*</span></label><input class="form-inp" id="auth-email" type="email" placeholder="you@example.com"/></div>
+    <div class="form-group">
+      <label class="form-lbl">Password <span style="color:var(--red)">*</span></label>
+      <div style="position:relative">
+        <input class="form-inp" id="auth-password" type="password" placeholder="••••••••" style="padding-right:44px"/>
+        <button type="button" onclick="togglePasswordVisibility('auth-password', this)" style="position:absolute;right:10px;top:50%;transform:translateY(-50%);background:none;border:none;color:var(--muted);cursor:pointer;font-size:12px;font-weight:600">Show</button>
+      </div>
+    </div>
     <button class="btn-full" id="auth-submit-btn" onclick="completeAuth()">Sign in</button>
     <button class="btn-outline" onclick="closeAuthSheet()" style="margin-top:8px;color:var(--muted)">Cancel</button>
   </div>
@@ -752,7 +766,7 @@ function go(id, skipPush) {
   if (id === 's-explore') loadRides();
   if (id === 's-notif') loadNotifications();
   if (id === 's-profile') loadProfile();
-  if (id === 's-home') { loadHomeGreeting(); loadHomeRides(); loadHostedRidesHome(); }
+  if (id === 's-home') { loadHomeGreeting(); loadHomeRides(); loadHostedRidesHome(); if (isAuthed) refreshSidebarUser(); }
   checkUnreadNotifications();
   const t = document.getElementById(id);
   if (t) {
@@ -810,23 +824,21 @@ async function completeAuth() {
     const bikeModel = document.getElementById('auth-bike').value.trim();
     const city = document.getElementById('auth-city').value.trim();
     const ccRaw = document.getElementById('auth-cc').value.trim();
-    const instagram = document.getElementById('auth-instagram').value.trim();
     const fullName = (capFirst(firstName) + ' ' + capFirst(lastName)).trim();
 
-    if (!firstName || !lastName) {
-      alert('Please enter your first and last name.');
-      return;
-    }
+    if (!firstName || !lastName) { alert('Please enter your first and last name.'); return; }
+    if (!bikeModel) { alert('Please enter your bike name.'); return; }
+    if (!city) { alert('Please enter your city.'); return; }
+    if (!ccRaw) { alert('Please enter your bike\'s engine CC.'); return; }
 
     result = await sb.auth.signUp({ email, password, options: { data: { name: fullName } } });
     if (!result.error && result.data.user) {
       await sb.from('profiles').insert({
         id: result.data.user.id,
         name: fullName || 'New Rider',
-        bike_model: bikeModel ? capFirst(bikeModel) : null,
-        city: city ? capFirst(city) : null,
-        cc: ccRaw ? parseInt(ccRaw) : null,
-        instagram: instagram || null,
+        bike_model: capFirst(bikeModel),
+        city: capFirst(city),
+        cc: parseInt(ccRaw),
       });
     }
   } else {
@@ -846,14 +858,19 @@ async function completeAuth() {
 }
 
 async function refreshSidebarUser() {
-  const ua = document.getElementById('sidebar-user-area');
-  if (!ua) return;
   const { data: { user } } = await sb.auth.getUser();
   if (!user) return;
   const { data: profile } = await sb.from('profiles').select('name').eq('id', user.id).maybeSingle();
   const displayName = (profile && profile.name) || (user.email ? user.email.split('@')[0] : 'Rider');
   const initial = displayName.charAt(0).toUpperCase();
-  ua.innerHTML = `<div style="display:flex;align-items:center;gap:10px;cursor:pointer;padding:8px 6px;border-radius:12px" onclick="go('s-profile')" onmouseover="this.style.background='rgba(255,255,255,.05)'" onmouseout="this.style.background=''"><div class="av color-a" style="width:34px;height:34px;font-size:12px">${initial}</div><div><div style="font-size:13px;font-weight:600;color:var(--text)">${displayName}</div></div></div>`;
+
+  const ua = document.getElementById('sidebar-user-area');
+  if (ua) {
+    ua.innerHTML = `<div style="display:flex;align-items:center;gap:10px;cursor:pointer;padding:8px 6px;border-radius:12px" onclick="go('s-profile')" onmouseover="this.style.background='rgba(255,255,255,.05)'" onmouseout="this.style.background=''"><div class="av color-a" style="width:34px;height:34px;font-size:12px">${initial}</div><div><div style="font-size:13px;font-weight:600;color:var(--text)">${displayName}</div></div></div>`;
+  }
+
+  const topbarAvatar = document.getElementById('home-topbar-avatar');
+  if (topbarAvatar) topbarAvatar.textContent = initial;
 }
 
 function capitalizeInput(el) {
@@ -868,6 +885,34 @@ function capFirst(str) {
   const trimmed = str.trim();
   if (!trimmed) return trimmed;
   return trimmed.charAt(0).toUpperCase() + trimmed.slice(1);
+}
+
+function togglePasswordVisibility(inputId, btn) {
+  const input = document.getElementById(inputId);
+  if (!input) return;
+  const showing = input.type === 'text';
+  input.type = showing ? 'password' : 'text';
+  btn.textContent = showing ? 'Show' : 'Hide';
+}
+
+async function getMemberCountsMap(rideIds, statuses) {
+  const map = {};
+  rideIds.forEach(function(id) { map[id] = { accepted: 0, pending: 0 }; });
+  if (rideIds.length === 0) return map;
+
+  const { data } = await sb
+    .from('ride_members')
+    .select('ride_id, status')
+    .in('ride_id', rideIds)
+    .in('status', statuses || ['accepted', 'pending']);
+
+  (data || []).forEach(function(row) {
+    if (!map[row.ride_id]) map[row.ride_id] = { accepted: 0, pending: 0 };
+    if (row.status === 'accepted') map[row.ride_id].accepted++;
+    if (row.status === 'pending') map[row.ride_id].pending++;
+  });
+
+  return map;
 }
 
 function goLogoHome() {
@@ -925,11 +970,6 @@ async function publishRide() {
   }
 
   const title = document.getElementById('ride-title').value.trim();
-  if (!title) {
-    alert('Please enter a ride title.');
-    return;
-  }
-
   const rideType = document.querySelector('#type-opts .opt.active')?.textContent || 'Casual';
   const pace = (document.querySelector('#pace-opts .opt.active')?.textContent || 'Moderate').toLowerCase();
   const fromLoc = document.getElementById('ride-from').value.trim();
@@ -939,9 +979,20 @@ async function publishRide() {
   const time = document.getElementById('ride-time').value;
   const minCcText = document.getElementById('ride-mincc').value;
   const minCc = minCcText === 'Any' ? 0 : parseInt(minCcText);
-  const maxRiders = parseInt(document.getElementById('ride-maxriders').value) || 10;
+  const maxRidersRaw = document.getElementById('ride-maxriders').value.trim();
+  const maxRiders = parseInt(maxRidersRaw);
   const description = document.getElementById('ride-description').value.trim();
   const whatsappLink = document.getElementById('ride-whatsapp').value.trim();
+
+  if (!title) { alert('Please enter a ride title.'); return; }
+  if (!fromLoc) { alert('Please enter a starting location.'); return; }
+  if (!toLoc) { alert('Please enter a destination.'); return; }
+  if (!meetingPoint) { alert('Please enter a meeting point.'); return; }
+  if (!date) { alert('Please pick a date.'); return; }
+  if (!time) { alert('Please pick a time.'); return; }
+  if (!maxRidersRaw || isNaN(maxRiders) || maxRiders < 2) { alert('Please enter a valid max riders count (2 or more).'); return; }
+  if (!description) { alert('Please add a description.'); return; }
+  if (!whatsappLink) { alert('Please add a WhatsApp group link.'); return; }
 
   let rideDate = null;
   if (date) {
@@ -1176,11 +1227,12 @@ async function loadRides() {
     return;
   }
 
-  const ridesWithCounts = await Promise.all(activeRides.map(async function(ride) {
-    const { count } = await sb.from('ride_members').select('*', { count: 'exact', head: true }).eq('ride_id', ride.id).eq('status', 'accepted');
-    ride.acceptedCount = count || 0;
+  const rideIds = activeRides.map(function(r) { return r.id; });
+  const countsMap = await getMemberCountsMap(rideIds, ['accepted']);
+  const ridesWithCounts = activeRides.map(function(ride) {
+    ride.acceptedCount = (countsMap[ride.id] && countsMap[ride.id].accepted) || 0;
     return ride;
-  }));
+  });
 
   grid.innerHTML = ridesWithCounts.map(function(ride) {
     const hostProfile = Array.isArray(ride.profiles) ? ride.profiles[0] : ride.profiles;
@@ -1315,11 +1367,12 @@ async function loadHomeRides() {
     return;
   }
 
-  const withCounts = await Promise.all(activeRides.map(async function(ride) {
-    const { count } = await sb.from('ride_members').select('*', { count: 'exact', head: true }).eq('ride_id', ride.id).eq('status', 'accepted');
-    ride.acceptedCount = count || 0;
+  const homeRideIds = activeRides.map(function(r) { return r.id; });
+  const homeCountsMap = await getMemberCountsMap(homeRideIds, ['accepted']);
+  const withCounts = activeRides.map(function(ride) {
+    ride.acceptedCount = (homeCountsMap[ride.id] && homeCountsMap[ride.id].accepted) || 0;
     return ride;
-  }));
+  });
 
   list.innerHTML = withCounts.map(function(ride) {
     const hostProfile = Array.isArray(ride.profiles) ? ride.profiles[0] : ride.profiles;
@@ -1373,13 +1426,13 @@ async function loadHostedRidesHome() {
 
   if (!hostedRides || hostedRides.length === 0) { section.style.display = 'none'; return; }
 
-  const withCounts = await Promise.all(hostedRides.map(async function(ride) {
-    const { count: accepted } = await sb.from('ride_members').select('*', { count: 'exact', head: true }).eq('ride_id', ride.id).eq('status', 'accepted');
-    const { count: pending } = await sb.from('ride_members').select('*', { count: 'exact', head: true }).eq('ride_id', ride.id).eq('status', 'pending');
-    ride.acceptedCount = accepted || 0;
-    ride.pendingCount = pending || 0;
+  const hostedRideIds = hostedRides.map(function(r) { return r.id; });
+  const hostedCountsMap = await getMemberCountsMap(hostedRideIds, ['accepted', 'pending']);
+  const withCounts = hostedRides.map(function(ride) {
+    ride.acceptedCount = (hostedCountsMap[ride.id] && hostedCountsMap[ride.id].accepted) || 0;
+    ride.pendingCount = (hostedCountsMap[ride.id] && hostedCountsMap[ride.id].pending) || 0;
     return ride;
-  }));
+  });
 
   section.style.display = 'block';
   list.innerHTML = withCounts.map(function(ride) {
@@ -1475,11 +1528,16 @@ async function logoutUser() {
 
 async function checkUnreadNotifications() {
   const dot = document.getElementById('alerts-dot');
-  if (!dot) return;
-  if (!isAuthed) { dot.style.display = 'none'; return; }
+  const bellDot = document.getElementById('home-bell-dot');
+  const setDots = function(show) {
+    if (dot) dot.style.display = show ? 'block' : 'none';
+    if (bellDot) bellDot.style.display = show ? 'block' : 'none';
+  };
+
+  if (!isAuthed) { setDots(false); return; }
 
   const { data: { user } } = await sb.auth.getUser();
-  if (!user) { dot.style.display = 'none'; return; }
+  if (!user) { setDots(false); return; }
 
   const { data: pendingOnMyRides } = await sb
     .from('ride_members')
@@ -1494,16 +1552,12 @@ async function checkUnreadNotifications() {
     .eq('status', 'accepted');
 
   const allTimes = [].concat(pendingOnMyRides || [], myAccepted || []).map(function(r) { return r.joined_at; });
-  if (allTimes.length === 0) { dot.style.display = 'none'; return; }
+  if (allTimes.length === 0) { setDots(false); return; }
 
   const newest = allTimes.sort().reverse()[0];
   const lastSeen = localStorage.getItem('revo_alerts_last_seen');
 
-  if (!lastSeen || new Date(newest) > new Date(lastSeen)) {
-    dot.style.display = 'block';
-  } else {
-    dot.style.display = 'none';
-  }
+  setDots(!lastSeen || new Date(newest) > new Date(lastSeen));
 }
 
 async function loadNotifications() {
@@ -1576,6 +1630,8 @@ async function loadNotifications() {
   localStorage.setItem('revo_alerts_last_seen', new Date().toISOString());
   const dot = document.getElementById('alerts-dot');
   if (dot) dot.style.display = 'none';
+  const bellDot = document.getElementById('home-bell-dot');
+  if (bellDot) bellDot.style.display = 'none';
 }
 
 async function respondToRequest(requestId, newStatus, rideId) {
