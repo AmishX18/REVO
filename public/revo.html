@@ -18,90 +18,43 @@
   --border:#333;--text:#fff;--muted:#888;--muted2:#555;
   --green:#4ade80;--amber:#fbbf24;--red:#f87171;--blue:#60a5fa;
 }
-
-/* ── RESET / BASE ── */
 body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-serif;font-size:14px;margin:0;padding:0;min-height:100vh}
-
-/* ── APP SHELL ── */
 .app-wrapper{display:flex;min-height:100vh;width:100%}
 .app-main{flex:1;position:relative;min-height:100vh;overflow:hidden;background:var(--bg)}
-
-/* ── SCREENS ── */
 .screen{display:none;flex-direction:column;min-height:100vh}
 .screen.active{display:flex}
 .content{flex:1;overflow-y:auto;padding:24px 20px 90px}
 .content::-webkit-scrollbar{width:0}
-
-/* ── SIDEBAR (desktop) ── */
-.sidebar-nav{
-  display:none;
-  width:220px;flex-shrink:0;
-  background:var(--bg2);border-right:1px solid var(--border);
-  padding:28px 14px;
-  flex-direction:column;
-  position:sticky;top:0;height:100vh;overflow-y:auto;
-}
+.sidebar-nav{display:none;width:220px;flex-shrink:0;background:var(--bg2);border-right:1px solid var(--border);padding:28px 14px;flex-direction:column;position:sticky;top:0;height:100vh;overflow-y:auto}
 .sidebar-logo{font-size:20px;font-weight:900;letter-spacing:-1.2px;padding:0 6px;margin-bottom:32px}
 .sidebar-logo span{color:var(--text)}
 .sidebar-items{display:flex;flex-direction:column;gap:2px;flex:1}
-.sidebar-item{
-  display:flex;align-items:center;gap:12px;
-  padding:10px 12px;border-radius:12px;
-  font-size:14px;font-weight:500;color:var(--muted);
-  cursor:pointer;transition:all .15s;
-  border:none;background:none;width:100%;text-align:left;
-}
+.sidebar-item{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:12px;font-size:14px;font-weight:500;color:var(--muted);cursor:pointer;transition:all .15s;border:none;background:none;width:100%;text-align:left}
 .sidebar-item:hover{color:var(--text);background:rgba(255,255,255,.05)}
 .sidebar-item.active{color:var(--text);background:rgba(255,255,255,.08)}
 .sidebar-item i{font-size:20px;flex-shrink:0}
 .sidebar-divider{height:1px;background:var(--border);margin:12px 0}
-.sidebar-create{
-  display:flex;align-items:center;gap:10px;
-  padding:11px 14px;border-radius:12px;
-  font-size:14px;font-weight:700;
-  background:var(--text);color:var(--bg);
-  cursor:pointer;border:none;width:100%;text-align:left;
-  transition:opacity .15s;margin:8px 0;
-}
+.sidebar-create{display:flex;align-items:center;gap:10px;padding:11px 14px;border-radius:12px;font-size:14px;font-weight:700;background:var(--text);color:var(--bg);cursor:pointer;border:none;width:100%;text-align:left;transition:opacity .15s;margin:8px 0}
 .sidebar-create:hover{opacity:.88}
 .sidebar-create i{font-size:18px}
 .sidebar-bottom{padding-top:16px;border-top:1px solid var(--border);margin-top:auto}
-.sidebar-signin-btn{
-  display:flex;align-items:center;gap:10px;
-  width:100%;padding:10px 12px;border-radius:12px;
-  font-size:13px;font-weight:500;color:var(--muted);
-  background:none;border:1px solid var(--border);cursor:pointer;
-  transition:all .15s;
-}
+.sidebar-signin-btn{display:flex;align-items:center;gap:10px;width:100%;padding:10px 12px;border-radius:12px;font-size:13px;font-weight:500;color:var(--muted);background:none;border:1px solid var(--border);cursor:pointer;transition:all .15s}
 .sidebar-signin-btn:hover{border-color:#555;color:var(--text)}
-
-/* ── BOTTOM NAV (mobile) ── */
-.bottom-nav{
-  position:absolute;bottom:0;left:0;right:0;
-  background:var(--bg2);border-top:1px solid var(--border);
-  display:flex;align-items:center;justify-content:space-around;
-  padding:12px 8px 20px;gap:4px;
-}
+.bottom-nav{position:absolute;bottom:0;left:0;right:0;background:var(--bg2);border-top:1px solid var(--border);display:flex;align-items:center;justify-content:space-around;padding:12px 8px 20px;gap:4px}
 .nav-item{display:flex;flex-direction:column;align-items:center;gap:4px;font-size:11px;color:var(--muted);cursor:pointer;padding:4px 12px;border-radius:12px;transition:color .15s;border:none;background:none;flex:1}
 .nav-item.active{color:var(--text)}
 .nav-item i{font-size:22px}
 .nav-center{width:48px;height:48px;border-radius:50%;background:var(--text);display:flex;align-items:center;justify-content:center;cursor:pointer;border:none;flex-shrink:0}
 .nav-center i{font-size:22px;color:var(--bg)}
-
-/* ── TYPOGRAPHY ── */
 .pg-title{font-size:26px;font-weight:700;letter-spacing:-.5px;margin-bottom:20px}
 .section-label{font-size:12px;color:var(--muted);font-weight:500;letter-spacing:.06em;text-transform:uppercase;margin-bottom:10px}
 .logo-text{font-size:22px;font-weight:800;letter-spacing:-1px}
 .logo-text span{color:var(--text)}
-
-/* ── TOPBAR ── */
 .topbar{display:flex;align-items:center;justify-content:space-between;padding:20px 20px 0}
 .topbar-icons{display:flex;align-items:center;gap:12px}
 .icon-btn{width:38px;height:38px;border-radius:50%;background:var(--card);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;cursor:pointer;font-size:18px;color:var(--muted);position:relative;transition:border-color .15s}
 .icon-btn:hover{border-color:#555;color:var(--text)}
 .icon-btn .dot{position:absolute;top:7px;right:7px;width:7px;height:7px;background:var(--text);border-radius:50%;border:2px solid var(--bg2)}
-
-/* ── RIDE CARDS ── */
 .action-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:24px}
 .action-card{background:var(--card);border:1px solid var(--border);border-radius:18px;padding:20px 16px;cursor:pointer;transition:background .15s}
 .action-card.light{background:#eee;color:#111}
@@ -110,7 +63,6 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-s
 .action-card.light:hover{background:#ddd}
 .action-title{font-size:15px;font-weight:600;margin-bottom:4px}
 .action-sub{font-size:12px;color:var(--muted)}
-
 .ride-card{background:var(--card);border:1px solid var(--border);border-radius:18px;overflow:hidden;margin-bottom:14px;cursor:pointer;transition:border-color .15s}
 .ride-card:hover{border-color:#555}
 .ride-img{width:100%;height:130px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
@@ -136,17 +88,11 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-s
 .btn-join:active{transform:scale(.97)}
 .btn-join.pending{background:transparent;border:1px solid var(--amber);color:var(--amber);cursor:default}
 .btn-join.full{background:transparent;border:1px solid var(--muted2);color:var(--muted);cursor:default}
-
 .slots-bar{margin-bottom:12px}
 .slots-row{display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-bottom:5px}
 .bar{height:2px;background:var(--border);border-radius:4px;overflow:hidden}
 .bar-fill{height:100%;border-radius:4px;background:var(--green)}
 .bar-fill.w{background:var(--amber)}.bar-fill.r{background:var(--red)}
-
-/* ── MISC COMPONENTS ── */
-.search-box{display:flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--border);border-radius:28px;padding:10px 16px;margin-bottom:16px}
-.search-box i{font-size:16px;color:var(--muted)}
-.search-box span{font-size:14px;color:var(--muted2)}
 .filter-section{margin-bottom:18px}
 .pill-row{display:flex;gap:8px;flex-wrap:wrap}
 .pill{padding:7px 16px;border-radius:20px;font-size:13px;font-weight:500;background:var(--card);border:1px solid var(--border);color:var(--muted);cursor:pointer;transition:all .15s}
@@ -213,13 +159,17 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-s
 .chat-send i{font-size:16px;color:var(--bg)}
 .color-a{background:#2563eb}.color-b{background:#059669}.color-c{background:#d97706}.color-d{background:#7c3aed}.color-e{background:#dc2626}.color-f{background:#0891b2}
 
-/* ── BUTTONS ── */
+.pending-request{background:var(--card);border:1px solid var(--border);border-radius:14px;padding:14px;margin-bottom:10px}
+.req-top{display:flex;align-items:center;gap:12px;margin-bottom:10px}
+.req-actions{display:flex;gap:8px}
+.btn-accept{flex:1;padding:9px;border-radius:10px;font-size:13px;font-weight:600;background:var(--text);color:var(--bg);border:none;cursor:pointer;transition:opacity .15s}
+.btn-accept:hover{opacity:.88}
+.btn-reject{flex:1;padding:9px;border-radius:10px;font-size:13px;font-weight:600;background:transparent;border:1px solid var(--border);color:var(--muted);cursor:pointer;transition:border-color .15s,color .15s}
+.btn-reject:hover{border-color:var(--red);color:var(--red)}
 .btn-full{width:100%;padding:14px;border-radius:16px;font-size:15px;font-weight:700;background:var(--text);color:var(--bg);border:none;cursor:pointer;transition:opacity .15s;margin-top:8px}
 .btn-full:hover{opacity:.9}
 .btn-outline{width:100%;padding:13px;border-radius:16px;font-size:14px;font-weight:600;background:transparent;color:var(--text);border:1px solid var(--border);cursor:pointer;transition:border-color .15s;margin-top:8px}
 .btn-outline:hover{border-color:#666}
-
-/* ── FORMS ── */
 .form-group{margin-bottom:16px}
 .form-lbl{font-size:12px;color:var(--muted);font-weight:500;text-transform:uppercase;letter-spacing:.06em;margin-bottom:7px;display:block}
 .form-inp{width:100%;background:var(--card);border:1px solid var(--border);border-radius:12px;padding:11px 14px;color:var(--text);font-size:14px;outline:none;font-family:inherit;transition:border-color .15s}
@@ -230,15 +180,7 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-s
 .opt{padding:8px 14px;border-radius:20px;font-size:13px;font-weight:500;background:var(--card);border:1px solid var(--border);color:var(--muted);cursor:pointer;transition:all .15s}
 .opt.active{background:var(--text);color:var(--bg);border-color:var(--text)}
 .opt:hover:not(.active){border-color:#555;color:var(--text)}
-
-/* ── PHOTO UPLOAD ── */
-.photo-upload-wrap{
-  width:100%;height:170px;
-  border:2px dashed var(--border);border-radius:16px;
-  display:flex;align-items:center;justify-content:center;
-  cursor:pointer;transition:border-color .2s;
-  position:relative;overflow:hidden;background:var(--card2);
-}
+.photo-upload-wrap{width:100%;height:170px;border:2px dashed var(--border);border-radius:16px;display:flex;align-items:center;justify-content:center;cursor:pointer;transition:border-color .2s;position:relative;overflow:hidden;background:var(--card2)}
 .photo-upload-wrap:hover{border-color:#666}
 .photo-upload-wrap.drag-over{border-color:var(--text);background:rgba(255,255,255,.04)}
 .photo-placeholder{text-align:center;color:var(--muted);pointer-events:none}
@@ -246,20 +188,13 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-s
 .photo-placeholder .p-title{font-size:13px;font-weight:600;margin-bottom:3px}
 .photo-placeholder .p-sub{font-size:11px;color:var(--muted2)}
 .photo-preview-img{width:100%;height:100%;object-fit:cover;display:none;position:absolute;inset:0}
-.photo-actions{
-  position:absolute;bottom:0;left:0;right:0;
-  background:linear-gradient(to top,rgba(0,0,0,.75),transparent);
-  padding:20px 12px 10px;
-  display:none;align-items:center;justify-content:space-between;
-}
+.photo-actions{position:absolute;bottom:0;left:0;right:0;background:linear-gradient(to top,rgba(0,0,0,.75),transparent);padding:20px 12px 10px;display:none;align-items:center;justify-content:space-between}
 .photo-upload-wrap.has-photo .photo-preview-img{display:block}
 .photo-upload-wrap.has-photo .photo-placeholder{display:none}
 .photo-upload-wrap.has-photo .photo-actions{display:flex}
 .photo-upload-wrap.has-photo{border:none}
 .photo-change{font-size:12px;font-weight:600;color:#fff;background:rgba(255,255,255,.18);border:none;border-radius:8px;padding:6px 12px;cursor:pointer;backdrop-filter:blur(4px)}
 .photo-remove{font-size:14px;color:#fff;background:rgba(248,113,113,.3);border:none;border-radius:8px;padding:6px 8px;cursor:pointer;line-height:1}
-
-/* ── ACCOUNT SECTION (inline in create) ── */
 .account-section{background:rgba(255,255,255,.03);border:1px solid var(--border);border-radius:18px;padding:18px;margin-bottom:16px}
 .account-section-hd{display:flex;align-items:center;gap:10px;margin-bottom:4px}
 .account-section-hd i{font-size:20px;color:var(--muted)}
@@ -270,8 +205,6 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-s
 .or-div span{font-size:12px;color:var(--muted2)}
 .signin-inline{text-align:center;font-size:13px;color:var(--muted);margin-bottom:16px}
 .signin-inline span{color:var(--text);font-weight:600;cursor:pointer}
-
-/* ── SHEET OVERLAY ── */
 .sheet-overlay{position:absolute;inset:0;background:rgba(0,0,0,0);display:flex;align-items:flex-end;z-index:300;pointer-events:none;transition:background .28s;overflow:hidden}
 .sheet-overlay.open{background:rgba(0,0,0,.72);pointer-events:all}
 .sheet-body{width:100%;background:#181818;border-top:1px solid var(--border);border-radius:24px 24px 0 0;padding:0 20px 36px;transform:translateY(100%);transition:transform .32s cubic-bezier(.32,.72,0,1)}
@@ -284,8 +217,6 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-s
 .join-cover-thumb{width:44px;height:44px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;overflow:hidden}
 .join-cover-thumb img{width:100%;height:100%;object-fit:cover}
 .join-cover-thumb i{font-size:22px;opacity:.6}
-
-/* ── LANDING ── */
 #s-landing{background:var(--bg);min-height:100vh;position:relative;overflow:hidden}
 .landing-video-bg{position:absolute;top:0;left:0;width:100%;height:520px;object-fit:cover;z-index:0}
 .landing-video-overlay{position:absolute;top:0;left:0;width:100%;height:520px;background:linear-gradient(to bottom,rgba(10,10,10,.25) 0%,rgba(17,17,17,.55) 55%,rgba(17,17,17,.97) 100%);z-index:1;pointer-events:none}
@@ -323,64 +254,35 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-s
 .landing-footer span:hover{color:var(--text)}
 .landing-left{position:relative;z-index:2}
 .landing-mobile-only{position:relative;z-index:2}
-
-/* ════════════════════════════════════
-   RESPONSIVE — TABLET / DESKTOP
-════════════════════════════════════ */
 @media(min-width:768px){
   body{background:#0a0a0a;display:flex;align-items:stretch}
   .app-wrapper{max-width:1400px;margin:0 auto;width:100%;box-shadow:0 0 0 1px #222}
   .sidebar-nav{display:flex}
   .bottom-nav{display:none !important}
   .screen{min-height:100vh}
-
-  /* Content wider + breathing room */
   .content{padding:36px 48px 60px}
   .pg-title{font-size:30px}
-
-  /* Explore 2-col grid */
   .explore-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
   .explore-grid .ride-card{margin-bottom:0}
-
-  /* Narrow form/detail pages */
   .content-narrow{max-width:660px}
-
-  /* Landing — side by side */
   #s-landing{flex-direction:row;min-height:100vh}
-  .landing-left{
-    width:420px;flex-shrink:0;
-    display:flex;flex-direction:column;justify-content:center;
-    padding:60px 48px;border-right:1px solid var(--border);
-  }
-  .landing-right{
-    flex:1;background:var(--bg2);padding:48px 40px;
-    display:flex;flex-direction:column;justify-content:center;
-    overflow-y:auto;
-  }
+  .landing-left{width:420px;flex-shrink:0;display:flex;flex-direction:column;justify-content:center;padding:60px 48px;border-right:1px solid var(--border)}
+  .landing-right{flex:1;background:var(--bg2);padding:48px 40px;display:flex;flex-direction:column;justify-content:center;overflow-y:auto}
   .landing-mobile-only{display:none}
   .landing-desktop-cta{display:block}
   .landing-topbar{display:none}
   .landing-video-bg, .landing-video-overlay{width:420px;height:420px}
   .btn-land-primary, .btn-land-secondary{padding:18px;font-size:16px}
   .btn-land-secondary{background:var(--text);color:var(--bg);border:none}
-
-  /* Landing right — grid of peek cards */
   .peek-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
   .peek-grid .peek-card{width:auto;flex-shrink:unset}
   .peek-grid .peek-more{width:auto}
-
-  /* Detail page cover taller */
   .detail-cover-lg{height:220px !important}
   .landing-left .landing-hero{padding-left:0;padding-right:0}
-
-  /* Photo upload taller on desktop */
   .photo-upload-wrap{height:200px}
-
-  /* Topbar logo hidden on desktop (sidebar has it) */
   .topbar .logo-text{display:none}
   .topbar{padding-bottom:4px}
 }
-
 @media(min-width:1200px){
   .sidebar-nav{width:240px}
   .content{padding:40px 56px 60px}
@@ -390,16 +292,13 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-s
 <body>
 <div class="app-wrapper">
 
-<!-- ══════════════════════════════
-     SIDEBAR (desktop only)
-══════════════════════════════ -->
 <nav class="sidebar-nav" id="sidebar-nav">
-  <div class="sidebar-logo">RE<span>V</span>O</div>
+  <div class="sidebar-logo" style="cursor:pointer" onclick="goLogoHome()">RE<span>V</span>O</div>
   <div class="sidebar-items">
     <button class="sidebar-item" id="snav-home" onclick="go('s-home')"><i class="ti ti-home"></i><span>Home</span></button>
     <button class="sidebar-item active" id="snav-explore" onclick="go('s-explore')"><i class="ti ti-compass"></i><span>Explore</span></button>
     <div class="sidebar-divider"></div>
-    <button class="sidebar-create" onclick="go('s-create')"><i class="ti ti-plus"></i><span>Create a Ride</span></button>
+    <button class="sidebar-create" onclick="goCreateRide()"><i class="ti ti-plus"></i><span>Create a Ride</span></button>
     <div class="sidebar-divider"></div>
     <button class="sidebar-item" id="snav-notif" onclick="requireAuth(()=>go('s-notif'),'to view alerts')"><i class="ti ti-bell"></i><span>Alerts</span><span id="alerts-dot" style="display:none;width:7px;height:7px;background:var(--red);border-radius:50%;margin-left:6px"></span></button>
     <button class="sidebar-item" id="snav-profile" onclick="requireAuth(()=>go('s-profile'),'to view your profile')"><i class="ti ti-user"></i><span>Profile</span></button>
@@ -411,41 +310,33 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-s
   </div>
 </nav>
 
-<!-- ══════════════════════════════
-     MAIN APP AREA
-══════════════════════════════ -->
 <div class="app-main" id="app-main">
 
-<!-- ── LANDING ── -->
 <div class="screen active" id="s-landing">
   <video class="landing-video-bg" autoplay muted loop playsinline src="/landing-bg.mp4"></video>
   <div class="landing-video-overlay"></div>
-  <!-- Mobile header (hidden on desktop) -->
   <div class="landing-topbar landing-mobile-only">
     <div class="landing-logo">RE<span>V</span>O</div>
     <button class="landing-signin-btn" onclick="openAuthSheet('in')">Sign in →</button>
   </div>
 
-  <!-- Desktop: left col / Mobile: full width -->
   <div class="landing-left" style="display:flex;flex-direction:column">
     <div class="landing-hero">
-      <div class="landing-eyebrow"><i class="ti ti-motorbike" style="font-size:13px"></i> 15 rides this week near Mumbai</div>
+      <div class="landing-eyebrow"><i class="ti ti-motorbike" style="font-size:13px"></i> <span id="landing-ride-count-text">Loading rides...</span></div>
       <div class="landing-headline">Find your<br>riding crew.</div>
       <div class="landing-sub">Browse rides near you — no sign-up needed to explore.</div>
     </div>
-    <!-- Desktop CTAs inside left col -->
     <div class="landing-desktop-cta" style="margin-top:90px">
       <button class="btn-land-primary" onclick="go('s-explore')"><i class="ti ti-compass" style="margin-right:6px;font-size:16px;vertical-align:-2px"></i>Browse Rides</button>
-      <button class="btn-land-secondary" onclick="go('s-create')"><i class="ti ti-plus" style="margin-right:6px;font-size:16px;vertical-align:-2px"></i>Host a Ride</button>
+      <button class="btn-land-secondary" onclick="goCreateRide()"><i class="ti ti-plus" style="margin-right:6px;font-size:16px;vertical-align:-2px"></i>Host a Ride</button>
       <div class="landing-footer">Already riding with us? <span onclick="openAuthSheet('in')">Sign in</span></div>
     </div>
   </div>
 
-  <!-- Mobile peek strip + CTAs (hidden on desktop) -->
   <div class="landing-mobile-only" style="flex:1;display:flex;flex-direction:column">
     <div class="landing-actions" style="margin-top:0">
       <button class="btn-land-primary" onclick="go('s-explore')"><i class="ti ti-compass" style="margin-right:6px;font-size:16px;vertical-align:-2px"></i>Browse Rides</button>
-      <button class="btn-land-secondary" onclick="go('s-create')"><i class="ti ti-plus" style="margin-right:6px;font-size:16px;vertical-align:-2px"></i>Host a Ride</button>
+      <button class="btn-land-secondary" onclick="goCreateRide()"><i class="ti ti-plus" style="margin-right:6px;font-size:16px;vertical-align:-2px"></i>Host a Ride</button>
       <div class="landing-footer">Already riding with us? <span onclick="openAuthSheet('in')">Sign in</span></div>
     </div>
     <div class="peek-section" style="margin-top:24px">
@@ -454,23 +345,25 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-s
     </div>
   </div>
 
-  <!-- Desktop: right col — ride grid -->
   <div class="landing-right" style="display:none" id="landing-right-col">
     <div style="font-size:11px;font-weight:500;color:var(--muted2);text-transform:uppercase;letter-spacing:.07em;margin-bottom:16px">Happening near you</div>
     <div class="peek-grid" id="landing-peek-desktop"><div style="font-size:12px;color:var(--muted)">Loading...</div></div>
-    <div style="text-align:center;margin-top:16px;font-size:13px;color:var(--muted);cursor:pointer" onclick="go('s-explore')">Browse all 15 rides this week →</div>
+    <div style="text-align:center;margin-top:16px;font-size:13px;color:var(--muted);cursor:pointer" onclick="go('s-explore')"><span id="landing-browse-all-text">Browse all rides →</span></div>
   </div>
 </div>
 
-<!-- ── HOME (authenticated) ── -->
 <div class="screen" id="s-home">
-  <div class="topbar"><div class="logo-text">RE<span>V</span>O</div><div class="topbar-icons"><div class="icon-btn" onclick="go('s-notif')"><span style="font-size:16px">🔔</span><div class="dot"></div></div><div class="av color-a" style="width:38px;height:38px;font-size:14px;cursor:pointer" onclick="go('s-profile')" id="home-topbar-avatar">A</div></div></div>
+  <div class="topbar"><div class="logo-text" style="cursor:pointer" onclick="goLogoHome()">RE<span>V</span>O</div><div class="topbar-icons"><div class="icon-btn" onclick="go('s-notif')"><span style="font-size:16px">🔔</span><div class="dot"></div></div><div class="av color-a" style="width:38px;height:38px;font-size:14px;cursor:pointer" onclick="go('s-profile')" id="home-topbar-avatar">A</div></div></div>
   <div class="content">
     <div style="margin-bottom:24px;padding-top:16px"><div style="font-size:16px;color:var(--muted);margin-bottom:2px" id="home-greeting-time">Hey,</div><div style="font-size:22px;font-weight:700" id="home-greeting-name">Rider 👋</div></div>
     <div style="font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:24px;padding:14px 16px;background:var(--card);border:1px solid var(--border);border-radius:14px">REVO connects local riders for group motorcycle rides — discover rides near you, or host your own and build your riding crew.</div>
     <div class="action-grid">
-      <div class="action-card light" onclick="go('s-create')"><div style="font-size:22px;margin-bottom:8px"><i class="ti ti-plus"></i></div><div class="action-title">Create a Ride</div><div class="action-sub">Start hosting</div></div>
+      <div class="action-card light" onclick="goCreateRide()"><div style="font-size:22px;margin-bottom:8px"><i class="ti ti-plus"></i></div><div class="action-title">Create a Ride</div><div class="action-sub">Start hosting</div></div>
       <div class="action-card" onclick="go('s-explore')"><div style="font-size:22px;margin-bottom:8px"><i class="ti ti-compass"></i></div><div class="action-title">Join a Ride</div><div class="action-sub">Browse available</div></div>
+    </div>
+    <div id="hosted-rides-section" style="display:none;margin-bottom:28px">
+      <div class="section-header"><div class="section-label">Your Hosted Rides</div></div>
+      <div class="info-card" id="hosted-rides-list"></div>
     </div>
     <div class="section-header"><div class="section-label">Upcoming Rides</div><div class="see-all" onclick="go('s-explore')">See all</div></div>
     <div id="home-rides-list"><div style="font-size:13px;color:var(--muted);padding:8px 0">Loading...</div></div>
@@ -478,18 +371,16 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-s
   <div class="bottom-nav">
     <button class="nav-item active" onclick="go('s-home')"><i class="ti ti-home"></i><span>Home</span></button>
     <button class="nav-item" onclick="go('s-explore')"><i class="ti ti-compass"></i><span>Explore</span></button>
-    <button class="nav-center" onclick="go('s-create')"><i class="ti ti-plus"></i></button>
+    <button class="nav-center" onclick="goCreateRide()"><i class="ti ti-plus"></i></button>
     <button class="nav-item" onclick="go('s-notif')"><i class="ti ti-bell"></i><span>Alerts</span></button>
     <button class="nav-item" onclick="go('s-profile')"><i class="ti ti-user"></i><span>Profile</span></button>
   </div>
 </div>
 
-<!-- ── EXPLORE ── -->
 <div class="screen" id="s-explore">
   <div class="content">
     <div class="ride-detail-back" onclick="isAuthed?go('s-home'):go('s-landing')"><i class="ti ti-arrow-left"></i><span>Back</span></div>
     <div class="pg-title">Explore</div>
-    <div class="search-box"><i class="ti ti-search"></i><span>Search routes, destinations...</span></div>
     
     <div class="filter-section"><div class="section-label">Ride Type</div><div class="pill-row"><div class="pill" onclick="togglePill(this)">Casual</div><div class="pill" onclick="togglePill(this)">Touring</div><div class="pill" onclick="togglePill(this)">Adventure</div><div class="pill" onclick="togglePill(this)">Night</div><div class="pill" onclick="togglePill(this)">Camping</div></div></div>
     <div class="filter-section"><div class="section-label">Pace</div><div class="pill-row"><div class="pill" onclick="togglePill(this)">Slow</div><div class="pill" onclick="togglePill(this)">Moderate</div><div class="pill" onclick="togglePill(this)">Fast</div></div></div>
@@ -504,13 +395,12 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-s
   <div class="bottom-nav">
     <button class="nav-item" onclick="isAuthed?go('s-home'):go('s-landing')"><i class="ti ti-home"></i><span>Home</span></button>
     <button class="nav-item active" onclick="go('s-explore')"><i class="ti ti-compass"></i><span>Explore</span></button>
-    <button class="nav-center" onclick="go('s-create')"><i class="ti ti-plus"></i></button>
+    <button class="nav-center" onclick="goCreateRide()"><i class="ti ti-plus"></i></button>
     <button class="nav-item" onclick="requireAuth(()=>go('s-notif'),'to view alerts')"><i class="ti ti-bell"></i><span>Alerts</span></button>
     <button class="nav-item" onclick="requireAuth(()=>go('s-profile'),'to view your profile')"><i class="ti ti-user"></i><span>Profile</span></button>
   </div>
 </div>
 
-<!-- ── RIDE DETAIL 1 ── -->
 <div class="screen" id="s-detail">
   <div class="content content-narrow">
     <div class="ride-detail-back" onclick="go('s-explore')"><i class="ti ti-arrow-left"></i><span>Back</span></div>
@@ -532,13 +422,12 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-s
   <div class="bottom-nav">
     <button class="nav-item" onclick="isAuthed?go('s-home'):go('s-landing')"><i class="ti ti-home"></i><span>Home</span></button>
     <button class="nav-item active" onclick="go('s-explore')"><i class="ti ti-compass"></i><span>Explore</span></button>
-    <button class="nav-center" onclick="go('s-create')"><i class="ti ti-plus"></i></button>
+    <button class="nav-center" onclick="goCreateRide()"><i class="ti ti-plus"></i></button>
     <button class="nav-item" onclick="requireAuth(()=>go('s-notif'),'to view alerts')"><i class="ti ti-bell"></i><span>Alerts</span></button>
     <button class="nav-item" onclick="requireAuth(()=>go('s-profile'),'to view your profile')"><i class="ti ti-user"></i><span>Profile</span></button>
   </div>
 </div>
 
-<!-- ── RIDE DETAIL 2 ── -->
 <div class="screen" id="s-detail2">
   <div class="content content-narrow">
     <div class="ride-detail-back" onclick="go('s-explore')"><i class="ti ti-arrow-left"></i><span>Back</span></div>
@@ -561,13 +450,12 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-s
   <div class="bottom-nav">
     <button class="nav-item" onclick="isAuthed?go('s-home'):go('s-landing')"><i class="ti ti-home"></i><span>Home</span></button>
     <button class="nav-item active" onclick="go('s-explore')"><i class="ti ti-compass"></i><span>Explore</span></button>
-    <button class="nav-center" onclick="go('s-create')"><i class="ti ti-plus"></i></button>
+    <button class="nav-center" onclick="goCreateRide()"><i class="ti ti-plus"></i></button>
     <button class="nav-item" onclick="requireAuth(()=>go('s-notif'),'to view alerts')"><i class="ti ti-bell"></i><span>Alerts</span></button>
     <button class="nav-item" onclick="requireAuth(()=>go('s-profile'),'to view your profile')"><i class="ti ti-user"></i><span>Profile</span></button>
   </div>
 </div>
 
-<!-- ── DYNAMIC RIDE DETAIL ── -->
 <div class="screen" id="s-ride-detail">
   <div class="content content-narrow">
     <div class="ride-detail-back" onclick="go('s-explore')"><i class="ti ti-arrow-left"></i><span>Back</span></div>
@@ -609,13 +497,12 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-s
   <div class="bottom-nav">
     <button class="nav-item" onclick="isAuthed?go('s-home'):go('s-landing')"><i class="ti ti-home"></i><span>Home</span></button>
     <button class="nav-item active" onclick="go('s-explore')"><i class="ti ti-compass"></i><span>Explore</span></button>
-    <button class="nav-center" onclick="go('s-create')"><i class="ti ti-plus"></i></button>
+    <button class="nav-center" onclick="goCreateRide()"><i class="ti ti-plus"></i></button>
     <button class="nav-item" onclick="requireAuth(()=>go('s-notif'),'to view alerts')"><i class="ti ti-bell"></i><span>Alerts</span></button>
     <button class="nav-item" onclick="requireAuth(()=>go('s-profile'),'to view your profile')"><i class="ti ti-user"></i><span>Profile</span></button>
   </div>
 </div>
 
-<!-- ── MEMBERS ── -->
 <div class="screen" id="s-members">
   <div class="content content-narrow">
     <div class="ride-detail-back" onclick="go('s-detail2')"><i class="ti ti-arrow-left"></i><span>Back to ride</span></div>
@@ -635,13 +522,12 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-s
   <div class="bottom-nav">
     <button class="nav-item" onclick="isAuthed?go('s-home'):go('s-landing')"><i class="ti ti-home"></i><span>Home</span></button>
     <button class="nav-item active" onclick="go('s-explore')"><i class="ti ti-compass"></i><span>Explore</span></button>
-    <button class="nav-center" onclick="go('s-create')"><i class="ti ti-plus"></i></button>
+    <button class="nav-center" onclick="goCreateRide()"><i class="ti ti-plus"></i></button>
     <button class="nav-item" onclick="requireAuth(()=>go('s-notif'),'to view alerts')"><i class="ti ti-bell"></i><span>Alerts</span></button>
     <button class="nav-item" onclick="requireAuth(()=>go('s-profile'),'to view your profile')"><i class="ti ti-user"></i><span>Profile</span></button>
   </div>
 </div>
 
-<!-- ── RIDER PROFILE ── -->
 <div class="screen" id="s-riderprofile">
   <div class="content content-narrow">
     <div class="ride-detail-back" onclick="go('s-members')"><i class="ti ti-arrow-left"></i><span>Back</span></div>
@@ -658,13 +544,12 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-s
   <div class="bottom-nav">
     <button class="nav-item" onclick="isAuthed?go('s-home'):go('s-landing')"><i class="ti ti-home"></i><span>Home</span></button>
     <button class="nav-item" onclick="go('s-explore')"><i class="ti ti-compass"></i><span>Explore</span></button>
-    <button class="nav-center" onclick="go('s-create')"><i class="ti ti-plus"></i></button>
+    <button class="nav-center" onclick="goCreateRide()"><i class="ti ti-plus"></i></button>
     <button class="nav-item" onclick="requireAuth(()=>go('s-notif'),'to view alerts')"><i class="ti ti-bell"></i><span>Alerts</span></button>
     <button class="nav-item" onclick="requireAuth(()=>go('s-profile'),'to view your profile')"><i class="ti ti-user"></i><span>Profile</span></button>
   </div>
 </div>
 
-<!-- ── CHAT ── -->
 <div class="screen" id="s-chat">
   <div style="padding:16px 20px 12px;border-bottom:1px solid var(--border);background:var(--bg2);display:flex;align-items:center;gap:12px"><div style="cursor:pointer;color:var(--muted);font-size:20px" onclick="go('s-detail2')"><i class="ti ti-arrow-left"></i></div><div style="flex:1"><div style="font-size:15px;font-weight:600">Marine Drive Cruise</div><div style="font-size:12px;color:var(--muted)">8 riders · Fri 13 Jun</div></div><div style="cursor:pointer;color:var(--muted);font-size:18px" onclick="go('s-members')"><i class="ti ti-users"></i></div></div>
   <div style="flex:1;padding:16px 20px 80px;overflow-y:auto">
@@ -677,28 +562,21 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-s
   <div class="chat-input-row"><input class="chat-inp" placeholder="Message the group..."/><button class="chat-send"><i class="ti ti-send"></i></button></div>
 </div>
 
-<!-- ── NOTIFICATIONS ── -->
 <div class="screen" id="s-notif">
   <div class="content content-narrow">
     <div class="pg-title" style="padding-top:4px">Notifications</div>
-    <div style="font-size:13px;color:var(--muted);margin-bottom:20px">3 unread</div>
+    <div style="font-size:13px;color:var(--muted);margin-bottom:20px"><span id="notif-unread-label">Loading...</span></div>
     <div id="notif-list"></div>
-    <div class="notif-item unread" onclick="go('s-detail')"><div class="notif-icon ni-white"><i class="ti ti-bell" style="font-size:18px;color:var(--text)"></i></div><div class="notif-text"><div class="notif-title">Vikram Nair requested to join your Lonavala Sunrise Run</div><div class="notif-sub">Lonavala Sunrise Breakfast Run</div></div><div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px"><div class="notif-time">2m</div><div class="unread-dot"></div></div></div>
-    <div class="notif-item unread" onclick="go('s-detail2')"><div class="notif-icon ni-green"><i class="ti ti-check" style="font-size:18px;color:var(--green)"></i></div><div class="notif-text"><div class="notif-title">You were accepted for Marine Drive Midnight Cruise</div><div class="notif-sub">Marine Drive Midnight Cruise</div></div><div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px"><div class="notif-time">18m</div><div class="unread-dot"></div></div></div>
-    <div class="notif-item unread"><div class="notif-icon ni-amber"><i class="ti ti-clock" style="font-size:18px;color:var(--amber)"></i></div><div class="notif-text"><div class="notif-title">Sahyadri Offroad Weekend starts in 2 hours</div><div class="notif-sub">Sahyadri Offroad Weekend</div></div><div style="display:flex;flex-direction:column;align-items:flex-end;gap:4px"><div class="notif-time">1h</div><div class="unread-dot"></div></div></div>
-    <div class="notif-item" onclick="go('s-detail2')"><div class="notif-icon ni-red"><i class="ti ti-x" style="font-size:18px;color:var(--red)"></i></div><div class="notif-text"><div class="notif-title">Your request for Night Cruise BKC was not accepted</div><div class="notif-sub">Night Cruise BKC</div></div><div class="notif-time">Yesterday</div></div>
-    <div class="notif-item"><div class="notif-icon ni-white"><i class="ti ti-star" style="font-size:18px;color:var(--muted)"></i></div><div class="notif-text"><div class="notif-title">Vikram gave you 5 stars on Lonavala Run</div><div class="notif-sub">New rating received</div></div><div class="notif-time">3d</div></div>
   </div>
   <div class="bottom-nav">
     <button class="nav-item" onclick="go('s-home')"><i class="ti ti-home"></i><span>Home</span></button>
     <button class="nav-item" onclick="go('s-explore')"><i class="ti ti-compass"></i><span>Explore</span></button>
-    <button class="nav-center" onclick="go('s-create')"><i class="ti ti-plus"></i></button>
+    <button class="nav-center" onclick="goCreateRide()"><i class="ti ti-plus"></i></button>
     <button class="nav-item active" onclick="go('s-notif')"><i class="ti ti-bell"></i><span>Alerts</span></button>
     <button class="nav-item" onclick="go('s-profile')"><i class="ti ti-user"></i><span>Profile</span></button>
   </div>
 </div>
 
-<!-- ── PROFILE ── -->
 <div class="screen" id="s-profile">
   <div class="profile-screen-top"><div class="pg-title" style="margin-bottom:0">Profile</div><div class="icon-btn"><i class="ti ti-settings"></i></div></div>
   <div class="content content-narrow" style="padding-top:20px">
@@ -712,19 +590,17 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-s
   <div class="bottom-nav">
     <button class="nav-item" onclick="go('s-home')"><i class="ti ti-home"></i><span>Home</span></button>
     <button class="nav-item" onclick="go('s-explore')"><i class="ti ti-compass"></i><span>Explore</span></button>
-    <button class="nav-center" onclick="go('s-create')"><i class="ti ti-plus"></i></button>
+    <button class="nav-center" onclick="goCreateRide()"><i class="ti ti-plus"></i></button>
     <button class="nav-item" onclick="go('s-notif')"><i class="ti ti-bell"></i><span>Alerts</span></button>
     <button class="nav-item active" onclick="go('s-profile')"><i class="ti ti-user"></i><span>Profile</span></button>
   </div>
 </div>
 
-<!-- ── CREATE RIDE (with photo upload + inline account) ── -->
 <div class="screen" id="s-create">
   <div class="content content-narrow">
     <div class="ride-detail-back" onclick="isAuthed?go('s-home'):go('s-landing')"><i class="ti ti-arrow-left"></i><span>Back</span></div>
     <div class="pg-title">Create a Ride</div>
 
-    <!-- COVER PHOTO UPLOAD -->
     <div class="form-group">
       <label class="form-lbl">Cover Photo <span style="color:var(--muted2);text-transform:none;letter-spacing:0;font-size:11px">— 1 photo</span></label>
       <div class="photo-upload-wrap" id="photo-upload-wrap" onclick="document.getElementById('photo-file-input').click()">
@@ -753,19 +629,7 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-s
     <div class="form-group"><label class="form-lbl">Description</label><textarea class="form-inp" id="ride-description" rows="3" placeholder="What to expect, what to bring..."></textarea></div>
 <div class="form-group"><label class="form-lbl">WhatsApp Group Link <span style="color:var(--muted2);text-transform:none;letter-spacing:0;font-size:11px">— optional, shown only to accepted riders</span></label><input class="form-inp" id="ride-whatsapp" placeholder="https://chat.whatsapp.com/..."/></div>
 
-    <!-- INLINE ACCOUNT CREATION -->
-    <div style="display:flex;align-items:center;gap:10px;margin:24px 0 16px"><div style="flex:1;height:1px;background:var(--border)"></div><div style="font-size:11px;color:var(--muted2);font-weight:500;text-transform:uppercase;letter-spacing:.08em;white-space:nowrap">Your account</div><div style="flex:1;height:1px;background:var(--border)"></div></div>
-    <div class="account-section" id="guest-account-section">
-      <div class="account-section-hd"><i class="ti ti-user-circle"></i><div class="account-section-title">Create your account</div></div>
-      <div class="account-section-sub">Sign up to publish this ride and manage your requests.</div>
-      <div class="form-group"><label class="form-lbl">Full name</label><input class="form-inp" placeholder="Your name"/></div>
-      <div class="form-group"><label class="form-lbl">Email</label><input class="form-inp" type="email" placeholder="you@example.com"/></div>
-      <div class="form-group" style="margin-bottom:0"><label class="form-lbl">Password</label><input class="form-inp" type="password" placeholder="Create a password"/></div>
-      <div class="or-div"><span>or</span></div>
-      <div class="signin-inline">Already on REVO? <span onclick="openAuthSheet('in')">Sign in</span></div>
-    </div>
-
-    <button class="btn-full" style="margin-bottom:8px" onclick="publishRide()">Publish Ride</button>
+    <button class="btn-full" style="margin-bottom:8px;margin-top:8px" onclick="publishRide()">Publish Ride</button>
   </div>
   <div class="bottom-nav">
     <button class="nav-item" onclick="isAuthed?go('s-home'):go('s-landing')"><i class="ti ti-home"></i><span>Home</span></button>
@@ -777,9 +641,6 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-s
 </div>
 
 
-<!-- ════════════════════════════════
-     JOIN REQUEST SHEET
-════════════════════════════════ -->
 <div class="sheet-overlay" id="join-overlay" onclick="handleSheetClick(event,'join-overlay')">
   <div class="sheet-body">
     <div class="sheet-handle"></div>
@@ -803,15 +664,21 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-s
   </div>
 </div>
 
-<!-- ════════════════════════════════
-     AUTH SHEET (nav-level sign in)
-════════════════════════════════ -->
 <div class="sheet-overlay" id="auth-overlay" onclick="handleSheetClick(event,'auth-overlay')">
   <div class="sheet-body">
     <div class="sheet-handle"></div>
     <div class="auth-tabs"><button class="auth-tab active" id="tab-signin" onclick="setAuthMode('signin')">Sign in</button><button class="auth-tab" id="tab-signup" onclick="setAuthMode('signup')">Create account</button></div>
     <div style="margin-bottom:20px"><div style="font-size:20px;font-weight:700;margin-bottom:5px" id="auth-title">Welcome back</div><div style="font-size:13px;color:var(--muted)" id="auth-sub">Sign in to continue</div></div>
-    <div class="form-group" id="auth-name-group" style="display:none"><label class="form-lbl">Your name</label><input class="form-inp" id="auth-name" placeholder="Full name"/></div>
+    <div class="form-group" id="auth-name-group" style="display:none">
+      <div class="form-grid" style="margin-bottom:16px">
+        <div class="form-group" style="margin-bottom:0"><label class="form-lbl">First name</label><input class="form-inp" id="auth-first-name" placeholder="First name" oninput="capitalizeInput(this)"/></div>
+        <div class="form-group" style="margin-bottom:0"><label class="form-lbl">Last name</label><input class="form-inp" id="auth-last-name" placeholder="Last name" oninput="capitalizeInput(this)"/></div>
+      </div>
+      <div class="form-group"><label class="form-lbl">Bike Name</label><input class="form-inp" id="auth-bike" placeholder="e.g. Royal Enfield Himalayan" oninput="capitalizeInput(this)"/></div>
+      <div class="form-group"><label class="form-lbl">City</label><input class="form-inp" id="auth-city" placeholder="e.g. Pune" oninput="capitalizeInput(this)"/></div>
+      <div class="form-group"><label class="form-lbl">Engine CC</label><input class="form-inp" id="auth-cc" type="number" placeholder="e.g. 350"/></div>
+      <div class="form-group"><label class="form-lbl">Instagram <span style="color:var(--muted2);text-transform:none;letter-spacing:0;font-size:11px">(optional)</span></label><input class="form-inp" id="auth-instagram" placeholder="@yourhandle"/></div>
+    </div>
     <div class="form-group"><label class="form-lbl">Email</label><input class="form-inp" id="auth-email" type="email" placeholder="you@example.com"/></div>
     <div class="form-group"><label class="form-lbl">Password</label><input class="form-inp" id="auth-password" type="password" placeholder="••••••••"/></div>
     <button class="btn-full" id="auth-submit-btn" onclick="completeAuth()">Sign in</button>
@@ -819,11 +686,23 @@ body{background:var(--bg);color:var(--text);font-family:'Inter',system-ui,sans-s
   </div>
 </div>
 
-</div><!-- /app-main -->
-</div><!-- /app-wrapper -->
+<div class="sheet-overlay" id="complete-profile-overlay" onclick="handleSheetClick(event,'complete-profile-overlay')">
+  <div class="sheet-body">
+    <div class="sheet-handle"></div>
+    <div style="text-align:center;padding:8px 0 4px">
+      <div style="font-size:36px;margin-bottom:12px">👤</div>
+      <div style="font-size:18px;font-weight:700;margin-bottom:8px">Complete your profile first</div>
+      <div style="font-size:13px;color:var(--muted);line-height:1.5;margin-bottom:24px">Add your city, bike name and engine CC so other riders and hosts know who you are before you create or join a ride.</div>
+    </div>
+    <button class="btn-full" onclick="closeCompleteProfilePrompt();go('s-profile')">Complete Profile</button>
+    <button class="btn-outline" onclick="closeCompleteProfilePrompt()" style="margin-top:8px;color:var(--muted)">Cancel</button>
+  </div>
+</div>
+
+</div>
+</div>
 
 <script>
-/* ══ STATE ══ */
 let isAuthed = false;
 let pendingAction = null;
 let joinTriggerBtn = null;
@@ -865,18 +744,15 @@ let authMode = 'signin';
 const ALL_SCREENS = ['s-landing','s-home','s-explore','s-detail','s-detail2','s-members','s-riderprofile','s-chat','s-notif','s-profile','s-create','s-ride-detail'];
 const SIDEBAR_MAP = {'s-home':'snav-home','s-explore':'snav-explore','s-detail':'snav-explore','s-detail2':'snav-explore','s-members':'snav-explore','s-riderprofile':'snav-explore','s-create':'snav-create','s-notif':'snav-notif','s-profile':'snav-profile'};
 
-/* ══ NAVIGATION ══ */
 function go(id, skipPush) {
   if (!skipPush) {
     history.pushState({ screen: id }, '', '');
   }
   ALL_SCREENS.forEach(s => { const el=document.getElementById(s); if(el) el.classList.remove('active'); });
-  const guestBox = document.getElementById('guest-account-section');
-  if (guestBox) guestBox.style.display = isAuthed ? 'none' : 'block';
   if (id === 's-explore') loadRides();
   if (id === 's-notif') loadNotifications();
   if (id === 's-profile') loadProfile();
-  if (id === 's-home') { loadHomeGreeting(); loadHomeRides(); }
+  if (id === 's-home') { loadHomeGreeting(); loadHomeRides(); loadHostedRidesHome(); }
   checkUnreadNotifications();
   const t = document.getElementById(id);
   if (t) {
@@ -884,13 +760,11 @@ function go(id, skipPush) {
     t.scrollTop = 0;
     const c = t.querySelector('.content'); if(c) c.scrollTop = 0;
   }
-  // update sidebar
   document.querySelectorAll('.sidebar-item').forEach(el => el.classList.remove('active'));
   const snavId = SIDEBAR_MAP[id];
   if (snavId) { const el = document.getElementById(snavId); if(el) el.classList.add('active'); }
 }
 
-/* ══ AUTH GATE ══ */
 function requireAuth(action, context) {
   if (isAuthed) { action(); return; }
   pendingAction = action;
@@ -923,7 +797,6 @@ function setAuthMode(mode) {
 async function completeAuth() {
   const email = document.getElementById('auth-email').value.trim();
   const password = document.getElementById('auth-password').value.trim();
-  const name = document.getElementById('auth-name').value.trim();
 
   if (!email || !password) {
     alert('Please enter both email and password');
@@ -932,11 +805,28 @@ async function completeAuth() {
 
   let result;
   if (authMode === 'signup') {
-    result = await sb.auth.signUp({ email, password, options: { data: { name } } });
+    const firstName = document.getElementById('auth-first-name').value.trim();
+    const lastName = document.getElementById('auth-last-name').value.trim();
+    const bikeModel = document.getElementById('auth-bike').value.trim();
+    const city = document.getElementById('auth-city').value.trim();
+    const ccRaw = document.getElementById('auth-cc').value.trim();
+    const instagram = document.getElementById('auth-instagram').value.trim();
+    const fullName = (capFirst(firstName) + ' ' + capFirst(lastName)).trim();
+
+    if (!firstName || !lastName) {
+      alert('Please enter your first and last name.');
+      return;
+    }
+
+    result = await sb.auth.signUp({ email, password, options: { data: { name: fullName } } });
     if (!result.error && result.data.user) {
       await sb.from('profiles').insert({
         id: result.data.user.id,
-        name: name || 'New Rider',
+        name: fullName || 'New Rider',
+        bike_model: bikeModel ? capFirst(bikeModel) : null,
+        city: city ? capFirst(city) : null,
+        cc: ccRaw ? parseInt(ccRaw) : null,
+        instagram: instagram || null,
       });
     }
   } else {
@@ -950,18 +840,82 @@ async function completeAuth() {
 
   isAuthed = true;
   closeAuthSheet();
-  // Update sidebar bottom
-  const ua = document.getElementById('sidebar-user-area');
-  if (ua) {
-    const displayEmail = (result.data.user && result.data.user.email) || email;
-    const initial = displayEmail.charAt(0).toUpperCase();
-    ua.innerHTML = `<div style="display:flex;align-items:center;gap:10px;cursor:pointer;padding:8px 6px;border-radius:12px" onclick="go('s-profile')" onmouseover="this.style.background='rgba(255,255,255,.05)'" onmouseout="this.style.background=''"><div class="av color-a" style="width:34px;height:34px;font-size:12px">${initial}</div><div><div style="font-size:13px;font-weight:600;color:var(--text)">${displayEmail}</div></div></div>`;
-  }
+  await refreshSidebarUser();
   if (pendingAction) { const a = pendingAction; pendingAction = null; setTimeout(()=>a(), 180); }
   else go('s-home');
 }
 
-/* ══ PUBLISH RIDE ══ */
+async function refreshSidebarUser() {
+  const ua = document.getElementById('sidebar-user-area');
+  if (!ua) return;
+  const { data: { user } } = await sb.auth.getUser();
+  if (!user) return;
+  const { data: profile } = await sb.from('profiles').select('name').eq('id', user.id).maybeSingle();
+  const displayName = (profile && profile.name) || (user.email ? user.email.split('@')[0] : 'Rider');
+  const initial = displayName.charAt(0).toUpperCase();
+  ua.innerHTML = `<div style="display:flex;align-items:center;gap:10px;cursor:pointer;padding:8px 6px;border-radius:12px" onclick="go('s-profile')" onmouseover="this.style.background='rgba(255,255,255,.05)'" onmouseout="this.style.background=''"><div class="av color-a" style="width:34px;height:34px;font-size:12px">${initial}</div><div><div style="font-size:13px;font-weight:600;color:var(--text)">${displayName}</div></div></div>`;
+}
+
+function capitalizeInput(el) {
+  if (!el.value) return;
+  const pos = el.selectionStart;
+  el.value = el.value.charAt(0).toUpperCase() + el.value.slice(1);
+  el.setSelectionRange(pos, pos);
+}
+
+function capFirst(str) {
+  if (!str) return str;
+  const trimmed = str.trim();
+  if (!trimmed) return trimmed;
+  return trimmed.charAt(0).toUpperCase() + trimmed.slice(1);
+}
+
+function goLogoHome() {
+  isAuthed ? go('s-home') : go('s-landing');
+}
+
+function isProfileComplete(profile) {
+  return !!(profile && profile.name && profile.name.trim() && profile.city && profile.city.trim() && profile.cc && profile.bike_model && profile.bike_model.trim());
+}
+
+function showCompleteProfilePrompt() {
+  document.getElementById('complete-profile-overlay').classList.add('open');
+}
+
+function closeCompleteProfilePrompt() {
+  document.getElementById('complete-profile-overlay').classList.remove('open');
+}
+
+async function goCreateRide() {
+  if (!isAuthed) { openAuthSheet('in', 'to create a ride'); return; }
+  const { data: { user } } = await sb.auth.getUser();
+  if (!user) { openAuthSheet('in', 'to create a ride'); return; }
+  const { data: profile } = await sb.from('profiles').select('*').eq('id', user.id).maybeSingle();
+  if (!isProfileComplete(profile)) { showCompleteProfilePrompt(); return; }
+  go('s-create');
+}
+
+async function directJoinRequest(rideId, btn, profile) {
+  const { data: { user } } = await sb.auth.getUser();
+  const { data: existing } = await sb.from('ride_members').select('status').eq('ride_id', rideId).eq('user_id', user.id).maybeSingle();
+  if (existing) {
+    if (btn) {
+      btn.disabled = true; btn.style.opacity = '.55';
+      btn.textContent = existing.status === 'accepted' ? "✓ You're going" : 'Requested';
+    }
+    return;
+  }
+  const { error } = await sb.from('ride_members').insert({ ride_id: rideId, user_id: user.id, status: 'pending' });
+  if (error) { alert('Error sending request: ' + error.message); return; }
+  if (btn) {
+    if (btn.classList.contains('btn-full')) {
+      btn.textContent = '✓ Request sent'; btn.style.opacity = '.55'; btn.disabled = true;
+    } else {
+      btn.textContent = 'Requested'; btn.classList.add('pending'); btn.disabled = true;
+    }
+  }
+}
+
 async function publishRide() {
   const { data: { user } } = await sb.auth.getUser();
   if (!user) {
@@ -1004,7 +958,6 @@ async function publishRide() {
     hostLat = position.coords.latitude;
     hostLng = position.coords.longitude;
   } catch (e) {
-    // location not available or denied - ride still publishes without it
   }
 
   let coverUrl = null;
@@ -1051,21 +1004,34 @@ async function publishRide() {
   go('s-home');
 }
 
-/* ══ JOIN SHEET ══ */
-function openJoinSheet(btn, rideName, coverClass, iconClass, imgSrc, rideId) {
-  joinTriggerBtn = btn;
-  joinRideId = rideId || null;
-  document.getElementById('join-ride-name').textContent = rideName;
-  const thumb = document.getElementById('join-cover-thumb');
-  if (imgSrc) {
-    thumb.innerHTML = '<img src="'+imgSrc+'" style="width:100%;height:100%;object-fit:cover"/>';
-    thumb.className = 'join-cover-thumb';
-  } else {
-    thumb.className = 'join-cover-thumb ' + (coverClass||'cover-a');
-    thumb.innerHTML = '<i class="ti '+(iconClass||'ti-motorbike')+'" style="font-size:22px;opacity:.6"></i>';
+async function openJoinSheet(btn, rideName, coverClass, iconClass, imgSrc, rideId) {
+  if (!rideId) {
+    // legacy demo card with no real ride behind it - keep old placeholder toggle behavior
+    joinTriggerBtn = btn;
+    joinRideId = null;
+    document.getElementById('join-ride-name').textContent = rideName;
+    const thumb = document.getElementById('join-cover-thumb');
+    if (imgSrc) {
+      thumb.innerHTML = '<img src="'+imgSrc+'" style="width:100%;height:100%;object-fit:cover"/>';
+      thumb.className = 'join-cover-thumb';
+    } else {
+      thumb.className = 'join-cover-thumb ' + (coverClass||'cover-a');
+      thumb.innerHTML = '<i class="ti '+(iconClass||'ti-motorbike')+'" style="font-size:22px;opacity:.6"></i>';
+    }
+    ['join-name','join-bike','join-phone'].forEach(id=>{ const el=document.getElementById(id); if(el) el.value=''; });
+    document.getElementById('join-overlay').classList.add('open');
+    return;
   }
-  ['join-name','join-bike','join-phone'].forEach(id=>{ const el=document.getElementById(id); if(el) el.value=''; });
-  document.getElementById('join-overlay').classList.add('open');
+
+  if (!isAuthed) { openAuthSheet('in', 'to request to join this ride'); return; }
+  const { data: { user } } = await sb.auth.getUser();
+  if (!user) { openAuthSheet('in', 'to request to join this ride'); return; }
+
+  const { data: profile } = await sb.from('profiles').select('*').eq('id', user.id).maybeSingle();
+  if (!isProfileComplete(profile)) { showCompleteProfilePrompt(); return; }
+
+  // Profile already complete - send the request directly, no popup needed
+  await directJoinRequest(rideId, btn, profile);
 }
 
 function closeJoinSheet() {
@@ -1119,11 +1085,12 @@ async function submitJoinRequest() {
 
 function handleSheetClick(e, overlayId) {
   if (e.target === document.getElementById(overlayId)) {
-    if (overlayId === 'join-overlay') closeJoinSheet(); else closeAuthSheet();
+    if (overlayId === 'join-overlay') closeJoinSheet();
+    else if (overlayId === 'complete-profile-overlay') closeCompleteProfilePrompt();
+    else closeAuthSheet();
   }
 }
 
-/* ══ PHOTO UPLOAD ══ */
 function handlePhotoUpload(input) {
   if (!input.files || !input.files[0]) return;
   processPhotoFile(input.files[0]);
@@ -1147,7 +1114,6 @@ function removePhoto() {
   document.getElementById('photo-file-input').value = '';
 }
 
-/* ══ DRAG & DROP ══ */
 (function() {
   const area = document.getElementById('photo-upload-wrap');
   if (!area) return;
@@ -1158,13 +1124,11 @@ function removePhoto() {
     const f = e.dataTransfer.files[0];
     if (f) processPhotoFile(f);
   });
-  // Show drag hint on desktop hover
   if (window.matchMedia('(min-width:768px)').matches) {
     document.getElementById('drag-hint').style.display = 'block';
   }
 })();
 
-/* ══ RESPONSIVE: show landing right col on desktop ══ */
 (function() {
   function applyLayout() {
     const isDesktop = window.matchMedia('(min-width:768px)').matches;
@@ -1177,7 +1141,6 @@ function removePhoto() {
   window.addEventListener('resize', applyLayout);
 })();
 
-/* ══ LOAD REAL RIDES ══ */
 async function loadRides() {
   const grid = document.getElementById('explore-grid');
   if (!grid) return;
@@ -1258,7 +1221,6 @@ async function loadRides() {
   }).join('');
 }
 
-/* ══ HOME GREETING ══ */
 async function loadHomeGreeting() {
   const { data: { user } } = await sb.auth.getUser();
   if (!user) return;
@@ -1275,7 +1237,6 @@ async function loadHomeGreeting() {
   if (nameEl) nameEl.textContent = name + ' 👋';
 }
 
-/* ══ LOAD PROFILE ══ */
 async function loadProfile() {
   const { data: { user } } = await sb.auth.getUser();
   if (!user) return;
@@ -1314,13 +1275,18 @@ async function editProfileField(field, label) {
   const { data: { user } } = await sb.auth.getUser();
   if (!user) return;
   const updateObj = {};
-  updateObj[field] = field === 'cc' ? parseInt(newVal) : newVal.trim();
+  if (field === 'cc') {
+    updateObj[field] = parseInt(newVal);
+  } else if (field === 'instagram') {
+    updateObj[field] = newVal.trim();
+  } else {
+    updateObj[field] = capFirst(newVal);
+  }
   const { error } = await sb.from('profiles').update(updateObj).eq('id', user.id);
   if (error) { alert('Error: ' + error.message); return; }
   loadProfile();
 }
 
-/* ══ HOME RIDES ══ */
 async function loadHomeRides() {
   const list = document.getElementById('home-rides-list');
   if (!list) return;
@@ -1371,6 +1337,8 @@ async function loadHomeRides() {
     const barClass = isFull ? 'r' : (fillPct >= 60 ? 'w' : '');
     const ridersText = isFull ? ride.acceptedCount + ' / ' + maxR + ' · Full' : ride.acceptedCount + ' / ' + maxR;
 
+    const safeTitle = (ride.title || '').replace(/'/g, "\\'");
+
     return '<div class="ride-card" onclick="openRideDetail(\'' + ride.id + '\')">' +
       '<div class="ride-img cover-a">' + coverHtml + '<div class="ride-tag">' + (ride.ride_type || 'Ride') + '</div></div>' +
       '<div class="ride-body">' +
@@ -1379,14 +1347,53 @@ async function loadHomeRides() {
         '<div class="slots-bar"><div class="slots-row"><span>Riders</span><span>' + ridersText + '</span></div><div class="bar"><div class="bar-fill ' + barClass + '" style="width:' + fillPct + '%"></div></div></div>' +
         '<div class="ride-footer">' +
           '<div class="host-row"><div class="av color-b">' + initial + '</div><div><div style="font-size:12px;font-weight:500">' + hostName + '</div></div></div>' +
-          '<span class="pace-pill ' + paceClass + '">' + paceLabel + '</span>' +
+          '<div style="display:flex;align-items:center;gap:8px">' +
+            '<span class="pace-pill ' + paceClass + '">' + paceLabel + '</span>' +
+            '<button class="btn-join" onclick="event.stopPropagation();openJoinSheet(this,\'' + safeTitle + '\',\'cover-a\',\'ti-motorbike\',null,\'' + ride.id + '\')">Join</button>' +
+          '</div>' +
         '</div>' +
       '</div>' +
     '</div>';
   }).join('');
 }
 
-/* ══ DELETE RIDE ══ */
+async function loadHostedRidesHome() {
+  const section = document.getElementById('hosted-rides-section');
+  const list = document.getElementById('hosted-rides-list');
+  if (!section || !list) return;
+
+  const { data: { user } } = await sb.auth.getUser();
+  if (!user) { section.style.display = 'none'; return; }
+
+  const { data: hostedRides } = await sb
+    .from('rides')
+    .select('*')
+    .eq('host_id', user.id)
+    .order('created_at', { ascending: false });
+
+  if (!hostedRides || hostedRides.length === 0) { section.style.display = 'none'; return; }
+
+  const withCounts = await Promise.all(hostedRides.map(async function(ride) {
+    const { count: accepted } = await sb.from('ride_members').select('*', { count: 'exact', head: true }).eq('ride_id', ride.id).eq('status', 'accepted');
+    const { count: pending } = await sb.from('ride_members').select('*', { count: 'exact', head: true }).eq('ride_id', ride.id).eq('status', 'pending');
+    ride.acceptedCount = accepted || 0;
+    ride.pendingCount = pending || 0;
+    return ride;
+  }));
+
+  section.style.display = 'block';
+  list.innerHTML = withCounts.map(function(ride) {
+    const dateStr = ride.ride_date ? new Date(ride.ride_date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : 'Date TBD';
+    const pendingBadge = ride.pendingCount > 0
+      ? '<span style="font-size:11px;font-weight:600;background:rgba(251,191,36,.15);color:var(--amber);padding:3px 10px;border-radius:20px;white-space:nowrap">' + ride.pendingCount + ' pending</span>'
+      : '<span style="font-size:11px;color:var(--muted)">' + ride.acceptedCount + ' riders</span>';
+    return '<div class="member-row" style="cursor:pointer" onclick="openRideDetail(\'' + ride.id + '\')">' +
+      '<div style="flex:1"><div style="font-size:14px;font-weight:500">' + ride.title + '</div><div style="font-size:12px;color:var(--muted)">' + dateStr + '</div></div>' +
+      pendingBadge +
+    '</div>';
+  }).join('');
+}
+
 async function deleteRide() {
   if (!currentRideId) return;
   const confirmed = confirm('Are you sure you want to delete this ride? This cannot be undone.');
@@ -1401,7 +1408,6 @@ async function deleteRide() {
   go('s-explore');
 }
 
-/* ══ MY RIDES HISTORY ══ */
 async function loadMyRides(limit) {
   const { data: { user } } = await sb.auth.getUser();
   if (!user) return;
@@ -1457,7 +1463,6 @@ function loadAllMyRides() {
   loadMyRides(null);
 }
 
-/* ══ LOG OUT ══ */
 async function logoutUser() {
   await sb.auth.signOut();
   isAuthed = false;
@@ -1468,7 +1473,6 @@ async function logoutUser() {
   go('s-landing');
 }
 
-/* ══ CHECK UNREAD ══ */
 async function checkUnreadNotifications() {
   const dot = document.getElementById('alerts-dot');
   if (!dot) return;
@@ -1502,7 +1506,6 @@ async function checkUnreadNotifications() {
   }
 }
 
-/* ══ LOAD NOTIFICATIONS ══ */
 async function loadNotifications() {
   const list = document.getElementById('notif-list');
   if (!list) return;
@@ -1511,6 +1514,8 @@ async function loadNotifications() {
   const { data: { user } } = await sb.auth.getUser();
   if (!user) {
     list.innerHTML = '';
+    const lbl = document.getElementById('notif-unread-label');
+    if (lbl) lbl.textContent = '';
     return;
   }
 
@@ -1565,20 +1570,20 @@ async function loadNotifications() {
   } else {
     list.innerHTML = items.map(function(i) { return i.html; }).join('');
   }
+  const lbl = document.getElementById('notif-unread-label');
+  if (lbl) lbl.textContent = items.length + (items.length === 1 ? ' unread' : ' unread');
 
   localStorage.setItem('revo_alerts_last_seen', new Date().toISOString());
   const dot = document.getElementById('alerts-dot');
   if (dot) dot.style.display = 'none';
 }
 
-/* ══ RESPOND TO REQUEST ══ */
 async function respondToRequest(requestId, newStatus, rideId) {
   const { error } = await sb.from('ride_members').update({ status: newStatus }).eq('id', requestId);
   if (error) { alert('Error: ' + error.message); return; }
   openRideDetail(rideId);
 }
 
-/* ══ OPEN RIDE DETAIL ══ */
 async function openRideDetail(rideId) {
   go('s-ride-detail');
   document.getElementById('rd-title').textContent = 'Loading...';
@@ -1648,9 +1653,11 @@ async function openRideDetail(rideId) {
   }
 
   const joinBtn = document.getElementById('rd-join-btn');
+  joinBtn.style.display = 'block';
   joinBtn.textContent = 'Request to Join';
   joinBtn.disabled = false;
   joinBtn.style.opacity = '1';
+  joinBtn.classList.remove('pending');
   joinBtn.onclick = function() {
     openJoinSheet(joinBtn, ride.title, 'cover-a', 'ti-motorbike', null, ride.id);
   };
@@ -1745,35 +1752,59 @@ async function openRideDetail(rideId) {
   }
 }
 
-/* ══ FILTER PILLS ══ */
 function togglePill(el) { el.classList.toggle('active'); }
 function selOpt(gridId, el) {
   document.querySelectorAll('#'+gridId+' .opt').forEach(b=>b.classList.remove('active'));
   el.classList.add('active');
 }
 
-/* ══ LANDING PEEK ══ */
 async function loadLandingPeek() {
-  const { data: rides } = await sb.from('rides').select('*, profiles(name)').order('created_at', { ascending: false }).limit(8);
+  const { data: rides } = await sb.from('rides').select('*, profiles(name)').order('created_at', { ascending: false });
 
   const twoDaysAgo = new Date();
   twoDaysAgo.setDate(twoDaysAgo.getDate() - 2);
-  const activeRides = (rides || []).filter(function(r) {
+  let activeRides = (rides || []).filter(function(r) {
     if (!r.ride_date) return true;
     return new Date(r.ride_date) >= twoDaysAgo;
-  }).slice(0, 4);
+  });
 
+  await requestUserLocation();
+  if (userLat !== null) {
+    activeRides = activeRides.filter(function(r) {
+      if (r.lat == null || r.lng == null) return true;
+      return distanceKm(userLat, userLng, r.lat, r.lng) <= RIDE_RADIUS_KM;
+    });
+  }
+
+  const nearbyCount = activeRides.length;
+  const countTextEl = document.getElementById('landing-ride-count-text');
+  const browseTextEl = document.getElementById('landing-browse-all-text');
+  if (countTextEl) {
+    if (nearbyCount === 0) {
+      countTextEl.textContent = 'No rides nearby yet';
+    } else {
+      const rideWord = nearbyCount === 1 ? 'ride' : 'rides';
+      countTextEl.textContent = nearbyCount + ' ' + rideWord + (userLat !== null ? ' within 300km' : ' this week');
+    }
+  }
+  if (browseTextEl) {
+    browseTextEl.textContent = nearbyCount === 0
+      ? 'Browse all rides →'
+      : 'Browse all ' + nearbyCount + (nearbyCount === 1 ? ' ride' : ' rides') + ' →';
+  }
+
+  const displayRides = activeRides.slice(0, 4);
   const mobileEl = document.getElementById('landing-peek-mobile');
   const desktopEl = document.getElementById('landing-peek-desktop');
 
-  if (activeRides.length === 0) {
+  if (displayRides.length === 0) {
     const emptyMsg = '<div style="padding:0 24px;font-size:13px;color:var(--muted)">No rides yet — be the first to host one!</div>';
     if (mobileEl) mobileEl.innerHTML = emptyMsg;
     if (desktopEl) desktopEl.innerHTML = emptyMsg;
     return;
   }
 
-  const cardsHtml = activeRides.map(function(ride) {
+  const cardsHtml = displayRides.map(function(ride) {
     const dateStr = ride.ride_date ? new Date(ride.ride_date).toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' }) : 'Date TBD';
     const coverHtml = ride.cover_url
       ? '<img src="' + ride.cover_url + '" style="width:100%;height:100%;object-fit:cover">'
@@ -1785,7 +1816,6 @@ async function loadLandingPeek() {
   if (desktopEl) desktopEl.innerHTML = cardsHtml;
 }
 
-/* ══ SHARE A RIDE ══ */
 function shareRide(rideId, title) {
   const url = window.location.origin + '/revo.html?ride=' + rideId;
   if (navigator.share) {
@@ -1815,10 +1845,7 @@ history.replaceState({ screen: 's-landing' }, '', '');
   const { data: { user } } = await sb.auth.getUser();
   if (user) {
     isAuthed = true;
-    const ua = document.getElementById('sidebar-user-area');
-    if (ua) {
-      ua.innerHTML = '<div style="display:flex;align-items:center;gap:10px;cursor:pointer;padding:8px 6px;border-radius:12px" onclick="go(\'s-profile\')" onmouseover="this.style.background=\'rgba(255,255,255,.05)\'" onmouseout="this.style.background=\'\'"><div class="av color-a" style="width:34px;height:34px;font-size:12px">' + user.email.charAt(0).toUpperCase() + '</div><div><div style="font-size:13px;font-weight:600;color:var(--text)">' + user.email + '</div></div></div>';
-    }
+    await refreshSidebarUser();
     checkUnreadNotifications();
   }
 
